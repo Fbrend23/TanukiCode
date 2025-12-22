@@ -1,21 +1,48 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
+import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
 import { RefreshCw } from 'lucide-vue-next';
 
-const allKana = [...hiragana, ...katakana].filter(k => k.char); // Filter out empty spacers
-const currentCard = ref<KanaChar>(getRandomKana());
+type CardData = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
+
+const mode = ref<'hiragana' | 'katakana' | 'vocabulary'>('hiragana');
 const isFlipped = ref(false);
 
-function getRandomKana() {
-    const randomIndex = Math.floor(Math.random() * allKana.length);
-    return allKana[randomIndex];
+const currentList = computed(() => {
+    if (mode.value === 'hiragana') return hiragana.filter(k => k.char);
+    if (mode.value === 'katakana') return katakana.filter(k => k.char);
+    return vocabulary;
+});
+
+const currentCard = ref<CardData>(getRandomItem());
+
+function getRandomItem() {
+    const randomIndex = Math.floor(Math.random() * currentList.value.length);
+    return currentList.value[randomIndex];
 }
+
+
+const frontText = computed(() => {
+    const card = currentCard.value;
+    if ('char' in card) {
+        return (card as KanaChar).char;
+    }
+    if ('word' in card) {
+        return (card as VocabularyWord).word;
+    }
+    return '';
+});
+
+watch(mode, () => {
+    isFlipped.value = false;
+    currentCard.value = getRandomItem();
+});
 
 function nextCard() {
     isFlipped.value = false;
     setTimeout(() => {
-        currentCard.value = getRandomKana();
+        currentCard.value = getRandomItem();
     }, 200); // Wait for unflip animation
 }
 
@@ -26,7 +53,15 @@ function flipCard() {
 
 <template>
     <div class="flex flex-col items-center justify-center min-h-[60vh]">
-        <h2 class="text-4xl font-display font-bold text-tanuki-green mb-12">Flashcards</h2>
+        <h2 class="text-4xl font-display font-bold text-tanuki-green mb-8">Flashcards</h2>
+
+        <!-- Mode Toggle -->
+        <div class="flex bg-white rounded-full p-1 shadow-md mb-8 border border-gray-200">
+            <button v-for="m in ['hiragana', 'katakana', 'vocabulary']" :key="m" @click="mode = m as any"
+                :class="['px-6 py-2 rounded-full font-bold transition-all capitalize', mode === m ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                {{ m }}
+            </button>
+        </div>
 
         <!-- Flashcard Scene -->
         <div class="scene w-80 h-96 perspective-1000 cursor-pointer group" @click="flipCard">
@@ -35,15 +70,20 @@ function flipCard() {
                 <!-- Front -->
                 <div
                     class="face front absolute w-full h-full bg-white flex items-center justify-center rounded-2xl backface-hidden border-2 border-tanuki-green/10">
-                    <span class="text-9xl font-bold text-tanuki-brown-dark">{{ currentCard.char }}</span>
+                    <div class="text-center">
+                        <span class="block text-6xl font-bold text-tanuki-brown-dark mb-2">{{ frontText }}</span>
+                        <!-- Show reading for vocab on front if needed, or keeping it hidden -->
+                    </div>
                     <span class="absolute bottom-4 text-gray-400 text-sm">Tap to reveal</span>
                 </div>
 
                 <!-- Back -->
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180">
-                    <span class="text-6xl font-bold mb-4">{{ currentCard.romaji }}</span>
-                    <span class="text-xl opacity-80">Romaji</span>
+                    <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning || currentCard.romaji
+                        }}</span>
+                    <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Meaning' : 'Romaji' }}</span>
+                    <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji }})</span>
                 </div>
             </div>
         </div>
