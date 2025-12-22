@@ -1,0 +1,142 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { hiragana, katakana, type KanaChar } from '@/data/kana';
+import { Check, X, Trophy } from 'lucide-vue-next';
+
+const allKana = [...hiragana, ...katakana].filter(k => k.char);
+const score = ref(0);
+const total = ref(0);
+const streak = ref(0);
+
+const currentQuestion = ref<KanaChar>(getRandomKana());
+const options = ref<KanaChar[]>(generateOptions(currentQuestion.value));
+const selectedOption = ref<KanaChar | null>(null);
+const isAnswered = ref(false);
+
+function getRandomKana() {
+    return allKana[Math.floor(Math.random() * allKana.length)];
+}
+
+function generateOptions(correct: KanaChar): KanaChar[] {
+    const opts = [correct];
+    while (opts.length < 4) {
+        const random = getRandomKana();
+        if (!opts.find(o => o.romaji === random.romaji)) {
+            opts.push(random);
+        }
+    }
+    return opts.sort(() => Math.random() - 0.5);
+}
+
+function checkAnswer(option: KanaChar) {
+    if (isAnswered.value) return;
+
+    selectedOption.value = option;
+    isAnswered.value = true;
+    total.value++;
+
+    if (option.romaji === currentQuestion.value.romaji) {
+        score.value++;
+        streak.value++;
+    } else {
+        streak.value = 0;
+    }
+}
+
+function nextQuestion() {
+    currentQuestion.value = getRandomKana();
+    options.value = generateOptions(currentQuestion.value);
+    selectedOption.value = null;
+    isAnswered.value = false;
+}
+
+const isCorrect = computed(() => selectedOption.value?.romaji === currentQuestion.value.romaji);
+</script>
+
+<template>
+    <div class="flex flex-col items-center max-w-lg mx-auto">
+        <div class="flex justify-between w-full mb-8 bg-white p-4 rounded-xl shadow-sm border border-tanuki-beige/50">
+            <div class="flex items-center gap-2 text-tanuki-brown font-bold">
+                <Trophy class="w-5 h-5 text-tanuki-gold" />
+                <span>Score: {{ score }} / {{ total }}</span>
+            </div>
+            <div class="text-tanuki-green font-bold">
+                Streak: {{ streak }} 🔥
+            </div>
+        </div>
+
+        <div
+            class="bg-white p-12 rounded-3xl shadow-lg border-2 border-tanuki-beige w-full text-center mb-8 relative overflow-hidden">
+            <div class="text-8xl font-bold text-tanuki-brown-dark mb-4">{{ currentQuestion.char }}</div>
+            <p class="text-gray-400">Select the correct Romaji</p>
+
+            <!-- Feedback Overlay -->
+            <div v-if="isAnswered"
+                class="absolute inset-0 flex items-center justify-center bg-opacity-90 transition-all backdrop-blur-sm"
+                :class="isCorrect ? 'bg-green-100/50' : 'bg-red-100/50'">
+                <div v-if="isCorrect" class="text-green-600 flex flex-col items-center animate-bounce-short">
+                    <Check class="w-20 h-20" />
+                    <span class="text-2xl font-bold">Correct!</span>
+                </div>
+                <div v-else class="text-red-500 flex flex-col items-center">
+                    <X class="w-20 h-20" />
+                    <span class="text-2xl font-bold">Oops!</span>
+                    <span class="text-lg text-gray-600 mt-2">It was "{{ currentQuestion.romaji }}"</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Options -->
+        <div class="grid grid-cols-2 gap-4 w-full">
+            <button v-for="option in options" :key="option.romaji" @click="checkAnswer(option)" :disabled="isAnswered"
+                class="py-4 px-6 rounded-xl font-bold text-xl shadow-sm border-2 transition-all transform active:scale-95 disabled:cursor-default"
+                :class="[
+                    isAnswered && option.romaji === currentQuestion.romaji ? 'bg-green-500 text-white border-green-600' :
+                        isAnswered && selectedOption === option && option.romaji !== currentQuestion.romaji ? 'bg-red-500 text-white border-red-600' :
+                            'bg-white text-tanuki-brown hover:border-tanuki-gold hover:text-tanuki-gold border-transparent'
+                ]">
+                {{ option.romaji }}
+            </button>
+        </div>
+
+        <!-- Next Button -->
+        <button v-if="isAnswered" @click="nextQuestion"
+            class="mt-8 bg-tanuki-green text-white font-bold py-3 px-12 rounded-full shadow-lg hover:bg-green-700 transition-colors animate-fade-in">
+            Next Question
+        </button>
+    </div>
+</template>
+
+<style scoped>
+.animate-bounce-short {
+    animation: bounce-short 0.5s;
+}
+
+@keyframes bounce-short {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>

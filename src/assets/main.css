@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-tanuki-green: #2d6a4f;
+  --color-tanuki-green-light: #52b788;
+  --color-tanuki-brown: #bc6c25;
+  --color-tanuki-brown-dark: #603808;
+  --color-tanuki-gold: #dda15e;
+  --color-tanuki-beige: #fefae0;
+  --color-tanuki-white: #fdfdfd;
+
+  --font-display: 'Fredoka', sans-serif;
+  --font-body: 'Varela Round', sans-serif;
+}
+
+body {
+  background-color: var(--color-tanuki-beige);
+  color: var(--color-tanuki-brown-dark);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--color-tanuki-green);
+}
