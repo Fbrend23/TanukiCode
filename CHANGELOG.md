@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.1] - 2025-12-22
+
+### Added
+
+- **CI/CD**: Added GitHub Action workflow to automate deployment to Infomaniak via FTP.
+
 ## [0.1.0] - 2025-12-22
 
 ### Added

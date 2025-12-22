@@ -19,7 +19,7 @@ const selectedOption = ref<QuizItem | null>(null);
 const isAnswered = ref(false);
 
 function getRandomItem() {
-    return allItems[Math.floor(Math.random() * allItems.length)];
+    return allItems[Math.floor(Math.random() * allItems.length)] as QuizItem;
 }
 
 function getId(item: QuizItem): string {
