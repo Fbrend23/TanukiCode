@@ -24,7 +24,7 @@ const currentKana = computed(() => mode.value === 'hiragana' ? hiragana : kataka
         </div>
 
         <!-- Grid -->
-        <div class="grid grid-cols-5 gap-4 max-w-2xl w-full p-4">
+        <div class="grid grid-cols-5 gap-2 md:gap-4 max-w-2xl w-full p-4">
             <div v-for="(item, index) in currentKana" :key="index"
                 class="aspect-square flex flex-col items-center justify-center bg-white rounded-xl shadow-sm border border-tanuki-beige/50 hover:shadow-md hover:border-tanuki-gold transition-all cursor-pointer group">
                 <template v-if="item.char">

@@ -93,8 +93,9 @@ function getAnswerText(item: QuizItem) {
         </div>
 
         <div
-            class="bg-white p-12 rounded-3xl shadow-lg border-2 border-tanuki-beige w-full text-center mb-8 relative overflow-hidden">
-            <div class="text-6xl font-bold text-tanuki-brown-dark mb-4">{{ getDisplayText(currentQuestion) }}</div>
+            class="bg-white p-6 md:p-12 rounded-3xl shadow-lg border-2 border-tanuki-beige w-full text-center mb-8 relative overflow-hidden">
+            <div class="text-4xl md:text-6xl font-bold text-tanuki-brown-dark mb-4 break-words">{{
+                getDisplayText(currentQuestion) }}</div>
             <p class="text-gray-400">Choisir la bonne Signification / Romaji</p>
 
             <!-- Feedback Overlay -->
@@ -114,7 +115,7 @@ function getAnswerText(item: QuizItem) {
         </div>
 
         <!-- Options -->
-        <div class="grid grid-cols-2 gap-4 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <button v-for="(option, idx) in options" :key="idx" @click="checkAnswer(option)" :disabled="isAnswered"
                 class="py-4 px-6 rounded-xl font-bold text-xl shadow-sm border-2 transition-all transform active:scale-95 disabled:cursor-default"
                 :class="[

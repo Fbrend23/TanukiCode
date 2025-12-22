@@ -56,30 +56,32 @@ function flipCard() {
         <h2 class="text-4xl font-display font-bold text-tanuki-green mb-8">Flashcards</h2>
 
         <!-- Mode Toggle -->
-        <div class="flex bg-white rounded-full p-1 shadow-md mb-8 border border-gray-200">
+        <div
+            class="flex flex-wrap justify-center gap-2 bg-white rounded-2xl p-2 shadow-md mb-8 border border-gray-200 max-w-full">
             <button @click="mode = 'hiragana'"
-                :class="['px-6 py-2 rounded-full font-bold transition-all capitalize', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Hiragana
             </button>
             <button @click="mode = 'katakana'"
-                :class="['px-6 py-2 rounded-full font-bold transition-all capitalize', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Katakana
             </button>
             <button @click="mode = 'vocabulary'"
-                :class="['px-6 py-2 rounded-full font-bold transition-all capitalize', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Vocabulaire
             </button>
         </div>
 
         <!-- Flashcard Scene -->
-        <div class="scene w-80 h-96 perspective-1000 cursor-pointer group" @click="flipCard">
+        <div class="scene w-72 h-80 md:w-80 md:h-96 perspective-1000 cursor-pointer group" @click="flipCard">
             <div class="card relative w-full h-full transition-transform duration-500 transform-style-3d shadow-xl rounded-2xl"
                 :class="{ 'rotate-y-180': isFlipped }">
                 <!-- Front -->
                 <div
                     class="face front absolute w-full h-full bg-white flex items-center justify-center rounded-2xl backface-hidden border-2 border-tanuki-green/10">
-                    <div class="text-center">
-                        <span class="block text-6xl font-bold text-tanuki-brown-dark mb-2">{{ frontText }}</span>
+                    <div class="text-center px-4">
+                        <span class="block text-4xl md:text-6xl font-bold text-tanuki-brown-dark mb-2 break-all">{{
+                            frontText }}</span>
                         <!-- Show reading for vocab on front if needed, or keeping it hidden -->
                     </div>
                     <span class="absolute bottom-4 text-gray-400 text-sm">Appuyer pour révéler</span>
@@ -89,7 +91,7 @@ function flipCard() {
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180">
                     <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning || currentCard.romaji
-                    }}</span>
+                        }}</span>
                     <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
                     <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji }})</span>
                 </div>
