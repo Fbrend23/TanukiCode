@@ -13,9 +13,9 @@ import { Leaf } from 'lucide-vue-next';
           <span class="text-2xl font-display font-bold">TanukiCode</span>
         </div>
         <nav class="flex gap-4">
-          <RouterLink to="/" class="font-bold hover:text-tanuki-brown transition-colors">Home</RouterLink>
-          <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors">Charts</RouterLink>
-          <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors">Study</RouterLink>
+          <RouterLink to="/" class="font-bold hover:text-tanuki-brown transition-colors">Accueil</RouterLink>
+          <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors">Tableaux</RouterLink>
+          <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors">Étude</RouterLink>
           <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors">Quiz</RouterLink>
         </nav>
       </div>
@@ -28,7 +28,7 @@ import { Leaf } from 'lucide-vue-next';
 
     <!-- Footer -->
     <footer class="bg-tanuki-brown-dark text-tanuki-beige py-6 text-center">
-      <p>&copy; 2025 TanukiCode. Learning made fun.</p>
+      <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
     </footer>
   </div>
 </template>

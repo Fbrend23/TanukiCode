@@ -9,7 +9,7 @@ const currentKana = computed(() => mode.value === 'hiragana' ? hiragana : kataka
 
 <template>
     <div class="flex flex-col items-center">
-        <h2 class="text-4xl font-display font-bold text-tanuki-green mb-8">Kana Charts</h2>
+        <h2 class="text-4xl font-display font-bold text-tanuki-green mb-8">Tableaux des Kana</h2>
 
         <!-- Toggle -->
         <div class="flex bg-white rounded-full p-1 shadow-md mb-8 border border-gray-200">

@@ -11,16 +11,17 @@ import { ArrowRight } from 'lucide-vue-next';
         </div>
 
         <h1 class="text-5xl font-display font-bold text-tanuki-green mb-4">
-            Welcome to TanukiCode
+            Bienvenue sur TanukiCode
         </h1>
 
         <p class="text-xl text-tanuki-brown-dark mb-8 max-w-lg">
-            Master Hiragana, Katakana, and basic Japanese vocabulary with our friendly raccoon dog companion!
+            Maîtrisez les Hiragana, Katakana et le vocabulaire japonais de base avec notre sympathique compagnon tanuki
+            !
         </p>
 
         <button
             class="bg-tanuki-gold hover:bg-yellow-500 text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transition-transform transform hover:scale-105 flex items-center gap-2 cursor-pointer">
-            Start Learning
+            Commencer à apprendre
             <ArrowRight class="w-6 h-6" />
         </button>
     </div>

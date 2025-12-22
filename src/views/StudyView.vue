@@ -57,9 +57,17 @@ function flipCard() {
 
         <!-- Mode Toggle -->
         <div class="flex bg-white rounded-full p-1 shadow-md mb-8 border border-gray-200">
-            <button v-for="m in ['hiragana', 'katakana', 'vocabulary']" :key="m" @click="mode = m as any"
-                :class="['px-6 py-2 rounded-full font-bold transition-all capitalize', mode === m ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
-                {{ m }}
+            <button @click="mode = 'hiragana'"
+                :class="['px-6 py-2 rounded-full font-bold transition-all capitalize', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                Hiragana
+            </button>
+            <button @click="mode = 'katakana'"
+                :class="['px-6 py-2 rounded-full font-bold transition-all capitalize', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                Katakana
+            </button>
+            <button @click="mode = 'vocabulary'"
+                :class="['px-6 py-2 rounded-full font-bold transition-all capitalize', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                Vocabulaire
             </button>
         </div>
 
@@ -74,15 +82,15 @@ function flipCard() {
                         <span class="block text-6xl font-bold text-tanuki-brown-dark mb-2">{{ frontText }}</span>
                         <!-- Show reading for vocab on front if needed, or keeping it hidden -->
                     </div>
-                    <span class="absolute bottom-4 text-gray-400 text-sm">Tap to reveal</span>
+                    <span class="absolute bottom-4 text-gray-400 text-sm">Appuyer pour révéler</span>
                 </div>
 
                 <!-- Back -->
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180">
                     <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning || currentCard.romaji
-                        }}</span>
-                    <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Meaning' : 'Romaji' }}</span>
+                    }}</span>
+                    <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
                     <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji }})</span>
                 </div>
             </div>
@@ -93,7 +101,7 @@ function flipCard() {
             <button @click="nextCard"
                 class="flex items-center gap-2 bg-tanuki-gold hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full text-lg shadow-md transition-transform hover:scale-105">
                 <RefreshCw class="w-5 h-5" />
-                Next Card
+                Suivant
             </button>
         </div>
     </div>

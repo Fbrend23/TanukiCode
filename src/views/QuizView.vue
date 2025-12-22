@@ -88,14 +88,14 @@ function getAnswerText(item: QuizItem) {
                 <span>Score: {{ score }} / {{ total }}</span>
             </div>
             <div class="text-tanuki-green font-bold">
-                Streak: {{ streak }} 🔥
+                Série: {{ streak }} 🔥
             </div>
         </div>
 
         <div
             class="bg-white p-12 rounded-3xl shadow-lg border-2 border-tanuki-beige w-full text-center mb-8 relative overflow-hidden">
             <div class="text-6xl font-bold text-tanuki-brown-dark mb-4">{{ getDisplayText(currentQuestion) }}</div>
-            <p class="text-gray-400">Select the correct Meaning / Romaji</p>
+            <p class="text-gray-400">Choisir la bonne Signification / Romaji</p>
 
             <!-- Feedback Overlay -->
             <div v-if="isAnswered"
@@ -103,12 +103,12 @@ function getAnswerText(item: QuizItem) {
                 :class="isCorrect ? 'bg-green-100/50' : 'bg-red-100/50'">
                 <div v-if="isCorrect" class="text-green-600 flex flex-col items-center animate-bounce-short">
                     <Check class="w-20 h-20" />
-                    <span class="text-2xl font-bold">Correct!</span>
+                    <span class="text-2xl font-bold">Correct !</span>
                 </div>
                 <div v-else class="text-red-500 flex flex-col items-center">
                     <X class="w-20 h-20" />
-                    <span class="text-2xl font-bold">Oops!</span>
-                    <span class="text-lg text-gray-600 mt-2">It was "{{ getAnswerText(currentQuestion) }}"</span>
+                    <span class="text-2xl font-bold">Oups !</span>
+                    <span class="text-lg text-gray-600 mt-2">C'était "{{ getAnswerText(currentQuestion) }}"</span>
                 </div>
             </div>
         </div>
@@ -129,7 +129,7 @@ function getAnswerText(item: QuizItem) {
         <!-- Next Button -->
         <button v-if="isAnswered" @click="nextQuestion"
             class="mt-8 bg-tanuki-green text-white font-bold py-3 px-12 rounded-full shadow-lg hover:bg-green-700 transition-colors animate-fade-in">
-            Next Question
+            Question Suivante
         </button>
     </div>
 </template>
