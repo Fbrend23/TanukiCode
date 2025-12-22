@@ -18,8 +18,13 @@ const currentList = computed(() => {
 const currentCard = ref<CardData>(getRandomItem());
 
 function getRandomItem() {
-    const randomIndex = Math.floor(Math.random() * currentList.value.length);
-    return currentList.value[randomIndex];
+    const list = currentList.value;
+    if (list.length === 0) {
+        // Fallback or handle empty list - though typically shouldn't happen with static data
+        return list[0] as CardData;
+    }
+    const randomIndex = Math.floor(Math.random() * list.length);
+    return list[randomIndex] as CardData;
 }
 
 
@@ -91,7 +96,7 @@ function flipCard() {
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180">
                     <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning || currentCard.romaji
-                        }}</span>
+                    }}</span>
                     <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
                     <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji }})</span>
                 </div>
