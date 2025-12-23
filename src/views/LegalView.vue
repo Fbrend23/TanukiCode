@@ -18,7 +18,8 @@ import { ShieldCheck, UserMinus, Mail } from 'lucide-vue-next';
                 </p>
                 <ul class="list-disc ml-6 mt-2 space-y-1">
                     <li>Votre adresse email (pour la création et la sécurisation de votre compte).</li>
-                    <li>Votre progression (score, séries, records) pour vous permettre de la retrouver sur tous vos appareils.</li>
+                    <li>Votre progression (score, séries, records) pour vous permettre de la retrouver sur tous vos
+                        appareils.</li>
                 </ul>
                 <p class="mt-4 italic">Nous ne vendons ni ne partageons vos données avec des tiers.</p>
             </section>
@@ -27,7 +28,8 @@ import { ShieldCheck, UserMinus, Mail } from 'lucide-vue-next';
             <section>
                 <h2 class="text-2xl font-bold text-tanuki-green mb-4">2. Utilisation des données</h2>
                 <p class="leading-relaxed">
-                    Vos données sont stockées chez notre partenaire technique <strong>Supabase</strong> (infrastructure sécurisée). 
+                    Vos données sont stockées chez notre partenaire technique <strong>Supabase</strong> (infrastructure
+                    sécurisée).
                     Elles sont utilisées exclusivement pour :
                 </p>
                 <ul class="list-disc ml-6 mt-2 space-y-1">
@@ -43,12 +45,14 @@ import { ShieldCheck, UserMinus, Mail } from 'lucide-vue-next';
                     3. Vos droits (Droit à l'oubli)
                 </h2>
                 <p class="leading-relaxed mb-4">
-                    Conformément à la <strong>RGPD</strong> et à la <strong>nLPD</strong> (Suisse), vous disposez d'un droit d'accès, de modification et de suppression de vos données.
+                    Conformément à la <strong>RGPD</strong> et à la <strong>nLPD</strong> (Suisse), vous disposez d'un
+                    droit d'accès, de modification et de suppression de vos données.
                 </p>
                 <div class="bg-tanuki-beige/20 p-4 rounded-xl border border-tanuki-beige">
                     <p class="font-bold">Comment supprimer vos données ?</p>
                     <p class="text-sm mt-1">
-                        Vous pouvez supprimer votre compte et toutes les données associées directement depuis votre profil dans l'en-tête de l'application (Bouton "Supprimer mon compte"). 
+                        Vous pouvez supprimer votre compte et toutes les données associées directement depuis votre
+                        profil dans l'en-tête de l'application (Bouton "Supprimer mon compte").
                         Toute suppression est immédiate et irréversible.
                     </p>
                 </div>
@@ -61,18 +65,20 @@ import { ShieldCheck, UserMinus, Mail } from 'lucide-vue-next';
                     4. Contact
                 </h2>
                 <p class="leading-relaxed">
-                    Pour toute question relative à vos données personnelles, vous pouvez contacter le responsable du site via 
-                    <a href="https://contact.brendanfleurdelys.ch/" target="_blank" class="text-tanuki-green font-bold hover:underline">
+                    Pour toute question relative à vos données personnelles, vous pouvez contacter le responsable du
+                    site via
+                    <a href="https://contact.brendanfleurdelys.ch/?origin=tanuki" target="_blank"
+                        class="text-tanuki-green font-bold hover:underline">
                         notre formulaire de contact
                     </a>.
                 </p>
             </section>
-            
+
             <footer class="pt-8 border-t border-tanuki-beige/50 text-sm text-gray-400 text-center">
                 Dernière mise à jour : 23 décembre 2025
             </footer>
         </div>
-        
+
         <div class="mt-12 text-center">
             <RouterLink to="/" class="text-tanuki-green font-bold hover:underline">
                 ← Retour à l'accueil
