@@ -2,7 +2,8 @@
 import { ref, computed, watch } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
-import { RefreshCw } from 'lucide-vue-next';
+import { RefreshCw, Volume2 } from 'lucide-vue-next';
+import { speakJapanese } from '@/utils/audio';
 
 type CardData = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
 
@@ -53,6 +54,14 @@ function nextCard() {
 
 function flipCard() {
     isFlipped.value = !isFlipped.value;
+    if (isFlipped.value) {
+        speakJapanese(frontText.value);
+    }
+}
+
+function playSound(e?: Event) {
+    if (e) e.stopPropagation();
+    speakJapanese(frontText.value);
 }
 </script>
 
@@ -89,6 +98,12 @@ function flipCard() {
                             frontText }}</span>
                         <!-- Show reading for vocab on front if needed, or keeping it hidden -->
                     </div>
+                    
+                    <!-- Audio Button -->
+                    <button @click="playSound" class="absolute top-4 right-4 p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-colors">
+                        <Volume2 class="w-6 h-6" />
+                    </button>
+
                     <span class="absolute bottom-4 text-gray-400 text-sm">Appuyer pour révéler</span>
                 </div>
 
