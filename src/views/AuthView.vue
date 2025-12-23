@@ -34,7 +34,7 @@ const handleAuth = async () => {
                 email: email.value,
                 password: password.value,
                 options: {
-                    emailRedirectTo: window.location.origin
+                    emailRedirectTo: globalThis.location.origin
                 }
             })
             if (error) throw error
@@ -66,19 +66,19 @@ const handleAuth = async () => {
 
             <form @submit.prevent="handleAuth" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-bold text-tanuki-brown mb-1">Email</label>
+                    <label for="email" class="block text-sm font-bold text-tanuki-brown mb-1">Email</label>
                     <div class="relative">
                         <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input v-model="email" type="email" required placeholder="votre@email.com"
+                        <input id="email" v-model="email" type="email" required placeholder="votre@email.com"
                             class="w-full pl-10 pr-4 py-3 bg-tanuki-beige/20 border-2 border-transparent focus:border-tanuki-green outline-none rounded-xl transition-all" />
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-tanuki-brown mb-1">Mot de passe</label>
+                    <label for="password" class="block text-sm font-bold text-tanuki-brown mb-1">Mot de passe</label>
                     <div class="relative">
                         <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input v-model="password" type="password" required placeholder="••••••••"
+                        <input id="password" v-model="password" type="password" required placeholder="••••••••"
                             class="w-full pl-10 pr-4 py-3 bg-tanuki-beige/20 border-2 border-transparent focus:border-tanuki-green outline-none rounded-xl transition-all" />
                     </div>
                 </div>
@@ -99,6 +99,13 @@ const handleAuth = async () => {
                         <ArrowRight class="w-5 h-5" />
                     </template>
                 </button>
+
+                <!-- Legal Notice -->
+                <p v-if="!isLogin" class="text-[10px] text-center text-gray-400 mt-4 leading-tight">
+                    En cliquant sur s'inscrire, vous acceptez nos 
+                    <RouterLink to="/legal" class="underline hover:text-tanuki-green">mentions légales</RouterLink> 
+                    et notre politique de confidentialité.
+                </p>
             </form>
 
             <div class="mt-8 text-center">
