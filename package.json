@@ -1,6 +1,6 @@
 {
   "name": "-tanuki-code",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -16,6 +16,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.89.0",
     "@tailwindcss/vite": "^4.1.18",
     "lucide-vue-next": "^0.562.0",
     "pinia": "^3.0.4",

@@ -2,7 +2,8 @@
 import { ref, computed } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
-import { Check, X, Trophy } from 'lucide-vue-next';
+import { Check, X, Trophy, Volume2 } from 'lucide-vue-next';
+import { speakJapanese } from '@/utils/audio';
 
 type QuizItem = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
 
@@ -78,6 +79,10 @@ function getAnswerText(item: QuizItem) {
     if ('meaning' in item && item.meaning) return item.meaning;
     return item.romaji || '';
 }
+
+function playSound() {
+    speakJapanese(getDisplayText(currentQuestion.value));
+}
 </script>
 
 <template>
@@ -93,9 +98,15 @@ function getAnswerText(item: QuizItem) {
         </div>
 
         <div
-            class="bg-white p-6 md:p-12 rounded-3xl shadow-lg border-2 border-tanuki-beige w-full text-center mb-8 relative overflow-hidden">
-            <div class="text-4xl md:text-6xl font-bold text-tanuki-brown-dark mb-4 break-words">{{
-                getDisplayText(currentQuestion) }}</div>
+            class="bg-white p-6 md:p-12 rounded-3xl shadow-lg border-2 border-tanuki-beige w-full text-center mb-8 relative overflow-hidden group">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="text-4xl md:text-6xl font-bold text-tanuki-brown-dark break-words">{{
+                    getDisplayText(currentQuestion) }}</div>
+                
+                <button @click="playSound" class="p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-all transform active:scale-90" title="Ecouter">
+                    <Volume2 class="w-8 h-8" />
+                </button>
+            </div>
             <p class="text-gray-400">Choisir la bonne Signification / Romaji</p>
 
             <!-- Feedback Overlay -->
