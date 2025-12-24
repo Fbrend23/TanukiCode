@@ -10,6 +10,8 @@ export const useUserStore = defineStore('user', () => {
   const totalQuestions = ref(0)
   const streak = ref(0)
   const highScore = ref(0)
+  const username = ref('')
+  const avatarColor = ref('gold') // Default color
   const loading = ref(false)
 
   // Load progress from Supabase if logged in
@@ -19,7 +21,7 @@ export const useUserStore = defineStore('user', () => {
     loading.value = true
     const { data, error } = await supabase
       .from('profiles')
-      .select('score, total_questions, streak, high_score')
+      .select('score, total_questions, streak, high_score, username, avatar_url')
       .eq('id', auth.user.id)
       .single()
 
@@ -28,8 +30,27 @@ export const useUserStore = defineStore('user', () => {
       totalQuestions.value = data.total_questions
       streak.value = data.streak
       highScore.value = data.high_score
+      if (data.username) username.value = data.username
+      if (data.avatar_url) avatarColor.value = data.avatar_url
     }
     loading.value = false
+  }
+
+  // Update profile (username & avatar)
+  const updateProfile = async (newUsername: string, newColor: string) => {
+    if (!auth.user) return
+
+    const { error } = await supabase.from('profiles').upsert({
+      id: auth.user.id,
+      username: newUsername,
+      avatar_url: newColor,
+      updated_at: new Date(),
+    })
+
+    if (error) throw error
+
+    username.value = newUsername
+    avatarColor.value = newColor
   }
 
   // Save progress to Supabase
@@ -92,6 +113,8 @@ export const useUserStore = defineStore('user', () => {
         totalQuestions.value = 0
         streak.value = 0
         highScore.value = 0
+        username.value = ''
+        avatarColor.value = 'gold'
       }
     },
   )
@@ -101,8 +124,12 @@ export const useUserStore = defineStore('user', () => {
     totalQuestions,
     streak,
     highScore,
+    username,
+    avatarColor,
     loading,
     recordAnswer,
     resetProgress,
+    loadProgress,
+    updateProfile,
   }
 })
