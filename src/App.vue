@@ -2,6 +2,7 @@
 import { RouterView, useRouter } from 'vue-router'
 import { Leaf, LogOut, User as UserIcon } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/authStore'
+import ToastContainer from '@/components/ToastContainer.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -65,6 +66,7 @@ const handleLogout = async () => {
     <footer class="bg-tanuki-brown-dark text-tanuki-beige py-6 text-center">
       <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
     </footer>
+    <ToastContainer />
   </div>
 </template>
 

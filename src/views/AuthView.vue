@@ -2,14 +2,15 @@
 import { ref, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'vue-router'
-import { Leaf, Mail, Lock, ArrowRight, Loader2 } from 'lucide-vue-next'
+import { Leaf, Mail, Lock, ArrowRight, Loader2, AlertCircle, CheckCircle } from 'lucide-vue-next'
 
 const router = useRouter()
+// const notification = useNotificationStore() // Not used for AuthView anymore per user request
 const isLogin = ref(true)
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
-const errorMsg = ref('')
+const authMessage = ref<{ text: string, type: 'success' | 'error' } | null>(null)
 
 const titleText = computed(() => isLogin.value ? 'Connexion' : 'Inscription')
 const subtitleText = computed(() =>
@@ -20,7 +21,7 @@ const subtitleText = computed(() =>
 
 const handleAuth = async () => {
     loading.value = true
-    errorMsg.value = ''
+    authMessage.value = null
 
     try {
         if (isLogin.value) {
@@ -38,11 +39,14 @@ const handleAuth = async () => {
                 }
             })
             if (error) throw error
-            alert('Vérifiez vos emails pour confirmer votre inscription !')
+            authMessage.value = { text: 'Vérifiez vos emails pour confirmer votre inscription !', type: 'success' }
         }
-        router.push('/')
+        if (!authMessage.value && isLogin.value) {
+             router.push('/')
+        }
     } catch (e: unknown) {
-        errorMsg.value = e instanceof Error ? e.message : String(e)
+        const message = e instanceof Error ? e.message : String(e)
+        authMessage.value = { text: message, type: 'error' }
     } finally {
         loading.value = false
     }
@@ -83,9 +87,11 @@ const handleAuth = async () => {
                     </div>
                 </div>
 
-                <div v-if="errorMsg"
-                    class="bg-red-50 text-red-500 p-3 rounded-lg text-sm font-medium border border-red-100">
-                    {{ errorMsg }}
+                <div v-if="authMessage"
+                    class="p-3 rounded-lg text-sm font-medium border flex items-center gap-2"
+                    :class="authMessage.type === 'error' ? 'bg-red-50 text-red-500 border-red-100' : 'bg-green-50 text-green-600 border-green-100'">
+                    <component :is="authMessage.type === 'error' ? AlertCircle : CheckCircle" class="w-4 h-4" />
+                    {{ authMessage.text }}
                 </div>
 
                 <button :disabled="loading" type="submit"
