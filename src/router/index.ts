@@ -28,6 +28,16 @@ const router = createRouter({
       name: 'auth',
       component: () => import('../views/AuthView.vue'),
     },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/UserProfileView.vue'),
+    },
+    {
+      path: '/update-password',
+      name: 'update-password',
+      component: () => import('../views/UpdatePasswordView.vue'),
+    },
   ],
 })
 

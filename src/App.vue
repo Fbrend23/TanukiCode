@@ -2,6 +2,7 @@
 import { RouterView, useRouter } from 'vue-router'
 import { Leaf, LogOut, User as UserIcon } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/authStore'
+import ToastContainer from '@/components/ToastContainer.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -34,15 +35,16 @@ const handleLogout = async () => {
           <!-- Auth Section -->
           <div class="flex items-center gap-4 border-l border-tanuki-beige/30 pl-4">
             <template v-if="auth.user">
-              <div class="flex items-center gap-2 text-tanuki-gold group cursor-help" :title="auth.user.email">
-                <UserIcon class="w-5 h-5" />
-                <span class="hidden lg:inline text-xs font-mono opacity-80 truncate max-w-[100px]">{{ auth.user.email
-                  }}</span>
-              </div>
+              <RouterLink to="/profile"
+                class="flex items-center gap-2 text-tanuki-gold group hover:text-tanuki-brown transition-colors"
+                title="Mon Profil">
+                <div class="bg-tanuki-gold/20 p-2 rounded-full hover:bg-tanuki-gold/30 transition-colors">
+                  <UserIcon class="w-6 h-6" />
+                </div>
+              </RouterLink>
               <button @click="handleLogout"
-                class="hover:text-red-300 transition-colors flex items-center gap-1 font-bold">
-                <LogOut class="w-4 h-4" />
-                <span class="hidden sm:inline">Quitter</span>
+                class="hover:text-red-400 text-tanuki-beige/80 transition-colors flex items-center gap-1 font-bold ml-2">
+                <LogOut class="w-4 h-4 cursor-pointer" />
               </button>
             </template>
             <template v-else>
@@ -65,6 +67,7 @@ const handleLogout = async () => {
     <footer class="bg-tanuki-brown-dark text-tanuki-beige py-6 text-center">
       <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
     </footer>
+    <ToastContainer />
   </div>
 </template>
 
