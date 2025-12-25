@@ -65,7 +65,7 @@ const handleAuth = async () => {
 
 <template>
     <div class="flex flex-col items-center justify-center min-h-[70vh] px-4">
-        <div class="w-full max-w-md bg-white rounded-3xl shadow-xl border-2 border-tanuki-beige p-8">
+        <div class="w-full max-w-md card p-8">
             <div class="flex flex-col items-center mb-8">
                 <div class="bg-tanuki-green/10 p-4 rounded-2xl mb-4">
                     <Leaf class="w-10 h-10 text-tanuki-green" />
@@ -80,17 +80,17 @@ const handleAuth = async () => {
 
             <form @submit.prevent="handleAuth" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-bold text-tanuki-brown mb-1">Email</label>
+                    <label for="email" class="block text-sm font-bold text-tanuki-brown mb-1">Email</label>
                     <div class="relative">
                         <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input v-model="email" type="email" required placeholder="votre@email.com"
+                        <input id="email" v-model="email" type="email" required placeholder="votre@email.com"
                             class="w-full pl-10 pr-4 py-3 bg-tanuki-beige/20 border-2 border-transparent focus:border-tanuki-green outline-none rounded-xl transition-all" />
                     </div>
                 </div>
 
                 <div v-if="!isResetMode">
                     <div class="flex justify-between items-center mb-1">
-                        <label class="block text-sm font-bold text-tanuki-brown">Mot de passe</label>
+                        <label for="password" class="block text-sm font-bold text-tanuki-brown">Mot de passe</label>
                         <button v-if="isLogin" type="button" @click="isResetMode = true"
                             class="text-xs text-tanuki-green hover:underline font-medium">
                             Mot de passe oublié ?
@@ -98,20 +98,19 @@ const handleAuth = async () => {
                     </div>
                     <div class="relative">
                         <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input v-model="password" type="password" required placeholder="••••••••"
+                        <input id="password" v-model="password" type="password" required placeholder="••••••••"
                             class="w-full pl-10 pr-4 py-3 bg-tanuki-beige/20 border-2 border-transparent focus:border-tanuki-green outline-none rounded-xl transition-all" />
                     </div>
                 </div>
 
-                <div v-if="authMessage"
-                    class="p-3 rounded-lg text-sm font-medium border flex items-center gap-2"
+                <div v-if="authMessage" class="p-3 rounded-lg text-sm font-medium border flex items-center gap-2"
                     :class="authMessage.type === 'error' ? 'bg-red-50 text-red-500 border-red-100' : 'bg-green-50 text-green-600 border-green-100'">
                     <component :is="authMessage.type === 'error' ? AlertCircle : CheckCircle" class="w-4 h-4" />
                     {{ authMessage.text }}
                 </div>
 
                 <button :disabled="loading" type="submit"
-                    class="w-full bg-tanuki-green hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50">
+                    class="w-full btn-3d btn-primary transition-all flex items-center justify-center gap-2 disabled:opacity-50">
                     <template v-if="loading">
                         <Loader2 class="w-6 h-6 animate-spin" />
                         Chargement...
@@ -121,10 +120,18 @@ const handleAuth = async () => {
                         <ArrowRight class="w-5 h-5" />
                     </template>
                 </button>
+
+                <!-- Legal Notice -->
+                <p v-if="!isLogin" class="text-[10px] text-center text-gray-400 mt-4 leading-tight">
+                    En cliquant sur s'inscrire, vous acceptez nos
+                    <RouterLink to="/legal" class="underline hover:text-tanuki-green">mentions légales</RouterLink>
+                    et notre politique de confidentialité.
+                </p>
             </form>
 
             <div class="mt-8 text-center">
-                <button v-if="isResetMode" @click="isResetMode = false" class="text-tanuki-green font-bold hover:underline">
+                <button v-if="isResetMode" @click="isResetMode = false"
+                    class="text-tanuki-green font-bold hover:underline">
                     Retour à la connexion
                 </button>
                 <button v-else @click="isLogin = !isLogin" class="text-tanuki-green font-bold hover:underline">

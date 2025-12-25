@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
-import { Leaf, LogOut, User as UserIcon } from 'lucide-vue-next';
+import { LogOut, User as UserIcon } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/authStore'
 import ToastContainer from '@/components/ToastContainer.vue'
 
@@ -16,10 +16,11 @@ const handleLogout = async () => {
 <template>
   <div class="min-h-screen flex flex-col font-body bg-tanuki-beige/10">
     <!-- Header -->
-    <header class="bg-tanuki-green text-tanuki-beige p-4 shadow-md sticky top-0 z-50">
+    <header class="bg-tanuki-green text-tanuki-beige p-2 shadow-md sticky top-0 z-50">
       <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-2 cursor-pointer" @click="router.push('/')">
-          <Leaf class="w-8 h-8 text-tanuki-gold" />
+        <div class="flex items-center gap-3 cursor-pointer group" @click="router.push('/')">
+          <img src="@/assets/tanuki-head.png" alt="Tanuki Logo"
+            class="w-10 h-10 object-contain group-hover:scale-110 transition-transform drop-shadow-md" />
           <span class="text-2xl font-display font-bold">TanukiCode</span>
         </div>
         <nav class="flex items-center gap-4 md:gap-6 text-sm md:text-base overflow-x-auto max-w-full pb-1 md:pb-0">
@@ -64,8 +65,13 @@ const handleLogout = async () => {
     </main>
 
     <!-- Footer -->
-    <footer class="bg-tanuki-brown-dark text-tanuki-beige py-6 text-center">
-      <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
+    <footer class="bg-tanuki-brown-dark text-tanuki-beige py-8">
+      <div class="container mx-auto px-4 flex flex-col items-center gap-4">
+        <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
+        <div class="flex gap-4 text-xs opacity-60">
+          <RouterLink to="/legal" class="hover:underline">Mentions Légales & Confidentialité</RouterLink>
+        </div>
+      </div>
     </footer>
     <ToastContainer />
   </div>

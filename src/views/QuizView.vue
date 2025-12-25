@@ -87,7 +87,8 @@ function playSound() {
 
 <template>
     <div class="flex flex-col items-center max-w-lg mx-auto">
-        <div class="flex justify-between w-full mb-8 bg-white p-4 rounded-xl shadow-sm border border-tanuki-beige/50">
+
+        <div class="flex justify-between w-full mb-8 card p-4">
             <div class="flex items-center gap-2 text-tanuki-brown font-bold">
                 <Trophy class="w-5 h-5 text-tanuki-gold" />
                 <span>Score: {{ score }} / {{ total }}</span>
@@ -97,13 +98,14 @@ function playSound() {
             </div>
         </div>
 
-        <div
-            class="bg-white p-6 md:p-12 rounded-3xl shadow-lg border-2 border-tanuki-beige w-full text-center mb-8 relative overflow-hidden group">
+        <div class="card w-full text-center mb-8 relative overflow-hidden group p-6 md:p-12">
             <div class="flex items-center justify-center gap-4 mb-4">
                 <div class="text-4xl md:text-6xl font-bold text-tanuki-brown-dark break-words">{{
                     getDisplayText(currentQuestion) }}</div>
-                
-                <button @click="playSound" class="p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-all transform active:scale-90" title="Ecouter">
+
+                <button @click="playSound"
+                    class="p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-all transform active:scale-90"
+                    title="Ecouter">
                     <Volume2 class="w-8 h-8" />
                 </button>
             </div>
@@ -128,19 +130,17 @@ function playSound() {
         <!-- Options -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <button v-for="(option, idx) in options" :key="idx" @click="checkAnswer(option)" :disabled="isAnswered"
-                class="py-4 px-6 rounded-xl font-bold text-xl shadow-sm border-2 transition-all transform active:scale-95 disabled:cursor-default"
-                :class="[
-                    isAnswered && getDisplayText(option) === getDisplayText(currentQuestion) ? 'bg-green-500 text-white border-green-600' :
-                        isAnswered && selectedOption === option && getDisplayText(option) !== getDisplayText(currentQuestion) ? 'bg-red-500 text-white border-red-600' :
-                            'bg-white text-tanuki-brown hover:border-tanuki-gold hover:text-tanuki-gold border-transparent'
+                class="btn-3d w-full" :class="[
+                    isAnswered && getDisplayText(option) === getDisplayText(currentQuestion) ? 'bg-green-500 text-white border-green-700' :
+                        isAnswered && selectedOption === option && getDisplayText(option) !== getDisplayText(currentQuestion) ? 'bg-red-500 text-white border-red-700' :
+                            'btn-secondary'
                 ]">
                 {{ getAnswerText(option) }}
             </button>
         </div>
 
         <!-- Next Button -->
-        <button v-if="isAnswered" @click="nextQuestion"
-            class="mt-8 bg-tanuki-green text-white font-bold py-3 px-12 rounded-full shadow-lg hover:bg-green-700 transition-colors animate-fade-in">
+        <button v-if="isAnswered" @click="nextQuestion" class="mt-8 btn-3d btn-gold w-full animate-fade-in">
             Question Suivante
         </button>
     </div>
