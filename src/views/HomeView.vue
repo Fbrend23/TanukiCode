@@ -20,7 +20,7 @@ import { ArrowRight } from 'lucide-vue-next';
         </p>
 
         <RouterLink to="/charts"
-            class="bg-tanuki-gold hover:bg-yellow-500 text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transition-transform transform hover:scale-105 flex items-center gap-2 cursor-pointer">
+            class="btn-3d btn-gold py-4 px-8 text-xl shadow-lg flex items-center justify-center gap-2 cursor-pointer w-auto inline-flex">
             Commencer à apprendre
             <ArrowRight class="w-6 h-6" />
         </RouterLink>

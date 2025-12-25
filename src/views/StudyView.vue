@@ -70,8 +70,7 @@ function playSound(e?: Event) {
         <h2 class="text-4xl font-display font-bold text-tanuki-green mb-8">Flashcards</h2>
 
         <!-- Mode Toggle -->
-        <div
-            class="flex flex-wrap justify-center gap-2 bg-white rounded-2xl p-2 shadow-md mb-8 border border-gray-200 max-w-full">
+        <div class="card flex flex-wrap justify-center gap-2 p-2 mb-8 max-w-full">
             <button @click="mode = 'hiragana'"
                 :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Hiragana
@@ -88,19 +87,20 @@ function playSound(e?: Event) {
 
         <!-- Flashcard Scene -->
         <div class="scene w-72 h-80 md:w-80 md:h-96 perspective-1000 cursor-pointer group" @click="flipCard">
-            <div class="card relative w-full h-full transition-transform duration-500 transform-style-3d shadow-xl rounded-2xl"
+            <div class="relative w-full h-full transition-transform duration-500 transform-style-3d shadow-xl rounded-2xl"
                 :class="{ 'rotate-y-180': isFlipped }">
                 <!-- Front -->
                 <div
-                    class="face front absolute w-full h-full bg-white flex items-center justify-center rounded-2xl backface-hidden border-2 border-tanuki-green/10">
+                    class="face front absolute w-full h-full bg-white flex items-center justify-center rounded-2xl backface-hidden border-2 border-tanuki-green">
                     <div class="text-center px-4">
                         <span class="block text-4xl md:text-6xl font-bold text-tanuki-brown-dark mb-2 break-all">{{
                             frontText }}</span>
                         <!-- Show reading for vocab on front if needed, or keeping it hidden -->
                     </div>
-                    
+
                     <!-- Audio Button -->
-                    <button @click="playSound" class="absolute top-4 right-4 p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-colors">
+                    <button @click="playSound"
+                        class="absolute top-4 right-4 p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-colors">
                         <Volume2 class="w-6 h-6" />
                     </button>
 
@@ -109,9 +109,9 @@ function playSound(e?: Event) {
 
                 <!-- Back -->
                 <div
-                    class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180">
+                    class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
                     <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning || currentCard.romaji
-                    }}</span>
+                        }}</span>
                     <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
                     <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji }})</span>
                 </div>
@@ -121,7 +121,7 @@ function playSound(e?: Event) {
         <!-- Controls -->
         <div class="mt-12 flex gap-4">
             <button @click="nextCard"
-                class="flex items-center gap-2 bg-tanuki-gold hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full text-lg shadow-md transition-transform hover:scale-105">
+                class="btn-3d btn-gold flex items-center gap-2 py-3 px-8 text-lg w-auto inline-flex">
                 <RefreshCw class="w-5 h-5" />
                 Suivant
             </button>
