@@ -40,7 +40,7 @@ const handleUpdatePassword = async () => {
 
 <template>
     <div class="flex flex-col items-center justify-center min-h-[70vh] px-4">
-        <div class="w-full max-w-md bg-white rounded-3xl shadow-xl border-2 border-tanuki-beige p-8">
+        <div class="w-full max-w-md card p-8">
             <div class="flex flex-col items-center mb-8">
                 <div class="bg-tanuki-green/10 p-4 rounded-2xl mb-4">
                     <Lock class="w-10 h-10 text-tanuki-green" />
@@ -55,19 +55,23 @@ const handleUpdatePassword = async () => {
 
             <form @submit.prevent="handleUpdatePassword" class="space-y-4">
                 <div>
-                    <label for="new-password" class="block text-sm font-bold text-tanuki-brown mb-1">Nouveau mot de passe</label>
+                    <label for="new-password" class="block text-sm font-bold text-tanuki-brown mb-1">Nouveau mot de
+                        passe</label>
                     <div class="relative">
                         <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input id="new-password" v-model="password" type="password" required placeholder="••••••••" minlength="6"
+                        <input id="new-password" v-model="password" type="password" required placeholder="••••••••"
+                            minlength="6"
                             class="w-full pl-10 pr-4 py-3 bg-tanuki-beige/20 border-2 border-transparent focus:border-tanuki-green outline-none rounded-xl transition-all" />
                     </div>
                 </div>
 
                 <div>
-                    <label for="confirm-password" class="block text-sm font-bold text-tanuki-brown mb-1">Confirmer</label>
+                    <label for="confirm-password"
+                        class="block text-sm font-bold text-tanuki-brown mb-1">Confirmer</label>
                     <div class="relative">
                         <CheckCircle class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input id="confirm-password" v-model="confirmPassword" type="password" required placeholder="••••••••" minlength="6"
+                        <input id="confirm-password" v-model="confirmPassword" type="password" required
+                            placeholder="••••••••" minlength="6"
                             class="w-full pl-10 pr-4 py-3 bg-tanuki-beige/20 border-2 border-transparent focus:border-tanuki-green outline-none rounded-xl transition-all" />
                     </div>
                 </div>
@@ -79,7 +83,7 @@ const handleUpdatePassword = async () => {
                 </div>
 
                 <button :disabled="loading" type="submit"
-                    class="w-full bg-tanuki-green hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50">
+                    class="w-full btn-3d btn-primary transition-all flex items-center justify-center gap-2 disabled:opacity-50">
                     <template v-if="loading">
                         <Loader2 class="w-6 h-6 animate-spin" />
                         Enregistrement...

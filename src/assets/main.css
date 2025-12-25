@@ -13,10 +13,47 @@
   --font-body: 'Varela Round', sans-serif;
 }
 
+@layer components {
+  .card {
+    @apply bg-white rounded-3xl shadow-lg border-2 border-tanuki-green;
+  }
+
+  /* 3D Button Components */
+  .btn-3d {
+    @apply font-display font-bold text-center transition-all active:translate-y-1 active:border-b-0 py-3 px-6 rounded-2xl border-b-4 uppercase tracking-wider;
+  }
+
+  .btn-primary {
+    @apply bg-tanuki-green text-white border-green-800 hover:bg-green-700;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-tanuki-brown border-tanuki-brown-dark hover:bg-gray-50;
+  }
+
+  .btn-danger {
+    @apply bg-white text-red-500 border-red-200 hover:bg-red-50;
+  }
+
+  .btn-gold {
+    @apply bg-tanuki-gold text-white border-yellow-600 hover:bg-yellow-500;
+  }
+
+  .btn-brown {
+    @apply bg-tanuki-brown text-white border-tanuki-brown-dark hover:bg-amber-600;
+  }
+}
+
 body {
   background-color: var(--color-tanuki-beige);
   color: var(--color-tanuki-brown-dark);
   font-family: var(--font-body);
+}
+
+button,
+a,
+.cursor-pointer {
+  cursor: pointer;
 }
 
 h1,

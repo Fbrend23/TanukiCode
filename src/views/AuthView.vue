@@ -65,7 +65,7 @@ const handleAuth = async () => {
 
 <template>
     <div class="flex flex-col items-center justify-center min-h-[70vh] px-4">
-        <div class="w-full max-w-md bg-white rounded-3xl shadow-xl border-2 border-tanuki-beige p-8">
+        <div class="w-full max-w-md card p-8">
             <div class="flex flex-col items-center mb-8">
                 <div class="bg-tanuki-green/10 p-4 rounded-2xl mb-4">
                     <Leaf class="w-10 h-10 text-tanuki-green" />
@@ -103,15 +103,14 @@ const handleAuth = async () => {
                     </div>
                 </div>
 
-                <div v-if="authMessage"
-                    class="p-3 rounded-lg text-sm font-medium border flex items-center gap-2"
+                <div v-if="authMessage" class="p-3 rounded-lg text-sm font-medium border flex items-center gap-2"
                     :class="authMessage.type === 'error' ? 'bg-red-50 text-red-500 border-red-100' : 'bg-green-50 text-green-600 border-green-100'">
                     <component :is="authMessage.type === 'error' ? AlertCircle : CheckCircle" class="w-4 h-4" />
                     {{ authMessage.text }}
                 </div>
 
                 <button :disabled="loading" type="submit"
-                    class="w-full bg-tanuki-green hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50">
+                    class="w-full btn-3d btn-primary transition-all flex items-center justify-center gap-2 disabled:opacity-50">
                     <template v-if="loading">
                         <Loader2 class="w-6 h-6 animate-spin" />
                         Chargement...
@@ -124,7 +123,8 @@ const handleAuth = async () => {
             </form>
 
             <div class="mt-8 text-center">
-                <button v-if="isResetMode" @click="isResetMode = false" class="text-tanuki-green font-bold hover:underline">
+                <button v-if="isResetMode" @click="isResetMode = false"
+                    class="text-tanuki-green font-bold hover:underline">
                     Retour à la connexion
                 </button>
                 <button v-else @click="isLogin = !isLogin" class="text-tanuki-green font-bold hover:underline">
