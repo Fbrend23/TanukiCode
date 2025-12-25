@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TanukiCode - Maintenance</title>
+    <link rel="icon" href="/favicon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Varela+Round&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --color-tanuki-green: #2d6a4f;
+        --color-tanuki-brown: #bc6c25;
+        --color-tanuki-brown-dark: #603808;
+        --color-tanuki-gold: #dda15e;
+        --color-tanuki-beige: #fefae0;
+        --color-tanuki-white: #fdfdfd;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #fcfbf6;
+        font-family: 'Varela Round', sans-serif;
+        color: var(--color-tanuki-brown-dark);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .card {
+        background-color: var(--color-tanuki-white);
+        border: 2px solid var(--color-tanuki-green);
+        border-radius: 24px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
+      .mascot-container {
+        background-color: rgba(45, 106, 79, 0.1);
+        padding: 24px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-bottom: 24px;
+      }
+
+      .mascot-img {
+        width: 128px;
+        height: 128px;
+        object-fit: contain;
+        animation: bounce 3s infinite;
+      }
+
+      h1 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 2.25rem;
+        color: var(--color-tanuki-green);
+        margin: 0 0 16px 0;
+      }
+
+      p {
+        margin: 0 0 16px 0;
+        line-height: 1.5;
+      }
+
+      .subtitle {
+        color: var(--color-tanuki-brown);
+        font-size: 1.125rem;
+        font-weight: 500;
+      }
+
+      .description {
+        color: #4b5563; /* Darker gray for better contrast */
+        font-size: 0.875rem;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #f9fafb;
+        padding: 8px 16px;
+        border-radius: 9999px;
+        border: 1px solid #e5e7eb;
+        margin-top: 16px;
+        font-size: 0.875rem;
+        color: #6b7280; /* Darker gray for better contrast */
+      }
+
+      .footer {
+        margin-top: 32px;
+        color: rgba(96, 56, 8, 0.6); /* Increased opacity for contrast */
+        font-family: 'Fredoka', sans-serif;
+        font-weight: bold;
+        font-size: 0.875rem;
+      }
+
+      /* Blobs */
+      .blob {
+        position: absolute;
+        width: 128px;
+        height: 128px;
+        border-radius: 50%;
+        filter: blur(40px);
+        z-index: 0;
+      }
+      .blob-green {
+        background-color: rgba(45, 106, 79, 0.1);
+        top: -40px;
+        right: -40px;
+      }
+      .blob-gold {
+        background-color: rgba(221, 161, 94, 0.1);
+        bottom: -40px;
+        left: -40px;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(-5%);
+          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+        }
+        50% {
+          transform: translateY(0);
+          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <!-- Blobs -->
+      <div class="blob blob-green"></div>
+      <div class="blob blob-gold"></div>
+
+      <div style="position: relative; z-index: 10">
+        <div class="mascot-container">
+          <img src="/tanuki-worker.png" alt="Tanuki Maintenance Worker" class="mascot-img" />
+        </div>
+
+        <h1>En maintenance</h1>
+
+        <p class="subtitle">Le terrier est en travaux ! 🚧</p>
+
+        <p class="description">
+          Notre Tanuki chef de chantier s'affaire pour améliorer le site. Nous serons de retour très
+          vite !
+        </p>
+
+        <div class="status-badge">
+          <span>�</span>
+          <span>Retour estimé : Bientôt</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">&copy; 2025 TanukiCode</div>
+  </body>
+</html>
