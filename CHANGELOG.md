@@ -1,11 +1,24 @@
 # Changelog
 
+## [0.3.0] - 2025-12-25
+
+### Added
+
+- **UI Unification**: Implemented a complete design system (`.card`, `.btn-3d`) across all views (Home, Auth, Quiz, Study, Charts, Profile).
+- **Brand Identity**: Integrated new Tanuki mascot logo and synced favicon.
+- **Visuals**: Added "Gold" and "Brown" 3D button variants for better hierarchy.
+- **UX**: Enforced global pointer cursors on interactive elements and improved hover effects.
+- **Legal & Privacy**: Added `LegalView` with Terms of Service and Privacy Policy, GDPR/nLPD compliant.
+
+### Fixed
+
+- **Design Consistency**: Standardized border colors across all cards.
+
 ## [0.2.0] - 2025-12-24
 
 ### Added
 
 - **Audio Learning**: Integrated native Japanese text-to-speech in Kana Charts, Flashcards, and Quiz views.
-- **Legal & Privacy**: Added `LegalView` with Terms of Service and Privacy Policy, GDPR/nLPD compliant.
 - **Toast Notifications**: Implemented a global custom toast system (`ToastContainer`), replacing native browser alerts.
 - **Password Reset**: Added full "Forgot Password" flow with email links and a new `UpdatePasswordView`.
 - **Account Deletion**: Added secure account deletion with a confirmation modal (`ConfirmationModal`).
