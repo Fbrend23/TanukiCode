@@ -54,9 +54,6 @@ function nextCard() {
 
 function flipCard() {
     isFlipped.value = !isFlipped.value;
-    if (isFlipped.value) {
-        speakJapanese(frontText.value);
-    }
 }
 
 function playSound(e?: Event) {
@@ -111,7 +108,7 @@ function playSound(e?: Event) {
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
                     <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning || currentCard.romaji
-                        }}</span>
+                    }}</span>
                     <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
                     <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji }})</span>
                 </div>
