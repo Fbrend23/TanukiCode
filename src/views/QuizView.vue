@@ -32,11 +32,15 @@ function generateOptions(correct: QuizItem): QuizItem[] {
     const opts = [correct];
     while (opts.length < 4) {
         const random = getRandomItem();
-        // Check duplication based on unique identifiers (char or word)
+        // Check duplication based on unique identifiers AND answer text
+        // This prevents having Hiragana 'ho' and Katakana 'ho' in the same question (same answer text)
         const randomId = getId(random);
-        const optsIds = opts.map(getId);
+        const randomAnswer = getAnswerText(random);
+        
+        const isDuplicateId = opts.some(o => getId(o) === randomId);
+        const isDuplicateAnswer = opts.some(o => getAnswerText(o) === randomAnswer);
 
-        if (!optsIds.includes(randomId)) {
+        if (!isDuplicateId && !isDuplicateAnswer) {
             opts.push(random);
         }
     }
