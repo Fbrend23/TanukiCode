@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { User, Trash2, LogOut, Trophy, Flame, Edit2, Check, X as XIcon, Palette, Lock } from 'lucide-vue-next'
+import { User, Trash2, LogOut, Trophy, Flame, Edit2, Check, X as XIcon, Palette, Lock, Zap } from 'lucide-vue-next'
 import { supabase } from '@/lib/supabase'
 import { useNotificationStore } from '@/stores/notificationStore'
 import ConfirmationModal from '@/components/ConfirmationModal.vue'
@@ -207,17 +207,22 @@ const handleDeleteAccount = async () => {
             </div>
 
             <!-- 2. Stats Card -->
-            <div class="grid grid-cols-2 gap-4">
-                <div class="card p-6 flex flex-col items-center justify-center gap-2 text-center">
-                    <Trophy class="w-8 h-8 text-tanuki-gold mb-1" />
-                    <p class="text-xs font-bold text-tanuki-brown/50 uppercase tracking-wide">Score Total</p>
-                    <p class="text-3xl font-bold text-tanuki-brown">{{ userStore.score }}</p>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="card p-4 flex flex-col items-center justify-center gap-2 text-center">
+                    <Trophy class="w-6 h-6 text-tanuki-gold mb-1" />
+                    <p class="text-[10px] font-bold text-tanuki-brown/50 uppercase tracking-wide">Score</p>
+                    <p class="text-xl md:text-2xl font-bold text-tanuki-brown">{{ userStore.score }}</p>
                 </div>
-                <div class="card p-6 flex flex-col items-center justify-center gap-2 text-center">
-                    <Flame class="w-8 h-8 text-amber-500 mb-1" />
-                    <p class="text-xs font-bold text-tanuki-brown/50 uppercase tracking-wide">Série</p>
-                    <p class="text-3xl font-bold text-tanuki-brown">{{ userStore.streak }} <span
-                            class="text-sm font-normal text-tanuki-brown/60">j</span></p>
+                <div class="card p-4 flex flex-col items-center justify-center gap-2 text-center">
+                    <Flame class="w-6 h-6 text-amber-500 mb-1" />
+                    <p class="text-[10px] font-bold text-tanuki-brown/50 uppercase tracking-wide">Série</p>
+                    <p class="text-xl md:text-2xl font-bold text-tanuki-brown">{{ userStore.streak }} <span
+                            class="text-xs font-normal text-tanuki-brown/60">j</span></p>
+                </div>
+                <div class="card p-4 flex flex-col items-center justify-center gap-2 text-center">
+                    <Zap class="w-6 h-6 text-yellow-500 mb-1" />
+                    <p class="text-[10px] font-bold text-tanuki-brown/50 uppercase tracking-wide">Best Combo</p>
+                    <p class="text-xl md:text-2xl font-bold text-tanuki-brown">{{ userStore.bestCombo }}</p>
                 </div>
             </div>
 
