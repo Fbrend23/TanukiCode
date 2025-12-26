@@ -7,12 +7,17 @@ import { speakJapanese } from '@/utils/audio';
 
 type QuizItem = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
 
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
 const allKana = [...hiragana, ...katakana].filter(k => k.char);
 const allItems: QuizItem[] = [...allKana, ...vocabulary];
 
-const score = ref(0);
-const total = ref(0);
-const streak = ref(0);
+// Use store values for persistent stats
+const score = computed(() => userStore.score);
+const total = computed(() => userStore.totalQuestions);
+// Use store state for "Combo" so it persists across navigation
+const combo = computed(() => userStore.currentCombo);
 
 const currentQuestion = ref<QuizItem>(getRandomItem());
 const options = ref<QuizItem[]>(generateOptions(currentQuestion.value));
@@ -32,11 +37,15 @@ function generateOptions(correct: QuizItem): QuizItem[] {
     const opts = [correct];
     while (opts.length < 4) {
         const random = getRandomItem();
-        // Check duplication based on unique identifiers (char or word)
+        // Check duplication based on unique identifiers AND answer text
+        // This prevents having Hiragana 'ho' and Katakana 'ho' in the same question (same answer text)
         const randomId = getId(random);
-        const optsIds = opts.map(getId);
+        const randomAnswer = getAnswerText(random);
 
-        if (!optsIds.includes(randomId)) {
+        const isDuplicateId = opts.some(o => getId(o) === randomId);
+        const isDuplicateAnswer = opts.some(o => getAnswerText(o) === randomAnswer);
+
+        if (!isDuplicateId && !isDuplicateAnswer) {
             opts.push(random);
         }
     }
@@ -48,14 +57,22 @@ function checkAnswer(option: QuizItem) {
 
     selectedOption.value = option;
     isAnswered.value = true;
-    total.value++;
 
-    if (getId(option) === getId(currentQuestion.value)) {
-        score.value++;
-        streak.value++;
+    const isCorrectAnswer = getId(option) === getId(currentQuestion.value);
+
+    // Calculate new combo value
+    let newCombo = userStore.currentCombo;
+    if (isCorrectAnswer) {
+        newCombo++;
     } else {
-        streak.value = 0;
+        newCombo = 0;
     }
+
+    // Update Best Combo & Current Combo in store
+    userStore.updateBestCombo(newCombo);
+
+    // Record answer in store (handles persistence, global score, daily streak)
+    userStore.recordAnswer(isCorrectAnswer);
 }
 
 function nextQuestion() {
@@ -94,7 +111,7 @@ function playSound() {
                 <span>Score: {{ score }} / {{ total }}</span>
             </div>
             <div class="text-tanuki-green font-bold">
-                Série: {{ streak }} 🔥
+                Série: {{ combo }} 🔥
             </div>
         </div>
 
