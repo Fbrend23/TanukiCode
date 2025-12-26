@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.4.0] - 2025-12-26
+
+### Added
+
+- **Gamification**:
+  - **Best Combo**: Now tracking and displaying the all-time best streak on the user profile.
+  - **Score Calculation**: Score now accurately reflects `Correct / Total Attempts` (previously ignored wrong answers).
+  - **Persistent Session**: Quiz streak ("Combo") is now persisted in memory, surviving navigation between Profile and Quiz.
+- **Security**:
+  - **Database**: Secured `delete_user` function with explicit `search_path` (fixes Supabase Advisor warning).
+- **UI/UX**:
+  - **Footer**: Compact design with dynamic version number (`v0.4.0`) linked to GitHub Release + Circular GitHub Icon.
+  - **Audio**: Disabled automatic TTS on card flip in Study mode (manual playback only).
+
+### Fixed
+
+- **Navigation**: Fixed issue where quiz combo would reset when visiting the profile.
+- **Score**: Fixed logic where total questions counter only incremented on correct answers.
+
 ## [0.3.0] - 2025-12-25
 
 ### Added
