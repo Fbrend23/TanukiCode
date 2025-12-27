@@ -32,6 +32,8 @@ const handleLogout = async () => {
             Tableaux</RouterLink>
           <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
           </RouterLink>
+          <RouterLink to="/kanji" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
+          </RouterLink>
           <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
           </RouterLink>
 

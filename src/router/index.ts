@@ -24,6 +24,12 @@ const router = createRouter({
       component: () => import('../views/QuizView.vue'),
     },
     {
+      path: '/kanji',
+      name: 'kanji',
+      component: () => import('../views/KanjiGridView.vue'),
+    },
+
+    {
       path: '/auth',
       name: 'auth',
       component: () => import('../views/AuthView.vue'),
