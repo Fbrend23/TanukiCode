@@ -76,7 +76,7 @@ const fontSizeClass = computed(() => {
         <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Flashcards</h2>
 
         <!-- Mode Toggle -->
-        <div class="card flex flex-wrap justify-center gap-2 p-2 mb-2 md:mb-8 max-w-full">
+        <div class="card flex flex-wrap justify-center p-1 mb-2 md:mb-8 max-w-full">
             <button @click="mode = 'hiragana'"
                 :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Hiragana
@@ -119,10 +119,10 @@ const fontSizeClass = computed(() => {
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
                     <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning ||
                         currentCard.romaji
-                    }}</span>
+                        }}</span>
                     <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
                     <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji
-                    }})</span>
+                        }})</span>
                 </div>
             </div>
         </div>
