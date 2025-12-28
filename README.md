@@ -1,48 +1,80 @@
-# ./
+# TanukiCode
 
-This template should help get you started developing with Vue 3 in Vite.
+TanukiCode est une application web interactive pour l'apprentissage du japonais, se concentrant sur les bases essentielles : Hiragana, Katakana, vocabulaire et Kanjis (Niveau N5).
 
-## Recommended IDE Setup
+## Fonctionnalités
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### 1. Apprentissage des Kanas
 
-## Recommended Browser Setup
+- Tableaux complets des Hiragana et Katakana.
+- Visualisation claire pour l'apprentissage par cœur.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### 2. Mode Étude
 
-## Type Support for `.vue` Imports in TS
+- Cartes de vocabulaire interactives.
+- Apprentissage de mots et phrases courants.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### 3. Quiz
 
-## Customize configuration
+- Test de connaissances pour valider les acquis.
+- Questions à choix multiples sur les leçons précédentes.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### 4. Kanjis (Nouveau)
 
-## Project Setup
+- Module dédié aux Kanjis de niveau JLPT N5.
+- Grille de recherche et de visualisation.
+- Détails complets pour chaque Kanji : nombre de traits, lectures Onyomi (Chinoise) et Kunyomi (Japonaise).
+- Traductions et significations en français.
 
-```sh
+## Stack Technique
+
+- **Framework** : Vue 3
+- **Langage** : TypeScript
+- **Build Tool** : Vite
+- **Styles** : TailwindCSS (via @import et @theme)
+- **Backend/Auth** : Supabase
+- **Icônes** : Lucide Vue Next
+
+## Installation et Configuration
+
+### Pré-requis
+
+- Node.js (version LTS recommandée)
+- npm
+
+### Installation des dépendances
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Configuration de l'environnement
 
-```sh
+Créez un fichier `.env` à la racine du projet et ajoutez vos clés Supabase :
+
+```
+VITE_SUPABASE_URL=votre_url_supabase
+VITE_SUPABASE_KEY=votre_cle_anon_publique
+```
+
+### Lancer le serveur de développement
+
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+L'application sera accessible sur `http://localhost:5173`.
 
-```sh
+### Construction pour la production
+
+```bash
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+Les fichiers générés se trouveront dans le dossier `dist`.
 
-```sh
-npm run lint
-```
+## Conventions de Code
+
+- **Kanjis** : Les données se trouvent dans `src/data/kanji.ts`.
+- **Composants** : Les composants réutilisables sont dans `src/components`, les pages principales dans `src/views`.
+- **Styles** : Les styles globaux et le thème sont définis dans `src/assets/main.css`.
