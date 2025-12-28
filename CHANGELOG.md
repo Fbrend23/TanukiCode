@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.0] - 2025-12-28
+
+### Added
+
+- **Kanjis**: New learning module for N5 Kanjis.
+  - **Dashboard**: Searchable grid view for Kanjis.
+  - **Details**: Modal view with stroke count, JLPT level, and readings.
+  - **Readings**: Visual distinction between Onyomi (Chinese) and Kunyomi (Japanese) readings with tooltips.
+  - **Localization**: Full French translation for all Kanji meanings.
+- **Navigation**:
+  - **Home**: New dashboard layout with quick access to all modules.
+  - **Navbar**: Added direct link to Kanji module.
+
 ## [0.4.0] - 2025-12-26
 
 ### Added
