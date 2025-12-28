@@ -1,19 +1,35 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
-import { LogOut, User as UserIcon } from 'lucide-vue-next';
+import { LogOut, User as UserIcon, Menu, X } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/authStore'
+import { ref } from 'vue'
 import ToastContainer from '@/components/ToastContainer.vue'
 import pkg from '../package.json'
 
 const auth = useAuthStore()
 const router = useRouter()
 const appVersion = pkg.version;
+const isMenuOpen = ref(false)
 
 const handleLogout = async () => {
+  isMenuOpen.value = false
   await auth.signOut()
   router.push('/')
 }
 </script>
+
+<style>
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+</style>
 
 <template>
   <div class="min-h-screen flex flex-col font-body bg-tanuki-beige/10">
@@ -24,52 +40,107 @@ const handleLogout = async () => {
 
     <!-- Header -->
     <header class="bg-tanuki-green text-tanuki-beige p-2 shadow-md sticky top-0 z-50">
-      <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-3 cursor-pointer group" @click="router.push('/')">
-          <img src="@/assets/tanuki-head.png" alt="Tanuki Logo"
-            class="w-10 h-10 object-contain group-hover:scale-110 transition-transform drop-shadow-md" />
-          <span class="text-2xl font-display font-bold">TanukiCode</span>
-        </div>
-        <nav class="flex items-center gap-4 md:gap-6 text-sm md:text-base overflow-x-auto max-w-full pb-1 md:pb-0">
-          <RouterLink to="/" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Accueil
-          </RouterLink>
-          <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
-            Tableaux</RouterLink>
-          <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
-          </RouterLink>
-          <RouterLink to="/kanji" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
-          </RouterLink>
-          <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
-          </RouterLink>
-
-          <!-- Auth Section -->
-          <div class="flex items-center gap-4 border-l border-tanuki-beige/30 pl-4">
-            <template v-if="auth.user">
-              <RouterLink to="/profile"
-                class="flex items-center gap-2 text-tanuki-gold group hover:text-tanuki-brown transition-colors"
-                title="Mon Profil">
-                <div class="bg-tanuki-gold/20 p-2 rounded-full hover:bg-tanuki-gold/30 transition-colors">
-                  <UserIcon class="w-6 h-6" />
-                </div>
-              </RouterLink>
-              <button @click="handleLogout"
-                class="hover:text-red-400 text-tanuki-beige/80 transition-colors flex items-center gap-1 font-bold ml-2">
-                <LogOut class="w-4 h-4 cursor-pointer" />
-              </button>
-            </template>
-            <template v-else>
-              <RouterLink to="/auth"
-                class="bg-tanuki-gold hover:bg-yellow-500 text-white px-4 py-1 rounded-full font-bold transition-all shadow-sm">
-                Connexion
-              </RouterLink>
-            </template>
+      <div class="container mx-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3 cursor-pointer group" @click="router.push('/')">
+            <img src="@/assets/tanuki-head.png" alt="Tanuki Logo"
+              class="w-10 h-10 object-contain group-hover:scale-110 transition-transform drop-shadow-md" />
+            <span class="text-2xl font-display font-bold">TanukiCode</span>
           </div>
-        </nav>
+
+          <!-- Desktop Nav -->
+          <nav aria-label="Navigation principale" class="hidden md:flex items-center gap-6 text-base">
+            <RouterLink to="/" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Accueil
+            </RouterLink>
+            <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+              Tableaux</RouterLink>
+            <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
+            </RouterLink>
+            <RouterLink to="/kanji" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
+            </RouterLink>
+            <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
+            </RouterLink>
+
+            <!-- Auth Section Desktop -->
+            <div class="flex items-center gap-4 border-l border-tanuki-beige/30 pl-4">
+              <template v-if="auth.user">
+                <RouterLink to="/profile"
+                  class="flex items-center gap-2 text-tanuki-gold group hover:text-tanuki-brown transition-colors"
+                  title="Mon Profil">
+                  <div class="bg-tanuki-gold/20 p-2 rounded-full hover:bg-tanuki-gold/30 transition-colors">
+                    <UserIcon class="w-6 h-6" />
+                  </div>
+                </RouterLink>
+                <button @click="handleLogout"
+                  class="hover:text-red-400 text-tanuki-beige/80 transition-colors flex items-center gap-1 font-bold ml-2">
+                  <LogOut class="w-4 h-4 cursor-pointer" />
+                </button>
+              </template>
+              <template v-else>
+                <RouterLink to="/auth"
+                  class="bg-tanuki-gold hover:bg-yellow-500 text-white px-4 py-1 rounded-full font-bold transition-all shadow-sm">
+                  Connexion
+                </RouterLink>
+              </template>
+            </div>
+          </nav>
+
+          <!-- Mobile Menu Button -->
+          <button @click="isMenuOpen = !isMenuOpen"
+            class="md:hidden p-2 text-tanuki-beige hover:text-white transition-colors z-50 relative">
+            <Menu v-if="!isMenuOpen" class="w-8 h-8" />
+            <X v-else class="w-8 h-8" />
+          </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <Transition name="slide">
+          <nav aria-label="Navigation mobile" v-if="isMenuOpen"
+            class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-8 text-2xl pt-24 md:hidden overscroll-contain">
+            <RouterLink to="/" @click="isMenuOpen = false" class="font-bold hover:text-tanuki-gold transition-colors">
+              Accueil
+            </RouterLink>
+            <RouterLink to="/charts" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Tableaux</RouterLink>
+            <RouterLink to="/study" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">Étude
+            </RouterLink>
+            <RouterLink to="/kanji" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Kanjis</RouterLink>
+            <RouterLink to="/quiz" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">Quiz
+            </RouterLink>
+
+            <!-- Auth Section Mobile -->
+            <div class="flex flex-col items-center gap-6 mt-4 border-t border-tanuki-beige/20 pt-8 w-48">
+              <template v-if="auth.user">
+                <RouterLink to="/profile" @click="isMenuOpen = false"
+                  class="flex items-center gap-2 text-tanuki-gold hover:text-white transition-colors text-xl">
+                  <UserIcon class="w-6 h-6" />
+                  Mon Profil
+                </RouterLink>
+                <button @click="handleLogout(); isMenuOpen = false"
+                  class="text-red-300 hover:text-red-100 transition-colors flex items-center gap-2 font-bold text-xl">
+                  <LogOut class="w-5 h-5" />
+                  Déconnexion
+                </button>
+              </template>
+              <template v-else>
+                <RouterLink to="/auth" @click="isMenuOpen = false"
+                  class="bg-tanuki-gold hover:bg-yellow-500 text-white px-8 py-3 rounded-full font-bold transition-all shadow-lg text-lg">
+                  Connexion
+                </RouterLink>
+              </template>
+            </div>
+          </nav>
+        </Transition>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow container mx-auto py-8 flex flex-col">
+    <main class="flex-grow container mx-auto py-1 md:py-8 flex flex-col">
       <RouterView />
     </main>
 
