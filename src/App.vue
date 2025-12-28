@@ -17,6 +17,11 @@ const handleLogout = async () => {
 
 <template>
   <div class="min-h-screen flex flex-col font-body bg-tanuki-beige/10">
+    <!-- Warning Banner -->
+    <div class="bg-orange-100 text-orange-800 px-4 py-2 text-center text-sm font-bold border-b border-orange-200">
+      Site en développement : des pertes de données ou des maintenances peuvent avoir lieu.
+    </div>
+
     <!-- Header -->
     <header class="bg-tanuki-green text-tanuki-beige p-2 shadow-md sticky top-0 z-50">
       <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
@@ -31,6 +36,8 @@ const handleLogout = async () => {
           <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
             Tableaux</RouterLink>
           <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
+          </RouterLink>
+          <RouterLink to="/kanji" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
           </RouterLink>
           <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
           </RouterLink>
