@@ -56,7 +56,7 @@ const closeModal = () => {
     </div>
 
     <!-- Grid -->
-    <div v-if="filteredKanji.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    <div v-if="filteredKanji.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
       <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)" />
     </div>
 
