@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="card p-6 flex flex-col items-center hover:scale-105 transition-transform cursor-pointer border-2 border-tanuki-beige/50 hover:border-tanuki-green bg-white/80 backdrop-blur-sm group relative overflow-hidden">
+  <div class="flex flex-col items-center bg-white rounded-2xl shadow-md border-2 border-tanuki-green hover:shadow-lg hover:bg-tanuki-beige/20 transition-all cursor-pointer group relative overflow-hidden p-4 h-full">
     <!-- JLPT Badge -->
     <div class="absolute top-2 right-2 bg-tanuki-brown/10 text-tanuki-brown text-[10px] font-bold px-2 py-0.5 rounded-full">
       N{{ kanji.jlpt }}
@@ -25,13 +25,13 @@ defineProps<{
 
     <!-- Readings -->
     <div class="w-full space-y-2 border-t border-tanuki-beige/30 pt-3">
-        <div class="flex justify-between text-xs">
-            <span class="text-gray-400 font-bold">ON</span>
-            <span class="text-tanuki-brown font-mono">{{ kanji.onyomi.slice(0, 2).join('・') }}</span>
+        <div class="flex justify-between items-baseline">
+            <span class="text-xs text-blue-400 font-bold tracking-widest">ON</span>
+            <span class="text-base font-bold text-blue-900 font-body">{{ kanji.onyomi.slice(0, 2).join('・') }}</span>
         </div>
-        <div class="flex justify-between text-xs">
-            <span class="text-gray-400 font-bold">KUN</span>
-            <span class="text-tanuki-brown font-mono">{{ kanji.kunyomi.slice(0, 2).join('・') }}</span>
+        <div class="flex justify-between items-baseline">
+            <span class="text-xs text-tanuki-green font-bold tracking-widest">KUN</span>
+            <span class="text-base font-bold text-tanuki-brown-dark font-body">{{ kanji.kunyomi.slice(0, 2).join('・') }}</span>
         </div>
     </div>
   </div>
