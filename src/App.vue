@@ -145,8 +145,8 @@ const handleLogout = async () => {
     </main>
 
     <!-- Footer -->
-    <footer class="bg-tanuki-brown-dark text-tanuki-beige py-4">
-      <div class="container mx-auto px-4 flex flex-col items-center gap-4">
+    <footer class="bg-tanuki-brown-dark text-tanuki-beige py-2 md:py-4">
+      <div class="container mx-auto px-4 flex flex-col items-center gap-2 md:gap-4">
         <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
         <div class="flex gap-4 text-xs opacity-60">
           <RouterLink to="/legal" class="hover:underline hover:text-tanuki-gold transition-colors">Mentions Légales &
