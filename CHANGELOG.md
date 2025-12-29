@@ -24,6 +24,10 @@
     - **Mascot**: Integrated Tanuki mascot as a watermark background.
     - **Readability**: Improved contrast, typography (bold subjects), and mobile spacing for better accessibility.
 
+### Removed
+
+- **Quiz**: Removed Text-to-Speech (TTS) button to prevent "cheating" and focus on visual recognition.
+
 ### Fixed
 
 - **Layout**: Fixed various alignment issues across Quiz, Study, and Kanji views (2px shifts, residual padding).
