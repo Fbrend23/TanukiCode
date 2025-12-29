@@ -12,7 +12,7 @@ export const useUserStore = defineStore('user', () => {
   const highScore = ref(0)
   const bestCombo = ref(0) // Best Combo tracking
   // Initialize from localStorage to persist across refreshes
-  const currentCombo = ref(parseInt(localStorage.getItem('tanuki_current_combo') || '0'))
+  const currentCombo = ref(Number.parseInt(localStorage.getItem('tanuki_current_combo') || '0'))
 
   // Watch currentCombo to persist it immediately
   watch(currentCombo, (newVal) => {
@@ -138,10 +138,7 @@ export const useUserStore = defineStore('user', () => {
       return t - p === oneDay
     }
 
-    if (!lastDate) {
-      // First time playing ever
-      streak.value = 1
-    } else {
+    if (lastDate) {
       if (isSameDay(now, lastDate)) {
         // Already played today: do nothing with streak
       } else if (isYesterday(now, lastDate)) {
@@ -151,6 +148,9 @@ export const useUserStore = defineStore('user', () => {
         // Missed one or more days: reset to 1
         streak.value = 1
       }
+    } else {
+      // First time playing ever
+      streak.value = 1
     }
 
     if (streak.value > highScore.value) {
