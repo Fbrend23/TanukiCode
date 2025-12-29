@@ -111,7 +111,7 @@ const fontSizeClass = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center max-w-lg mx-auto">
+    <div class="w-full flex flex-col items-center max-w-3xl mx-auto px-4 md:px-0">
         <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Quiz</h2>
 
         <div class="flex justify-between w-full mb-4 card p-3">
@@ -131,8 +131,7 @@ const fontSizeClass = computed(() => {
 
             <!-- Fixed height container for question text to prevent layout shift -->
             <div class="h-32 md:h-40 w-full flex items-center justify-center mb-4">
-                <div
-                    :class="['font-bold text-tanuki-brown-dark break-words transition-all text-center', fontSizeClass]">
+                <div :class="['font-bold text-tanuki-brown-dark break-words text-center', fontSizeClass]">
                     {{ getDisplayText(currentQuestion) }}
                 </div>
             </div>

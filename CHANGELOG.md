@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.1] - 2025-12-29
+
+### Removed
+
+- **Quiz**: Removed Text-to-Speech (TTS) button to prevent "cheating" and focus on visual recognition.
+
+### Fixed
+
+- **Animation**: Fixed visual glitch where text size transition caused layout shifts in Quiz.
+- **Layout**: Enforced max-width and padding on Quiz view to prevent card resizing and edge touching on mobile.
+- **Quiz**: Fixed issue where the "Check" (Combo) streak would reset on page reload.
+
 ## [0.6.0] - 2025-12-29
 
 ### Added
