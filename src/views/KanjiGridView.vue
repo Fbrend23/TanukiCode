@@ -43,8 +43,8 @@ const closeModal = () => {
   <div class="flex flex-col items-center w-full px-4 py-0 pb-24">
     <div class="flex flex-col items-center w-full max-w-4xl mb-6 md:mb-12">
       <div class="text-center mb-2">
-        <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-2">Kanji N{{ selectedLevel
-          }}</h1>
+        <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanji N{{ selectedLevel
+        }}</h1>
       </div>
 
       <!-- Search Bar -->
