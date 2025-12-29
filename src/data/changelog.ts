@@ -9,6 +9,28 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.0',
+    date: '2025-12-29',
+    sections: [
+      {
+        title: 'Contenu & Apprentissage',
+        items: [
+          'KANA COMPLET : Ajout des Dakuten (ga, za...), Handakuten (pa...) et Yoon (kya, shu...).',
+          'VOCABULAIRE : +30 nouveaux mots ! (Nature, Famille, Animaux, Nourriture)',
+          'TABLEAUX : Nouvelle navigation par onglets (Base, Dérivés, Combos) pour tout explorer.',
+          'FLASHCARDS : Cartes plus grandes et format "Cinéma" sur ordinateur pour une meilleure lisibilité.',
+        ],
+      },
+      {
+        title: 'Interface',
+        items: [
+          'TABLEAUX : Mise en page responsive optimisée (Cartes plus grosses sur mobile).',
+          'LISIBILITÉ : Police dynamique agrandie pour les Kana et Romaji.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.6.1',
     date: '2025-12-29',
     sections: [

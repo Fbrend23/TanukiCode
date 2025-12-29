@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.0] - 2025-12-29
+
+### Nouveautés
+
+- **Kana** : Intégration de tous les Kana manquants (Dakuten, Handakuten, Yoon).
+- **Vocabulaire** : Ajout de +30 mots (Nature, Famille, Animaux, Nourriture).
+- **Interface** : Système d'onglets pour les tableaux de Kana.
+- **Flashcards** : Redesign "Grand Écran" sur desktop (plus large, police plus grosse).
+
+### Améliorations
+
+- **Mobile** : Grille de Kana ajustée à 4 colonnes pour des boutons plus accessibles.
+- **Typographie** : Agrandissement général des caractères et Romaji.
+
 ## [0.6.1] - 2025-12-29
 
 ### Removed
