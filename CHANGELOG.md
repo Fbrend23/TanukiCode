@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.6.0] - 2025-12-29
+
+### Added
+
+- **Mobile UI/UX**: Massive overhaul for better touch experience.
+  - **Quiz**:
+    - **2x2 Grid**: Answer buttons now use a compact 2x2 grid on mobile for better accessibility.
+    - **Stability**: Fixed card height and reserved space for "Next" button to prevent layout shifts.
+    - **Readability**: Dynamic font sizing for long questions.
+  - **Kanji Grid**:
+    - **Responsive Layout**: Cards now expand to fill width (`w-full`) on mobile and align perfectly (`items-stretch`).
+    - **Search**: Search bar now features a green border and localized placeholder ("Soleil").
+  - **Flashcards**:
+    - **Alignment**: Removed vertical centering to align perfectly with other view titles.
+  - **Navigation**:
+    - **Animation**: Mobile menu now slides down ("curtain" effect) instead of fading in.
+  - **Auth**:
+    - **Optimization**: Reduced padding and margins for a cleaner mobile login experience.
+    - **Branding**: Replaced generic Leaf icon with Tanuki mascot placeholder.
+  - **Changelog**:
+    - **Implementation**: Added a stylish "What's New" modal to display release history.
+    - **Mascot**: Integrated Tanuki mascot as a watermark background.
+    - **Readability**: Improved contrast, typography (bold subjects), and mobile spacing for better accessibility.
+
+### Fixed
+
+- **Layout**: Fixed various alignment issues across Quiz, Study, and Kanji views (2px shifts, residual padding).
+
 ## [0.5.0] - 2025-12-28
 
 ### Added

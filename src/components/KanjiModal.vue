@@ -43,15 +43,17 @@ watch(() => props.isOpen, (newVal) => {
 
                 <!-- Close Button (Fixed above everything) -->
                 <button @click="emit('close')"
-                    class="absolute top-3 right-3 md:top-4 md:right-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors z-50">
-                    <X class="w-5 h-5 md:w-6 md:h-6" />
+                    class="absolute top-3 right-3 md:top-4 md:right-4 bg-white/20 hover:bg-white/30 active:bg-white/40 text-white p-3 rounded-full transition-colors z-50 shadow-sm backdrop-blur-sm">
+                    <X class="w-6 h-6" />
                 </button>
 
                 <!-- Body (Scrollable) -->
                 <div class="p-5 md:p-8 -mt-10 md:-mt-12 relative z-10">
                     <!-- Character Circle -->
-                    <div class="relative w-24 h-24 md:w-32 md:h-32 bg-white rounded-full mx-auto flex items-center justify-center shadow-lg border-4 border-tanuki-gold mb-4 md:mb-6 shrink-0">
-                        <span class="font-display text-6xl md:text-8xl text-tanuki-brown-dark">{{ kanji.character }}</span>
+                    <div
+                        class="relative w-24 h-24 md:w-32 md:h-32 bg-white rounded-full mx-auto flex items-center justify-center shadow-lg border-4 border-tanuki-gold mb-4 md:mb-6 shrink-0">
+                        <span class="font-display text-6xl md:text-8xl text-tanuki-brown-dark">{{ kanji.character
+                            }}</span>
                     </div>
 
                     <div class="text-center mb-6">
@@ -105,21 +107,26 @@ watch(() => props.isOpen, (newVal) => {
                         </div>
 
                         <!-- Examples Section -->
-                        <div v-if="kanji.examples && kanji.examples.length > 0" class="mt-6 border-t border-tanuki-beige pt-6 pb-2">
+                        <div v-if="kanji.examples && kanji.examples.length > 0"
+                            class="mt-6 border-t border-tanuki-beige pt-6 pb-8">
                             <h3 class="text-center text-tanuki-brown text-lg font-bold mb-4">Exemples</h3>
                             <div class="space-y-3">
-                                <div v-for="(ex, idx) in kanji.examples" :key="idx" 
+                                <div v-for="(ex, idx) in kanji.examples" :key="idx"
                                     class="bg-white border border-tanuki-beige rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
                                     <div class="flex flex-col">
                                         <div class="flex flex-wrap items-baseline gap-x-2 md:gap-x-3 gap-y-1">
-                                            <span class="font-bold text-tanuki-brown-dark text-xl md:text-2xl">{{ ex.word }}</span>
-                                            <span class="text-lg md:text-xl text-tanuki-brown-dark/80 font-bold bg-tanuki-beige/50 px-2 rounded-md">{{ ex.reading }}</span>
+                                            <span class="font-bold text-tanuki-brown-dark text-xl md:text-2xl">{{
+                                                ex.word }}</span>
+                                            <span
+                                                class="text-lg md:text-xl text-tanuki-brown-dark/80 font-bold bg-tanuki-beige/50 px-2 rounded-md">{{
+                                                    ex.reading }}</span>
                                         </div>
-                                        <span class="text-sm md:text-base text-tanuki-green font-bold mt-1">{{ ex.meaning }}</span>
+                                        <span class="text-sm md:text-base text-tanuki-green font-bold mt-1">{{
+                                            ex.meaning }}</span>
                                     </div>
-                                    <button @click="playSound(ex.reading)" 
-                                        class="bg-tanuki-gold/10 hover:bg-tanuki-gold/20 text-tanuki-brown p-2 rounded-full transition-colors">
-                                        <Volume2 class="w-5 h-5" />
+                                    <button @click="playSound(ex.reading)"
+                                        class="bg-tanuki-gold/10 hover:bg-tanuki-gold/20 active:bg-tanuki-gold/30 text-tanuki-brown p-3 rounded-full transition-colors shrink-0 ml-2">
+                                        <Volume2 class="w-6 h-6" />
                                     </button>
                                 </div>
                             </div>
