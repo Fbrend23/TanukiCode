@@ -114,7 +114,7 @@ const fontSizeClass = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center max-w-lg mx-auto py-1">
+    <div class="flex flex-col items-center max-w-lg mx-auto">
         <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Quiz</h2>
 
         <div class="flex justify-between w-full mb-4 card p-3">
