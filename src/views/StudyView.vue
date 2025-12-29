@@ -92,7 +92,7 @@ const fontSizeClass = computed(() => {
         </div>
 
         <!-- Flashcard Scene -->
-        <div class="scene w-72 h-80 md:w-80 md:h-96 perspective-1000 cursor-pointer group" @click="flipCard">
+        <div class="scene w-72 h-80 md:w-[36rem] md:h-[26rem] perspective-1000 cursor-pointer group" @click="flipCard">
             <div class="relative w-full h-full transition-transform duration-500 transform-style-3d shadow-xl rounded-2xl"
                 :class="{ 'rotate-y-180': isFlipped }">
                 <!-- Front -->
@@ -117,12 +117,12 @@ const fontSizeClass = computed(() => {
                 <!-- Back -->
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
-                    <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning ||
+                    <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning ||
                         currentCard.romaji
-                        }}</span>
+                    }}</span>
                     <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
                     <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji
-                        }})</span>
+                    }})</span>
                 </div>
             </div>
         </div>
