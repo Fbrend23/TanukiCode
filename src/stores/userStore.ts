@@ -11,7 +11,14 @@ export const useUserStore = defineStore('user', () => {
   const streak = ref(0)
   const highScore = ref(0)
   const bestCombo = ref(0) // Best Combo tracking
-  const currentCombo = ref(0) // Persistent session combo
+  // Initialize from localStorage to persist across refreshes
+  const currentCombo = ref(parseInt(localStorage.getItem('tanuki_current_combo') || '0'))
+
+  // Watch currentCombo to persist it immediately
+  watch(currentCombo, (newVal) => {
+    localStorage.setItem('tanuki_current_combo', String(newVal))
+  })
+
   const username = ref('')
   const avatarColor = ref('gold') // Default color
   const lastStudiedAt = ref<string | null>(null)
@@ -25,7 +32,7 @@ export const useUserStore = defineStore('user', () => {
     const { data, error } = await supabase
       .from('profiles')
       .select(
-        'score, total_questions, streak, high_score, best_combo, username, avatar_url, last_studied_at',
+        'score, total_questions, streak, high_score, best_combo, current_combo, username, avatar_url, last_studied_at',
       )
       .eq('id', auth.user.id)
       .single()
@@ -36,6 +43,7 @@ export const useUserStore = defineStore('user', () => {
       streak.value = data.streak
       highScore.value = data.high_score
       if (data.best_combo) bestCombo.value = data.best_combo // Load best_combo
+      if (data.current_combo) currentCombo.value = data.current_combo // Load current_combo
       if (data.username) username.value = data.username
       if (data.avatar_url) avatarColor.value = data.avatar_url
       if (data.last_studied_at) lastStudiedAt.value = data.last_studied_at
@@ -72,6 +80,7 @@ export const useUserStore = defineStore('user', () => {
           streak: streak.value,
           highScore: highScore.value,
           bestCombo: bestCombo.value,
+          currentCombo: currentCombo.value, // Save currentCombo locally
           lastStudiedAt: lastStudiedAt.value,
         }),
       )
@@ -84,7 +93,8 @@ export const useUserStore = defineStore('user', () => {
       total_questions: totalQuestions.value,
       streak: streak.value,
       high_score: highScore.value,
-      best_combo: bestCombo.value, // Persist best_combo
+      best_combo: bestCombo.value,
+      current_combo: currentCombo.value, // Persist current_combo to Cloud
       last_studied_at: lastStudiedAt.value,
       updated_at: new Date(),
     })
@@ -156,6 +166,7 @@ export const useUserStore = defineStore('user', () => {
     totalQuestions.value = 0
     streak.value = 0
     bestCombo.value = 0
+    currentCombo.value = 0
     lastStudiedAt.value = null
     saveProgress()
   }
