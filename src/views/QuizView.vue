@@ -2,8 +2,7 @@
 import { ref, computed } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
-import { Check, X, Trophy, Volume2 } from 'lucide-vue-next';
-import { speakJapanese } from '@/utils/audio';
+import { Check, X, Trophy } from 'lucide-vue-next';
 
 type QuizItem = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
 
@@ -97,9 +96,7 @@ function getAnswerText(item: QuizItem) {
     return item.romaji || '';
 }
 
-function playSound() {
-    speakJapanese(getDisplayText(currentQuestion.value));
-}
+
 
 const fontSizeClass = computed(() => {
     const text = getDisplayText(currentQuestion.value);
@@ -114,7 +111,7 @@ const fontSizeClass = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center max-w-lg mx-auto">
+    <div class="w-full flex flex-col items-center max-w-3xl mx-auto px-4 md:px-0">
         <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Quiz</h2>
 
         <div class="flex justify-between w-full mb-4 card p-3">
@@ -130,16 +127,11 @@ const fontSizeClass = computed(() => {
         <div
             class="card w-full text-center mb-4 relative overflow-hidden group p-8 md:p-12 min-h-[30vh] flex flex-col items-center justify-center">
 
-            <button @click="playSound"
-                class="absolute top-2 right-2 md:top-4 md:right-4 p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-all transform active:scale-90"
-                title="Ecouter">
-                <Volume2 class="w-6 h-6 md:w-8 md:h-8" />
-            </button>
+
 
             <!-- Fixed height container for question text to prevent layout shift -->
             <div class="h-32 md:h-40 w-full flex items-center justify-center mb-4">
-                <div
-                    :class="['font-bold text-tanuki-brown-dark break-words transition-all text-center', fontSizeClass]">
+                <div :class="['font-bold text-tanuki-brown-dark break-words text-center', fontSizeClass]">
                     {{ getDisplayText(currentQuestion) }}
                 </div>
             </div>

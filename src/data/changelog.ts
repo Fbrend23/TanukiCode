@@ -26,8 +26,13 @@ export const changelog: ChangelogEntry[] = [
         title: 'Correctifs',
         items: [
           'Alignement parfait des titres sur toutes les pages (Flashcards, Quiz, Tableaux).',
+          'Alignement parfait des titres sur toutes les pages (Flashcards, Quiz, Tableaux).',
           'Harmonisation des bordures et des marges.',
         ],
+      },
+      {
+        title: 'Changements',
+        items: ['QUIZ : Suppression du bouton Audio (TTS) pour se concentrer sur la lecture.'],
       },
     ],
   },
