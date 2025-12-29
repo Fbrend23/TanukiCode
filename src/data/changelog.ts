@@ -9,6 +9,21 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.6.1',
+    date: '2025-12-29',
+    sections: [
+      {
+        title: 'Ajustements',
+        items: [
+          'QUIZ : La série (Combo) est synchronisée avec votre compte sur tous vos appareils (Cloud).',
+          'QUIZ : Suppression du bouton Audio (TTS) pour se concentrer sur la lecture.',
+          'QUIZ : Stabilisation de la largeur des cartes (plus de sauts de mise en page).',
+          'ANIMATION : Correction du glitch visuel lors du changement de taille de texte.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.6.0',
     date: '2025-12-29',
     sections: [
@@ -26,13 +41,8 @@ export const changelog: ChangelogEntry[] = [
         title: 'Correctifs',
         items: [
           'Alignement parfait des titres sur toutes les pages (Flashcards, Quiz, Tableaux).',
-          'Alignement parfait des titres sur toutes les pages (Flashcards, Quiz, Tableaux).',
           'Harmonisation des bordures et des marges.',
         ],
-      },
-      {
-        title: 'Changements',
-        items: ['QUIZ : Suppression du bouton Audio (TTS) pour se concentrer sur la lecture.'],
       },
     ],
   },
