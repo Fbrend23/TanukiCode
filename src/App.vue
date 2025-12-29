@@ -21,13 +21,12 @@ const handleLogout = async () => {
 <style>
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  transition: transform 0.3s ease-out;
 }
 
 .slide-enter-from,
 .slide-leave-to {
-  transform: translateY(-20px);
-  opacity: 0;
+  transform: translateY(-100%);
 }
 </style>
 
