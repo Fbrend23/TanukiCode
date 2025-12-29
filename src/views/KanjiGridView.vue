@@ -50,8 +50,8 @@ const closeModal = () => {
       <!-- Search Bar -->
       <div class="relative w-full max-w-md">
         <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input v-model="searchQuery" type="text" placeholder="Rechercher (日, Sun...)"
-          class="w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-beige/50 focus:border-tanuki-green outline-none rounded-xl transition-colors shadow-sm" />
+        <input v-model="searchQuery" type="text" placeholder="Rechercher (日, Soleil...)"
+          class="w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-green focus:border-tanuki-green outline-none rounded-xl transition-colors shadow-sm" />
       </div>
     </div>
 
