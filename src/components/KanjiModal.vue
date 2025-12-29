@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { X, Info } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { X, Info, Volume2 } from 'lucide-vue-next'
+import { ref, watch } from 'vue'
 import type { Kanji } from '@/data/kanji'
+import { speakJapanese } from '@/utils/audio'
 
-defineProps<{
+const props = defineProps<{
     kanji: Kanji | null
     isOpen: boolean
 }>()
@@ -11,6 +12,17 @@ defineProps<{
 const emit = defineEmits(['close'])
 
 const showInfo = ref(false)
+
+const playSound = (text: string) => {
+    speakJapanese(text)
+}
+
+// Auto-play sound when modal opens
+watch(() => props.isOpen, (newVal) => {
+    if (newVal && props.kanji) {
+        // Auto-play removed per user request
+    }
+})
 </script>
 
 <template>
@@ -21,25 +33,27 @@ const showInfo = ref(false)
 
             <!-- Modal Content -->
             <div
-                class="bg-white rounded-3xl w-full max-w-lg shadow-2xl relative overflow-hidden z-10 animate-modal-in border-4 border-tanuki-green">
+                class="bg-white rounded-3xl w-full max-w-lg md:max-w-2xl shadow-2xl relative max-h-[90vh] z-10 animate-modal-in border-4 border-tanuki-green overflow-y-auto overscroll-contain">
                 <!-- Header Pattern -->
-                <div class="h-24 bg-tanuki-green relative overflow-hidden flex items-center justify-center">
+                <div class="h-16 md:h-20 bg-tanuki-green relative shrink-0 flex items-center justify-center z-0">
                     <div
                         class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
                     </div>
-                    <!-- Close Button -->
-                    <button @click="emit('close')"
-                        class="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors">
-                        <X class="w-6 h-6" />
-                    </button>
                 </div>
 
-                <!-- Body -->
-                <div class="p-8 -mt-12 relative">
+                <!-- Close Button (Fixed above everything) -->
+                <button @click="emit('close')"
+                    class="absolute top-3 right-3 md:top-4 md:right-4 bg-white/20 hover:bg-white/30 active:bg-white/40 text-white p-3 rounded-full transition-colors z-50 shadow-sm backdrop-blur-sm">
+                    <X class="w-6 h-6" />
+                </button>
+
+                <!-- Body (Scrollable) -->
+                <div class="p-5 md:p-8 -mt-10 md:-mt-12 relative z-10">
                     <!-- Character Circle -->
                     <div
-                        class="w-32 h-32 bg-white rounded-full mx-auto flex items-center justify-center shadow-lg border-4 border-tanuki-gold mb-6">
-                        <span class="font-display text-8xl text-tanuki-brown-dark">{{ kanji.character }}</span>
+                        class="relative w-24 h-24 md:w-32 md:h-32 bg-white rounded-full mx-auto flex items-center justify-center shadow-lg border-4 border-tanuki-gold mb-4 md:mb-6 shrink-0">
+                        <span class="font-display text-6xl md:text-8xl text-tanuki-brown-dark">{{ kanji.character
+                            }}</span>
                     </div>
 
                     <div class="text-center mb-6">
@@ -77,7 +91,7 @@ const showInfo = ref(false)
                             <!-- Onyomi Card -->
                             <div class="bg-blue-50/50 border-2 border-blue-100 p-4 rounded-2xl text-center">
                                 <div class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">Onyomi</div>
-                                <div class="text-lg font-mono text-blue-900 font-bold break-words">{{
+                                <div class="text-xl font-bold text-blue-900 font-body break-words">{{
                                     kanji.onyomi.join('・') }}
                                 </div>
                             </div>
@@ -86,8 +100,34 @@ const showInfo = ref(false)
                                 class="bg-tanuki-beige/50 border-2 border-tanuki-green-light/30 p-4 rounded-2xl text-center">
                                 <div class="text-xs font-bold text-tanuki-green-light uppercase tracking-widest mb-2">
                                     Kunyomi</div>
-                                <div class="text-lg font-mono text-tanuki-brown-dark font-bold break-words">{{
+                                <div class="text-xl font-bold text-tanuki-brown-dark font-body break-words">{{
                                     kanji.kunyomi.join('・') }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Examples Section -->
+                        <div v-if="kanji.examples && kanji.examples.length > 0"
+                            class="mt-6 border-t border-tanuki-beige pt-6 pb-8">
+                            <h3 class="text-center text-tanuki-brown text-lg font-bold mb-4">Exemples</h3>
+                            <div class="space-y-3">
+                                <div v-for="(ex, idx) in kanji.examples" :key="idx"
+                                    class="bg-white border border-tanuki-beige rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="flex flex-col">
+                                        <div class="flex flex-wrap items-baseline gap-x-2 md:gap-x-3 gap-y-1">
+                                            <span class="font-bold text-tanuki-brown-dark text-xl md:text-2xl">{{
+                                                ex.word }}</span>
+                                            <span
+                                                class="text-lg md:text-xl text-tanuki-brown-dark/80 font-bold bg-tanuki-beige/50 px-2 rounded-md">{{
+                                                    ex.reading }}</span>
+                                        </div>
+                                        <span class="text-sm md:text-base text-tanuki-green font-bold mt-1">{{
+                                            ex.meaning }}</span>
+                                    </div>
+                                    <button @click="playSound(ex.reading)"
+                                        class="bg-tanuki-gold/10 hover:bg-tanuki-gold/20 active:bg-tanuki-gold/30 text-tanuki-brown p-3 rounded-full transition-colors shrink-0 ml-2">
+                                        <Volume2 class="w-6 h-6" />
+                                    </button>
                                 </div>
                             </div>
                         </div>

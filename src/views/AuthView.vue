@@ -2,7 +2,8 @@
 import { ref, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'vue-router'
-import { Leaf, Mail, Lock, ArrowRight, Loader2, AlertCircle, CheckCircle } from 'lucide-vue-next'
+import { Mail, Lock, ArrowRight, Loader2, AlertCircle, CheckCircle } from 'lucide-vue-next'
+import tanukiHead from '@/assets/tanuki-head.png'
 
 const router = useRouter()
 // const notification = useNotificationStore() // Not used for AuthView anymore per user request
@@ -64,13 +65,13 @@ const handleAuth = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center justify-center min-h-[70vh] px-4">
-        <div class="w-full max-w-md card p-8">
-            <div class="flex flex-col items-center mb-8">
-                <div class="bg-tanuki-green/10 p-4 rounded-2xl mb-4">
-                    <Leaf class="w-10 h-10 text-tanuki-green" />
+    <div class="flex flex-col items-center justify-center min-h-[70vh] px-4 md:px-0">
+        <div class="w-full max-w-md card p-6 md:p-8">
+            <div class="flex flex-col items-center mb-6 md:mb-8">
+                <div class="bg-tanuki-green/10 p-3 md:p-4 rounded-full mb-4">
+                    <img :src="tanukiHead" alt="Tanuki Logo" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
                 </div>
-                <h1 class="text-3xl font-display font-bold text-tanuki-brown-dark">
+                <h1 class="text-3xl font-display font-bold text-tanuki-brown-dark text-center">
                     {{ titleText }}
                 </h1>
                 <p class="text-gray-500 text-center mt-2">

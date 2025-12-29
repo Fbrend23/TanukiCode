@@ -60,14 +60,23 @@ function playSound(e?: Event) {
     if (e) e.stopPropagation();
     speakJapanese(frontText.value);
 }
+
+const fontSizeClass = computed(() => {
+    const len = frontText.value.length;
+    if (len === 1) return 'text-8xl md:text-9xl';
+    if (len <= 3) return 'text-6xl md:text-8xl';
+    if (len <= 5) return 'text-5xl md:text-7xl';
+    if (len <= 7) return 'text-4xl md:text-6xl';
+    return 'text-2xl md:text-4xl';
+});
 </script>
 
 <template>
-    <div class="flex flex-col items-center justify-center min-h-[60vh]">
-        <h2 class="text-4xl font-display font-bold text-tanuki-green mb-8">Flashcards</h2>
+    <div class="flex flex-col items-center justify-start min-h-[60vh]">
+        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Flashcards</h2>
 
         <!-- Mode Toggle -->
-        <div class="card flex flex-wrap justify-center gap-2 p-2 mb-8 max-w-full">
+        <div class="card flex flex-wrap justify-center p-1 mb-2 md:mb-8 max-w-full">
             <button @click="mode = 'hiragana'"
                 :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Hiragana
@@ -90,8 +99,9 @@ function playSound(e?: Event) {
                 <div
                     class="face front absolute w-full h-full bg-white flex items-center justify-center rounded-2xl backface-hidden border-2 border-tanuki-green">
                     <div class="text-center px-4">
-                        <span class="block text-4xl md:text-6xl font-bold text-tanuki-brown-dark mb-2 break-all">{{
-                            frontText }}</span>
+                        <span
+                            :class="['block font-bold text-tanuki-brown-dark mb-2 break-all transition-all', fontSizeClass]">{{
+                                frontText }}</span>
                         <!-- Show reading for vocab on front if needed, or keeping it hidden -->
                     </div>
 
@@ -107,16 +117,18 @@ function playSound(e?: Event) {
                 <!-- Back -->
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
-                    <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning || currentCard.romaji
-                    }}</span>
+                    <span class="text-4xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning ||
+                        currentCard.romaji
+                        }}</span>
                     <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
-                    <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji }})</span>
+                    <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji
+                        }})</span>
                 </div>
             </div>
         </div>
 
         <!-- Controls -->
-        <div class="mt-12 flex gap-4">
+        <div class="mt-6 flex gap-4">
             <button @click="nextCard"
                 class="btn-3d btn-gold flex items-center gap-2 py-3 px-8 text-lg w-auto inline-flex">
                 <RefreshCw class="w-5 h-5" />

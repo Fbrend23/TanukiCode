@@ -2,8 +2,7 @@
 import { ref, computed } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
-import { Check, X, Trophy, Volume2 } from 'lucide-vue-next';
-import { speakJapanese } from '@/utils/audio';
+import { Check, X, Trophy } from 'lucide-vue-next';
 
 type QuizItem = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
 
@@ -97,15 +96,25 @@ function getAnswerText(item: QuizItem) {
     return item.romaji || '';
 }
 
-function playSound() {
-    speakJapanese(getDisplayText(currentQuestion.value));
-}
+
+
+const fontSizeClass = computed(() => {
+    const text = getDisplayText(currentQuestion.value);
+    const len = text ? text.length : 0;
+
+    if (len === 1) return 'text-8xl md:text-9xl';
+    if (len <= 3) return 'text-6xl md:text-8xl';
+    if (len <= 5) return 'text-5xl md:text-7xl';
+    if (len <= 7) return 'text-4xl md:text-6xl';
+    return 'text-2xl md:text-4xl';
+});
 </script>
 
 <template>
     <div class="flex flex-col items-center max-w-lg mx-auto">
+        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Quiz</h2>
 
-        <div class="flex justify-between w-full mb-8 card p-4">
+        <div class="flex justify-between w-full mb-4 card p-3">
             <div class="flex items-center gap-2 text-tanuki-brown font-bold">
                 <Trophy class="w-5 h-5 text-tanuki-gold" />
                 <span>Score: {{ score }} / {{ total }}</span>
@@ -115,17 +124,19 @@ function playSound() {
             </div>
         </div>
 
-        <div class="card w-full text-center mb-8 relative overflow-hidden group p-6 md:p-12">
-            <div class="flex items-center justify-center gap-4 mb-4">
-                <div class="text-4xl md:text-6xl font-bold text-tanuki-brown-dark break-words">{{
-                    getDisplayText(currentQuestion) }}</div>
+        <div
+            class="card w-full text-center mb-4 relative overflow-hidden group p-8 md:p-12 min-h-[30vh] flex flex-col items-center justify-center">
 
-                <button @click="playSound"
-                    class="p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-all transform active:scale-90"
-                    title="Ecouter">
-                    <Volume2 class="w-8 h-8" />
-                </button>
+
+
+            <!-- Fixed height container for question text to prevent layout shift -->
+            <div class="h-32 md:h-40 w-full flex items-center justify-center mb-4">
+                <div
+                    :class="['font-bold text-tanuki-brown-dark break-words transition-all text-center', fontSizeClass]">
+                    {{ getDisplayText(currentQuestion) }}
+                </div>
             </div>
+
             <p class="text-gray-400">Choisir la bonne Signification / Romaji</p>
 
             <!-- Feedback Overlay -->
@@ -145,7 +156,7 @@ function playSound() {
         </div>
 
         <!-- Options -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+        <div class="grid grid-cols-2 gap-3 md:gap-4 w-full">
             <button v-for="(option, idx) in options" :key="idx" @click="checkAnswer(option)" :disabled="isAnswered"
                 class="btn-3d w-full" :class="[
                     isAnswered && getDisplayText(option) === getDisplayText(currentQuestion) ? 'bg-green-500 text-white border-green-700' :
@@ -157,7 +168,8 @@ function playSound() {
         </div>
 
         <!-- Next Button -->
-        <button v-if="isAnswered" @click="nextQuestion" class="mt-8 btn-3d btn-gold w-full animate-fade-in">
+        <button @click="nextQuestion" class="mt-8 btn-3d btn-gold w-full"
+            :class="isAnswered ? 'animate-fade-in' : 'invisible'">
             Question Suivante
         </button>
     </div>

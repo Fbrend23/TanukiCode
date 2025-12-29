@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { hiragana, katakana } from '@/data/kana';
 import { speakJapanese } from '@/utils/audio';
-import { Volume2 } from 'lucide-vue-next';
+import { Volume2, Info } from 'lucide-vue-next';
 
 const mode = ref<'hiragana' | 'katakana'>('hiragana');
 
@@ -17,10 +17,10 @@ function playSound(char: string) {
 
 <template>
     <div class="flex flex-col items-center">
-        <h2 class="text-4xl font-display font-bold text-tanuki-green mb-8">Tableaux des Kana</h2>
+        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Tableaux des Kana</h2>
 
         <!-- Toggle -->
-        <div class="card flex p-1 mb-8">
+        <div class="card flex p-1 mb-2">
             <button @click="mode = 'hiragana'"
                 :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Hiragana
@@ -29,6 +29,13 @@ function playSound(char: string) {
                 :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Katakana
             </button>
+        </div>
+
+        <!-- Hint -->
+        <div
+            class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 py-2 rounded-lg mb-1 text-sm animate-fade-in">
+            <Info class="w-4 h-4 text-tanuki-gold" />
+            <span>Cliquez sur un kana pour écouter sa prononciation.</span>
         </div>
 
         <!-- Grid -->

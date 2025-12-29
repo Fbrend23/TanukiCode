@@ -40,24 +40,25 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-8 pb-24">
-    <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
-      <div>
-        <h1 class="text-3xl font-display font-bold text-tanuki-brown-dark mb-2">Kanji N{{ selectedLevel }}</h1>
-        <p class="text-tanuki-brown font-medium">Maîtrisez les idéogrammes japonais.</p>
+  <div class="flex flex-col items-center w-full px-4 py-0 pb-24">
+    <div class="flex flex-col items-center w-full max-w-4xl mb-6 md:mb-12">
+      <div class="text-center mb-2">
+        <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanji N{{ selectedLevel
+          }}</h1>
       </div>
 
       <!-- Search Bar -->
-      <div class="relative w-full md:w-64">
+      <div class="relative w-full max-w-md">
         <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input v-model="searchQuery" type="text" placeholder="Rechercher (日, Sun...)"
-          class="w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-beige/50 focus:border-tanuki-green outline-none rounded-xl transition-colors" />
+        <input v-model="searchQuery" type="text" placeholder="Rechercher (日, Soleil...)"
+          class="w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-green focus:border-tanuki-green outline-none rounded-xl transition-colors shadow-sm" />
       </div>
     </div>
 
     <!-- Grid -->
-    <div v-if="filteredKanji.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-      <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)" />
+    <div v-if="filteredKanji.length > 0" class="flex flex-wrap justify-center items-stretch gap-2 md:gap-4 w-full">
+      <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)"
+        class="w-[calc(50%-0.5rem)] flex-grow md:flex-grow-0 md:w-52 lg:w-60" />
     </div>
 
     <!-- Empty State -->
