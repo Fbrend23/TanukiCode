@@ -44,7 +44,7 @@ const closeModal = () => {
     <div class="flex flex-col items-center w-full max-w-4xl mb-6 md:mb-12">
       <div class="text-center mb-2">
         <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanji N{{ selectedLevel
-        }}</h1>
+          }}</h1>
       </div>
 
       <!-- Search Bar -->
@@ -56,8 +56,9 @@ const closeModal = () => {
     </div>
 
     <!-- Grid -->
-    <div v-if="filteredKanji.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-      <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)" />
+    <div v-if="filteredKanji.length > 0" class="flex flex-wrap justify-center items-stretch gap-2 md:gap-4 w-full">
+      <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)"
+        class="w-[calc(50%-0.5rem)] flex-grow md:flex-grow-0 md:w-52 lg:w-60" />
     </div>
 
     <!-- Empty State -->
