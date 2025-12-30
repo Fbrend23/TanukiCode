@@ -103,3 +103,37 @@ export const speakJapanese = (text: string, rate: number = 0.9) => {
 
   playSource(0)
 }
+
+const AUDIO_BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/audio-assets`
+
+export const playGrammarAudio = (lessonId: string, index: number, text: string) => {
+  const audioPath = `${AUDIO_BASE_URL}/grammar/${lessonId}_${index}.mp3`
+  const audio = new Audio(audioPath)
+
+  audio.play().catch(() => {
+    speakJapanese(text)
+  })
+}
+
+export const playKanaAudio = (char: string, romaji: string) => {
+  if (!romaji) {
+    speakJapanese(char)
+    return
+  }
+  const audioPath = `${AUDIO_BASE_URL}/kana/${romaji}.mp3`
+  const audio = new Audio(audioPath)
+
+  audio.play().catch(() => {
+    speakJapanese(char)
+  })
+}
+
+export const playKanjiAudio = (character: string, index: number, text: string) => {
+  const hex = (character.codePointAt(0) || 0).toString(16)
+  const audioPath = `${AUDIO_BASE_URL}/kanji/k_${hex}_${index}.mp3`
+  const audio = new Audio(audioPath)
+
+  audio.play().catch(() => {
+    speakJapanese(text)
+  })
+}
