@@ -1,18 +1,33 @@
 # Changelog
 
+## [0.8.0] - 2025-12-30
+
+### Added
+
+- **Grammar**: New N5 Grammar module with searchable lessons and detailed explanations.
+- **Audio Migration**: All audio assets (Kanas, Grammar, Kanji) are now hosted on Supabase Storage.
+- **Audio Logic**: Hybrid system with Supabase Storage, Cloud TTS fallback, and Native TTS fallback.
+- **Tooling**: New `generate-audio.js` script for automated audio generation and Supabase upload.
+
+### Fixed
+
+- **UI Stability**: Stabilized `btn-3d` animations to prevent layout shifts/footer flickering.
+- **Mobile**: Adjusted spacing in Study view for better ergonomics on small screens.
+- **Kanji**: Fixed Kanji audio naming issues using Hex-encoding.
+
 ## [0.7.0] - 2025-12-29
 
-### Nouveautés
+### Added
 
-- **Kana** : Intégration de tous les Kana manquants (Dakuten, Handakuten, Yoon).
-- **Vocabulaire** : Ajout de +30 mots (Nature, Famille, Animaux, Nourriture).
-- **Interface** : Système d'onglets pour les tableaux de Kana.
-- **Flashcards** : Redesign "Grand Écran" sur desktop (plus large, police plus grosse).
+- **Kana**: Integrated all missing Kana (Dakuten, Handakuten, Yoon).
+- **Vocabulary**: Added 30+ words (Nature, Family, Animals, Food).
+- **Interface**: Tab system for Kana charts.
+- **Flashcards**: "Big Screen" redesign on desktop (wider, larger font).
 
-### Améliorations
+### Changed
 
-- **Mobile** : Grille de Kana ajustée à 4 colonnes pour des boutons plus accessibles.
-- **Typographie** : Agrandissement général des caractères et Romaji.
+- **Mobile**: Adjusted Kana grid to 4 columns for more accessible buttons.
+- **Typography**: General increase in character and Romaji size.
 
 ## [0.6.1] - 2025-12-29
 

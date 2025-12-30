@@ -9,6 +9,35 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.8.0',
+    date: '2025-12-30',
+    sections: [
+      {
+        title: 'Module Grammaire',
+        items: [
+          "LEÇONS N5 : Nouveau module d'apprentissage avec recherche et filtres par catégorie.",
+          'DESIGN : Interface épurée et standardisée pour une lecture plus agréable.',
+          'AUDIO : Exemples audios haute qualité générés pour chaque leçon.',
+        ],
+      },
+      {
+        title: 'Migration Cloud & Audio',
+        items: [
+          'SUPABASE : Hébergement des audios (Kana, Grammaire, Kanji) sur le cloud pour plus de rapidité.',
+          'ROBUSTESSE : Nouveau système hybride (Stockage > Cloud TTS > Voix Native).',
+          'FIX : Correction des noms de fichiers Kanji (Hex-encoding).',
+        ],
+      },
+      {
+        title: 'Polissage & UX',
+        items: [
+          'ANIMATIONS : Stabilisation des boutons 3D (le footer ne saute plus au clic).',
+          'MOBILE : Ajustement des marges en mode étude pour un meilleur confort.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.7.0',
     date: '2025-12-29',
     sections: [

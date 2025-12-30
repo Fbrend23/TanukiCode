@@ -20,7 +20,7 @@
 
   /* 3D Button Components */
   .btn-3d {
-    @apply font-display font-bold text-center transition-all active:translate-y-1 active:border-b-0 py-3 px-6 rounded-2xl border-b-4 uppercase tracking-wider;
+    @apply font-display font-bold text-center transition-all active:translate-y-1 active:border-b-transparent py-3 px-6 rounded-2xl border-b-4 uppercase tracking-wider;
   }
 
   .btn-primary {

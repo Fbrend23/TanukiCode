@@ -41,48 +41,11 @@ export const speakJapanese = (text: string, rate: number = 0.9) => {
   if (typeof globalThis === 'undefined') return
 
   const encodedText = encodeURIComponent(text)
-
-  // High-reliability Cloud TTS sources
-  // 1. Youdao: Fast, reliable, no CORS issues with standard Audio
-  // 2. Baidu: Highly robust for Japanese
-  // 3. Google: Good quality but sometimes rate-limited or blocked
   const sources: string[] = [
-    `https://dict.youdao.com/dictvoice?audio=${encodedText}&le=ja&type=2`,
+    `https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=gtx&q=${encodedText}`,
+    `https://dict.youdao.com/dictvoice?audio=${encodedText}&le=ja`,
     `https://tts.baidu.com/text2audio?lan=ja&ie=UTF-8&spd=4&text=${encodedText}`,
-    `https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=${encodedText}`,
   ]
-
-  const playSource = (index: number) => {
-    // If all cloud sources failed, use Native Fallback
-    if (index >= sources.length) {
-      playNativeFallback()
-      return
-    }
-
-    const currentUrl = sources[index]
-    if (!currentUrl) return
-
-    const audio = new Audio()
-    audio.src = currentUrl
-    audio.playbackRate = rate
-
-    // Timeout to skip source if it hangs (e.g., network block without error)
-    const playTimeout = setTimeout(() => {
-      audio.pause()
-      playSource(index + 1)
-    }, 2500)
-
-    audio
-      .play()
-      .then(() => {
-        clearTimeout(playTimeout)
-      })
-      .catch(() => {
-        clearTimeout(playTimeout)
-        // Silently fail to next source
-        playSource(index + 1)
-      })
-  }
 
   const playNativeFallback = () => {
     if (globalThis.speechSynthesis) {
@@ -101,5 +64,94 @@ export const speakJapanese = (text: string, rate: number = 0.9) => {
     }
   }
 
+  const playSource = (index: number) => {
+    // If all cloud sources failed, use Native Fallback
+    if (index >= sources.length) {
+      playNativeFallback()
+      return
+    }
+
+    const src = sources[index]
+    if (!src) return
+
+    const audio = new Audio()
+    audio.src = src
+    audio.playbackRate = rate
+
+    const playTimeout = setTimeout(() => {
+      audio.pause()
+      playSource(index + 1)
+    }, 5000)
+
+    audio
+      .play()
+      .then(() => {
+        clearTimeout(playTimeout)
+      })
+      .catch((e) => {
+        clearTimeout(playTimeout)
+        console.warn('TTS source failed', sources[index], e)
+        playSource(index + 1)
+      })
+  }
+
   playSource(0)
+}
+
+const AUDIO_BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/audio-assets`
+
+/**
+ * Attempts to play a static audio file for a grammar example.
+ * URL: {AUDIO_BASE_URL}/grammar/{id}_{index}.mp3
+ * Falls back to TTS (speakJapanese) if the file is missing or fails.
+ *
+ * @param lessonId - The ID of the lesson (e.g. 'basic-desu')
+ * @param index - The index of the example in the lesson
+ * @param text - The fallback Japanese text to speak
+ */
+export const playGrammarAudio = (lessonId: string, index: number, text: string) => {
+  const audioPath = `${AUDIO_BASE_URL}/grammar/${lessonId}_${index}.mp3`
+  const audio = new Audio(audioPath)
+
+  audio.play().catch(() => {
+    speakJapanese(text)
+  })
+}
+
+/**
+ * Attempts to play a static audio file for a Kana character.
+ * Uses romaji filename (e.g. 'a.mp3').
+ *
+ * @param char - The Japanese character (Fallback text)
+ * @param romaji - The romaji representation (Filename)
+ */
+export const playKanaAudio = (char: string, romaji: string) => {
+  if (!romaji) {
+    speakJapanese(char)
+    return
+  }
+  const audioPath = `${AUDIO_BASE_URL}/kana/${romaji}.mp3`
+  const audio = new Audio(audioPath)
+
+  audio.play().catch(() => {
+    speakJapanese(char)
+  })
+}
+
+/**
+ * Attempts to play a static audio file for a Kanji example word.
+ * Filename format: k_{hex}_{index}.mp3 (Hex encoded char)
+ *
+ * @param character - The Kanji character (e.g. '日')
+ * @param index - The index of the example in the list
+ * @param text - The reading to speak if file missing
+ */
+export const playKanjiAudio = (character: string, index: number, text: string) => {
+  const hex = (character.codePointAt(0) || 0).toString(16)
+  const audioPath = `${AUDIO_BASE_URL}/kanji/k_${hex}_${index}.mp3`
+  const audio = new Audio(audioPath)
+
+  audio.play().catch(() => {
+    speakJapanese(text)
+  })
 }
