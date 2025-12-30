@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
 import { RefreshCw, Volume2 } from 'lucide-vue-next';
-import { speakJapanese } from '@/utils/audio';
+import { speakJapanese, playKanaAudio } from '@/utils/audio';
 
 type CardData = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
 
@@ -58,7 +58,15 @@ function flipCard() {
 
 function playSound(e?: Event) {
     if (e) e.stopPropagation();
-    speakJapanese(frontText.value);
+
+    if (mode.value === 'hiragana' || mode.value === 'katakana') {
+        const card = currentCard.value as KanaChar;
+        // Uses static mp3 from Supabase
+        playKanaAudio(card.char, card.romaji);
+    } else {
+        // Fallback or future implementation for vocabulary
+        speakJapanese(frontText.value);
+    }
 }
 
 const fontSizeClass = computed(() => {
@@ -119,10 +127,10 @@ const fontSizeClass = computed(() => {
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
                     <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning ||
                         currentCard.romaji
-                    }}</span>
+                        }}</span>
                     <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
                     <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji
-                    }})</span>
+                        }})</span>
                 </div>
             </div>
         </div>

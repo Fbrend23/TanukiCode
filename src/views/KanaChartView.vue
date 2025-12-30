@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { hiragana, katakana, type KanaType } from '@/data/kana';
-import { speakJapanese } from '@/utils/audio';
+import { hiragana, katakana, type KanaType, type KanaChar } from '@/data/kana';
+import { speakJapanese, playKanaAudio } from '@/utils/audio';
 import { Volume2, Info } from 'lucide-vue-next';
 
 const mode = ref<'hiragana' | 'katakana'>('hiragana');
@@ -60,9 +60,14 @@ const gridLayoutClass = computed(() => {
     return 'grid-cols-4 sm:grid-cols-5 max-w-5xl gap-2 md:gap-4';
 });
 
-function playSound(char: string) {
-    if (char) {
-        speakJapanese(char);
+type GridItem = KanaChar | { type: 'spacer'; char?: string; romaji?: string };
+
+function playSound(item: GridItem) {
+    if (item.char && 'romaji' in item && item.romaji) {
+        playKanaAudio(item.char, item.romaji);
+    } else if (item.char) {
+        // Fallback if no romaji (shouldn't happen for KanaChar)
+        speakJapanese(item.char);
     }
 }
 </script>
@@ -119,14 +124,14 @@ function playSound(char: string) {
                 </div>
 
                 <!-- Card -->
-                <div v-else @click="playSound(item.char)"
+                <div v-else @click="playSound(item)"
                     class="aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-md border-2 border-tanuki-green hover:shadow-lg hover:bg-tanuki-beige/20 transition-all cursor-pointer group relative overflow-hidden z-10">
                     <template v-if="item.char">
                         <span
                             :class="['font-bold text-tanuki-brown-dark group-hover:scale-110 transition-transform', item.char.length > 1 ? 'text-3xl md:text-5xl' : 'text-4xl md:text-6xl']">{{
                                 item.char }}</span>
                         <span class="text-sm md:text-xl text-gray-400 group-hover:text-tanuki-gold mt-1">{{ item.romaji
-                        }}</span>
+                            }}</span>
 
                         <!-- Audio Icon Overlay -->
                         <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">

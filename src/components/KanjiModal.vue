@@ -2,7 +2,7 @@
 import { X, Info, Volume2 } from 'lucide-vue-next'
 import { ref, watch } from 'vue'
 import type { Kanji } from '@/data/kanji'
-import { speakJapanese } from '@/utils/audio'
+import { playKanjiAudio } from '@/utils/audio'
 
 const props = defineProps<{
     kanji: Kanji | null
@@ -13,8 +13,9 @@ const emit = defineEmits(['close'])
 
 const showInfo = ref(false)
 
-const playSound = (text: string) => {
-    speakJapanese(text)
+const playExample = (reading: string, index: number) => {
+    if (!props.kanji) return
+    playKanjiAudio(props.kanji.character, index, reading)
 }
 
 // Auto-play sound when modal opens
@@ -124,7 +125,7 @@ watch(() => props.isOpen, (newVal) => {
                                         <span class="text-sm md:text-base text-tanuki-green font-bold mt-1">{{
                                             ex.meaning }}</span>
                                     </div>
-                                    <button @click="playSound(ex.reading)"
+                                    <button @click="playExample(ex.reading, idx)"
                                         class="bg-tanuki-gold/10 hover:bg-tanuki-gold/20 active:bg-tanuki-gold/30 text-tanuki-brown p-3 rounded-full transition-colors shrink-0 ml-2">
                                         <Volume2 class="w-6 h-6" />
                                     </button>
