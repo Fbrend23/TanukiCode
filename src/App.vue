@@ -59,6 +59,8 @@ const handleLogout = async () => {
             </RouterLink>
             <RouterLink to="/kanji" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
             </RouterLink>
+            <RouterLink to="/grammar" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+              Grammaire</RouterLink>
             <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
             </RouterLink>
 
@@ -110,6 +112,9 @@ const handleLogout = async () => {
             <RouterLink to="/kanji" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Kanjis</RouterLink>
+            <RouterLink to="/grammar" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Grammaire</RouterLink>
             <RouterLink to="/quiz" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">Quiz
             </RouterLink>

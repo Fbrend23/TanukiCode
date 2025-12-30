@@ -49,6 +49,16 @@ const router = createRouter({
       name: 'update-password',
       component: () => import('../views/UpdatePasswordView.vue'),
     },
+    {
+      path: '/grammar',
+      name: 'grammar',
+      component: () => import('../views/GrammarView.vue'),
+    },
+    {
+      path: '/grammar/:id',
+      name: 'grammar-detail',
+      component: () => import('../views/GrammarDetailView.vue'),
+    },
   ],
 })
 
