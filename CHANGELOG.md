@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.8.0] - 2025-12-30
+
+### Added
+
+- **Grammar**: New N5 Grammar module with searchable lessons and detailed explanations.
+- **Audio Migration**: All audio assets (Kanas, Grammar, Kanji) are now hosted on Supabase Storage.
+- **Audio Logic**: Hybrid system with Supabase Storage, Cloud TTS fallback, and Native TTS fallback.
+- **Tooling**: New `generate-audio.js` script for automated audio generation and Supabase upload.
+
+### Fixed
+
+- **UI Stability**: Stabilized `btn-3d` animations to prevent layout shifts/footer flickering.
+- **Mobile**: Adjusted spacing in Study view for better ergonomics on small screens.
+- **Kanji**: Fixed Kanji audio naming issues using Hex-encoding.
+
 ## [0.7.0] - 2025-12-29
 
 ### Added
