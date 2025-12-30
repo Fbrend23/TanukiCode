@@ -80,7 +80,7 @@ const fontSizeClass = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center justify-start min-h-[60vh]">
+    <div class="flex flex-col items-center justify-start min-h-[60vh] pb-6 md:pb-0">
         <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Flashcards</h2>
 
         <!-- Mode Toggle -->
