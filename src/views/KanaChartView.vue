@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { hiragana, katakana, type KanaType, type KanaChar } from '@/data/kana';
+import { Volume2, Info, Check } from 'lucide-vue-next';
+import { hiragana, katakana, type KanaChar, type KanaType } from '@/data/kana';
 import { speakJapanese, playKanaAudio } from '@/utils/audio';
-import { Volume2, Info } from 'lucide-vue-next';
+import { useUserStore } from '@/stores/userStore';
 
 const mode = ref<'hiragana' | 'katakana'>('hiragana');
 const currentTab = ref<KanaType | 'modified'>('basic'); // 'modified' includes dakuten + handakuten
@@ -18,32 +19,12 @@ const displayedKana = computed(() => {
     }
     if (currentTab.value === 'yoon') {
         const raw = currentKanaList.value.filter(k => k.type === 'yoon');
-        // Insert spacer every 3 items for desktop layout
-        // Define a union type for items in the grid
         type GridItem = typeof raw[0] | { type: 'spacer'; char?: string; romaji?: string };
         const result: GridItem[] = [];
 
         for (let i = 0; i < raw.length; i += 3) {
             result.push(...raw.slice(i, i + 3));
-            if (i + 3 < raw.length) { // Verify if it's strictly inside the list logic?
-                // actually we want spacer at pos 3, 7, etc.
-                // Row 1: 0,1,2 (Spacer) 3,4,5
-                // The spacer is visually between Left and Right groups.
-                // Since we fill Row by Row.
-                // We need a spacer after every *Odd* group of 3?
-                // Group 0 (Left), Spacer, Group 1 (Right)
-                // Group 2 (Left), Spacer, Group 3 (Right)
-                // So insert spacer after index i+3 only if (i/3) is even?
-                // i=0 (Group 0): Push 0,1,2. Push Spacer.
-                // i=3 (Group 1): Push 3,4,5. New Row.
-                // i=6 (Group 2): Push 6,7,8. Push Spacer.
-                if ((i / 3) % 2 === 0) {
-                    result.push({ type: 'spacer' });
-                }
-            } else if ((i / 3) % 2 === 0) {
-                // Even if it is the last group, if it is on the Left, we might want a spacer for grid alignment?
-                // If last group is Left, and we don't have a Right group, spacer pushes nothing.
-                // But consistent grid structure is better.
+            if ((i / 3) % 2 === 0) {
                 result.push({ type: 'spacer' });
             }
         }
@@ -53,12 +34,14 @@ const displayedKana = computed(() => {
 });
 
 const gridLayoutClass = computed(() => {
-    if (currentTab.value === 'yoon') {
-        // Desktop: 3 cols | Spacer (3rem) | 3 cols
-        return 'grid-cols-3 md:grid-cols-[repeat(3,minmax(0,1fr))_3rem_repeat(3,minmax(0,1fr))] max-w-5xl gap-2 md:gap-4';
-    }
     return 'grid-cols-4 sm:grid-cols-5 max-w-5xl gap-2 md:gap-4';
 });
+
+const userStore = useUserStore();
+const isMastered = (item: { char?: string; romaji?: string }) => {
+    const id = item.char || item.romaji; // Fallback to romaji if needed, but char is best
+    return userStore.masteredItems.includes(id || '');
+};
 
 type GridItem = KanaChar | { type: 'spacer'; char?: string; romaji?: string };
 
@@ -76,8 +59,7 @@ function playSound(item: GridItem) {
     <div class="flex flex-col items-center">
         <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Tableaux des Kana</h2>
 
-        <!-- Mode Toggle (Hiragana/Katakana) -->
-        <div class="card flex p-1 mb-4">
+        <div class="card flex p-1 mb-4 shadow-none border-tanuki-green/40">
             <button @click="mode = 'hiragana'"
                 :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Hiragana
@@ -88,8 +70,7 @@ function playSound(item: GridItem) {
             </button>
         </div>
 
-        <!-- Tabs (Type) -->
-        <div class="flex gap-2 mb-6 overflow-x-auto max-w-full px-4 text-sm md:text-base">
+        <div class="flex gap-2 mb-6 overflow-x-auto max-w-full px-4 text-sm md:text-base scrollbar-hide">
             <button @click="currentTab = 'basic'"
                 :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2', currentTab === 'basic' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
                 De base
@@ -104,37 +85,36 @@ function playSound(item: GridItem) {
             </button>
         </div>
 
-        <!-- Hint -->
         <div
-            class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 py-2 rounded-lg mb-1 text-sm animate-fade-in">
+            class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 py-2 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige">
             <Info class="w-4 h-4 text-tanuki-gold" />
             <span>Cliquez sur un kana pour écouter sa prononciation.</span>
         </div>
 
-        <!-- Grid -->
         <div :class="['grid w-full p-4 transition-all relative', gridLayoutClass]">
-            <!-- Divider is now rendered inside spacer items or we keep absolute?
-                 If we rely on spacers, we can render the line inside every spacer!
-                 Let's drop absolute divider and put it in the spacer. -->
-
             <template v-for="(item, index) in displayedKana" :key="index">
-                <!-- Spacer (Desktop Divider) -->
                 <div v-if="item.type === 'spacer'" class="hidden md:flex items-center justify-center">
                     <div class="h-full w-0.5 bg-tanuki-brown/10 rounded-full"></div>
                 </div>
 
-                <!-- Card -->
                 <div v-else @click="playSound(item)"
-                    class="aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-md border-2 border-tanuki-green hover:shadow-lg hover:bg-tanuki-beige/20 transition-all cursor-pointer group relative overflow-hidden z-10">
+                    class="aspect-square flex flex-col items-center justify-center bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden z-10"
+                    :class="[isMastered(item) ? 'border-tanuki-green bg-tanuki-green/5' : 'border-tanuki-beige hover:border-tanuki-green hover:bg-tanuki-beige/20']">
                     <template v-if="item.char">
                         <span
-                            :class="['font-bold text-tanuki-brown-dark group-hover:scale-110 transition-transform', item.char.length > 1 ? 'text-3xl md:text-5xl' : 'text-4xl md:text-6xl']">{{
-                                item.char }}</span>
-                        <span class="text-sm md:text-xl text-gray-400 group-hover:text-tanuki-gold mt-1">{{ item.romaji
-                            }}</span>
+                            :class="['font-bold transition-transform', isMastered(item) ? 'text-tanuki-green scale-105' : 'text-tanuki-brown-dark group-hover:scale-110', item.char.length > 1 ? 'text-3xl md:text-5xl' : 'text-4xl md:text-6xl']">
+                            {{ item.char }}
+                        </span>
+                        <span
+                            :class="['text-xs md:text-xl transition-colors mt-1', isMastered(item) ? 'text-tanuki-green/60' : 'text-gray-400 group-hover:text-tanuki-gold']">
+                            {{ item.romaji }}
+                        </span>
 
-                        <!-- Audio Icon Overlay -->
-                        <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div v-if="isMastered(item)" class="absolute top-1 right-1">
+                            <Check class="w-3 h-3 md:w-4 md:h-4 text-tanuki-green stroke-[3]" />
+                        </div>
+
+                        <div v-else class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Volume2 class="w-3 h-3 text-tanuki-gold/50" />
                         </div>
                     </template>
