@@ -9,6 +9,35 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.9.0',
+    date: '2025-12-31',
+    sections: [
+      {
+        title: 'Quiz & Apprentissage',
+        items: [
+          'EXPANSION : Intégration complète des Kanjis et de la Grammaire dans le Quiz.',
+          'FILTRES : Nouveau système de sélection de catégories (Kanas, Kanjis, Grammaire, Vocabulaire).',
+          'MAÎTRISE : Suivi de progression individuelle pour chaque caractère et leçon.',
+        ],
+      },
+      {
+        title: 'Interface Premium',
+        items: [
+          'DASHBOARD : Refonte avec barres de progression stylisées et badges de réussite.',
+          'BADGES : Les Kanas, Kanjis et Leçons maîtrisés affichent désormais une coche verte.',
+          'HEADER : Nouveau design avec mascotte intégrée pour un look plus moderne.',
+        ],
+      },
+      {
+        title: 'Synchronisation Cloud',
+        items: [
+          'PROGRÈS : Vos maîtrises sont désormais sauvegardées et synchronisées via Supabase.',
+          'FIABILITÉ : Système de persistance hybride (Local + Cloud).',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.8.0',
     date: '2025-12-30',
     sections: [
