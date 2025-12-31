@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.9.0] - 2025-12-31
+
+### Added
+
+- **Quiz**: Integrated Kanji and Grammar into the question pool.
+- **Quiz**: Category filtering system (Kana, Kanji, Grammar, Vocabulary).
+- **Mastery**: Mastery tracking system to monitor progress for individual items.
+- **Home**: Progress indicators on home dashboard tiles.
+- **Cloud**: Automatic synchronization of mastery data and streaks with Supabase.
+
 ## [0.8.0] - 2025-12-30
 
 ### Added

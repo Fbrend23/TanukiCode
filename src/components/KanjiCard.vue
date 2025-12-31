@@ -1,38 +1,48 @@
 <script setup lang="ts">
 import type { Kanji } from '@/data/kanji'
+import { useUserStore } from '@/stores/userStore'
+import { Check } from 'lucide-vue-next'
+import { computed } from 'vue'
 
-defineProps<{
-  kanji: Kanji
-}>()
+const props = defineProps<{ kanji: Kanji }>()
+
+const userStore = useUserStore()
+const isMastered = computed(() => userStore.masteredItems.includes(props.kanji.character))
 </script>
 
 <template>
-  <div class="flex flex-col items-center bg-white rounded-2xl shadow-md border-2 border-tanuki-green hover:shadow-lg hover:bg-tanuki-beige/20 transition-all cursor-pointer group relative overflow-hidden p-4 h-full">
-    <!-- JLPT Badge -->
-    <div class="absolute top-2 right-2 bg-tanuki-brown/10 text-tanuki-brown text-[10px] font-bold px-2 py-0.5 rounded-full">
+  <div
+    class="flex flex-col items-center bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden p-4 h-full"
+    :class="[isMastered ? 'border-tanuki-green bg-tanuki-green/5' : 'border-tanuki-beige shadow-md hover:shadow-lg hover:bg-tanuki-beige/20 hover:border-tanuki-green']">
+
+    <div v-if="isMastered" class="absolute top-2 left-2 bg-tanuki-green text-white p-0.5 rounded-full">
+      <Check class="w-3 h-3 stroke-[4]" />
+    </div>
+
+    <div class="absolute top-2 right-2 font-bold px-2 py-0.5 rounded-full text-[10px]"
+      :class="isMastered ? 'text-tanuki-green bg-tanuki-green/10' : 'text-tanuki-brown bg-tanuki-brown/10'">
       N{{ kanji.jlpt }}
     </div>
 
-    <!-- Character -->
-    <div class="text-6xl font-display font-medium text-tanuki-brown-dark mb-4 group-hover:text-tanuki-green transition-colors">
+    <div class="text-6xl font-display font-medium mb-4 transition-colors"
+      :class="isMastered ? 'text-tanuki-green' : 'text-tanuki-brown-dark group-hover:text-tanuki-green'">
       {{ kanji.character }}
     </div>
 
-    <!-- Meanings -->
     <div class="text-center mb-4 min-h-[1.5em]">
       <p class="font-bold text-tanuki-brown text-lg leading-tight">{{ kanji.meaning.slice(0, 2).join(', ') }}</p>
     </div>
 
-    <!-- Readings -->
     <div class="w-full space-y-2 border-t border-tanuki-beige/30 pt-3">
-        <div class="flex justify-between items-baseline">
-            <span class="text-xs text-blue-400 font-bold tracking-widest">ON</span>
-            <span class="text-base font-bold text-blue-900 font-body">{{ kanji.onyomi.slice(0, 2).join('・') }}</span>
-        </div>
-        <div class="flex justify-between items-baseline">
-            <span class="text-xs text-tanuki-green font-bold tracking-widest">KUN</span>
-            <span class="text-base font-bold text-tanuki-brown-dark font-body">{{ kanji.kunyomi.slice(0, 2).join('・') }}</span>
-        </div>
+      <div class="flex justify-between items-baseline">
+        <span class="text-xs text-blue-400 font-bold tracking-widest">ON</span>
+        <span class="text-base font-bold text-blue-900 font-body">{{ kanji.onyomi.slice(0, 2).join('・') }}</span>
+      </div>
+      <div class="flex justify-between items-baseline">
+        <span class="text-xs text-tanuki-green font-bold tracking-widest">KUN</span>
+        <span class="text-base font-bold text-tanuki-brown-dark font-body">{{ kanji.kunyomi.slice(0, 2).join('・')
+          }}</span>
+      </div>
     </div>
   </div>
 </template>
