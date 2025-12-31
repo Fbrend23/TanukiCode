@@ -1,5 +1,28 @@
 <script setup lang="ts">
 import { Grid3x3, BookOpen, Gamepad2, ScrollText, PenTool } from 'lucide-vue-next';
+import { useUserStore } from '@/stores/userStore';
+import { hiragana, katakana } from '@/data/kana';
+import { vocabulary } from '@/data/vocabulary';
+import { kanjiList } from '@/data/kanji';
+import { grammarLessons } from '@/data/grammar';
+import { computed } from 'vue';
+
+const userStore = useUserStore();
+
+// Progress helper
+const getMasteryProgress = (items: { char?: string; character?: string; word?: string; id?: string }[]) => {
+    const total = items.length;
+    const mastered = items.filter(i => {
+        const id = i.char || i.character || i.word || i.id;
+        return userStore.masteredItems.includes(id || '');
+    }).length;
+    return { mastered, total };
+};
+
+const kanaProgress = computed(() => getMasteryProgress([...hiragana.filter(k => k.char), ...katakana.filter(k => k.char)]));
+const vocabProgress = computed(() => getMasteryProgress(vocabulary));
+const kanjiProgress = computed(() => getMasteryProgress(kanjiList));
+const grammarProgress = computed(() => getMasteryProgress(grammarLessons));
 </script>
 
 <template>
@@ -28,7 +51,7 @@ import { Grid3x3, BookOpen, Gamepad2, ScrollText, PenTool } from 'lucide-vue-nex
                 </div>
                 <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">Kanas
                 </h3>
-                <p class="text-sm text-gray-500">Hiragana & Katakana</p>
+                <p class="text-sm text-gray-500">{{ kanaProgress.mastered }} / {{ kanaProgress.total }} Maîtrisés</p>
             </RouterLink>
 
             <RouterLink to="/study"
@@ -38,7 +61,7 @@ import { Grid3x3, BookOpen, Gamepad2, ScrollText, PenTool } from 'lucide-vue-nex
                 </div>
                 <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">Étude
                 </h3>
-                <p class="text-sm text-gray-500">Cartes & Vocabulaire</p>
+                <p class="text-sm text-gray-500">{{ vocabProgress.mastered }} / {{ vocabProgress.total }} Vocabulaire</p>
             </RouterLink>
 
             <RouterLink to="/quiz"
@@ -48,7 +71,7 @@ import { Grid3x3, BookOpen, Gamepad2, ScrollText, PenTool } from 'lucide-vue-nex
                 </div>
                 <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">Quiz
                 </h3>
-                <p class="text-sm text-gray-500">Testez vos connaissances</p>
+                <p class="text-sm text-gray-500">Global: {{ userStore.masteredItems.length }} acquis</p>
             </RouterLink>
 
             <RouterLink to="/kanji"
@@ -60,7 +83,7 @@ import { Grid3x3, BookOpen, Gamepad2, ScrollText, PenTool } from 'lucide-vue-nex
                 </div>
                 <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors z-10">
                     Kanjis</h3>
-                <p class="text-sm text-gray-500 z-10">Niveau N5</p>
+                <p class="text-sm text-gray-500 z-10">{{ kanjiProgress.mastered }} / {{ kanjiProgress.total }} Kanjis</p>
             </RouterLink>
 
             <RouterLink to="/grammar"
@@ -70,7 +93,7 @@ import { Grid3x3, BookOpen, Gamepad2, ScrollText, PenTool } from 'lucide-vue-nex
                 </div>
                 <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">
                     Grammaire</h3>
-                <p class="text-sm text-gray-500">Particules & Phrases</p>
+                <p class="text-sm text-gray-500">{{ grammarProgress.mastered }} / {{ grammarProgress.total }} Leçons</p>
             </RouterLink>
         </div>
     </div>
