@@ -3,6 +3,7 @@ export interface Kanji {
   onyomi: string[]
   kunyomi: string[]
   meaning: string[]
+  category: string
   examples?: {
     word: string
     reading: string
@@ -19,6 +20,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['イチ', 'イツ'],
     kunyomi: ['ひと', 'ひと.つ'],
     meaning: ['Un'],
+    category: 'Numbers',
     examples: [
       { word: '一', reading: 'いち', meaning: 'Un' },
       { word: '一つ', reading: 'ひとつ', meaning: 'Une chose' },
@@ -32,6 +34,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ニ'],
     kunyomi: ['ふた', 'ふた.つ'],
     meaning: ['Deux'],
+    category: 'Numbers',
     examples: [
       { word: '二', reading: 'に', meaning: 'Deux' },
       { word: '二つ', reading: 'ふたつ', meaning: 'Deux choses' },
@@ -45,6 +48,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['サン'],
     kunyomi: ['み', 'み.つ', 'みっ.つ'],
     meaning: ['Trois'],
+    category: 'Numbers',
     examples: [
       { word: '三', reading: 'さん', meaning: 'Trois' },
       { word: '三つ', reading: 'みっつ', meaning: 'Trois choses' },
@@ -58,6 +62,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['シ'],
     kunyomi: ['よ', 'よ.つ', 'よっ.つ', 'よん'],
     meaning: ['Quatre'],
+    category: 'Numbers',
     examples: [
       { word: '四', reading: 'よん', meaning: 'Quatre' },
       { word: '四つ', reading: 'よっつ', meaning: 'Quatre choses' },
@@ -71,6 +76,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ゴ'],
     kunyomi: ['いつ', 'いつ.つ'],
     meaning: ['Cinq'],
+    category: 'Numbers',
     examples: [
       { word: '五', reading: 'ご', meaning: 'Cinq' },
       { word: '五つ', reading: 'いつつ', meaning: 'Cinq choses' },
@@ -84,6 +90,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ロク'],
     kunyomi: ['む', 'む.つ', 'むっ.つ'],
     meaning: ['Six'],
+    category: 'Numbers',
     examples: [
       { word: '六', reading: 'ろく', meaning: 'Six' },
       { word: '六つ', reading: 'むっつ', meaning: 'Six choses' },
@@ -97,6 +104,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['シチ'],
     kunyomi: ['なな', 'なな.つ', 'なの'],
     meaning: ['Sept'],
+    category: 'Numbers',
     examples: [
       { word: '七', reading: 'なな', meaning: 'Sept' },
       { word: '七つ', reading: 'ななつ', meaning: 'Sept choses' },
@@ -110,6 +118,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ハチ'],
     kunyomi: ['や', 'や.つ', 'やっ.つ', 'よう'],
     meaning: ['Huit'],
+    category: 'Numbers',
     examples: [
       { word: '八', reading: 'はち', meaning: 'Huit' },
       { word: '八つ', reading: 'やっつ', meaning: 'Huit choses' },
@@ -123,6 +132,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['キュウ', 'ク'],
     kunyomi: ['ここの', 'ここの.つ'],
     meaning: ['Neuf'],
+    category: 'Numbers',
     examples: [
       { word: '九', reading: 'きゅう', meaning: 'Neuf' },
       { word: '九つ', reading: 'ここのつ', meaning: 'Neuf choses' },
@@ -136,6 +146,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ジュウ', 'ジッ'],
     kunyomi: ['とお', 'と'],
     meaning: ['Dix'],
+    category: 'Numbers',
     examples: [
       { word: '十', reading: 'じゅう', meaning: 'Dix' },
       { word: '十', reading: 'とお', meaning: 'Dix choses' },
@@ -149,6 +160,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ヒャク'],
     kunyomi: [],
     meaning: ['Cent'],
+    category: 'Numbers',
     examples: [
       { word: '百', reading: 'ひゃく', meaning: 'Cent' },
       { word: '三百', reading: 'さんびゃく', meaning: 'Trois cents' },
@@ -162,6 +174,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['セン'],
     kunyomi: ['ち'],
     meaning: ['Mille'],
+    category: 'Numbers',
     examples: [
       { word: '千', reading: 'せん', meaning: 'Mille' },
       { word: '三千', reading: 'さんぜん', meaning: 'Trois mille' },
@@ -175,6 +188,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['マン', 'バン'],
     kunyomi: [],
     meaning: ['Dix Mille'],
+    category: 'Numbers',
     examples: [
       { word: '一万', reading: 'いちまん', meaning: 'Dix mille' },
       { word: '万国', reading: 'ばんこく', meaning: 'Tous les pays' },
@@ -187,6 +201,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['エン'],
     kunyomi: ['まる.い'],
     meaning: ['Yen', 'Cercle', 'Rond'],
+    category: 'Numbers',
     examples: [
       { word: '百円', reading: 'ひゃくえん', meaning: '100 Yens' },
       { word: '円い', reading: 'まるい', meaning: 'Rond' },
@@ -200,6 +215,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ニチ', 'ジツ'],
     kunyomi: ['ひ', '-び', '-か'],
     meaning: ['Jour', 'Soleil', 'Japon'],
+    category: 'Time',
     examples: [
       { word: '日本', reading: 'にほん', meaning: 'Japon' },
       { word: '日曜日', reading: 'にちようび', meaning: 'Dimanche' },
@@ -213,6 +229,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ゲツ', 'ガツ'],
     kunyomi: ['つき'],
     meaning: ['Mois', 'Lune'],
+    category: 'Time',
     examples: [
       { word: '月', reading: 'つき', meaning: 'Lune' },
       { word: '月曜日', reading: 'げつようび', meaning: 'Lundi' },
@@ -226,6 +243,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['カ'],
     kunyomi: ['ひ', '-び', 'ほ-'],
     meaning: ['Feu'],
+    category: 'Time',
     examples: [
       { word: '火', reading: 'ひ', meaning: 'Feu' },
       { word: '火曜日', reading: 'かようび', meaning: 'Mardi' },
@@ -239,6 +257,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['スイ'],
     kunyomi: ['みず'],
     meaning: ['Eau'],
+    category: 'Time',
     examples: [
       { word: '水', reading: 'みず', meaning: 'Eau' },
       { word: '水曜日', reading: 'すいようび', meaning: 'Mercredi' },
@@ -252,6 +271,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ボク', 'モク'],
     kunyomi: ['き', 'こ-'],
     meaning: ['Arbre', 'Bois'],
+    category: 'Time',
     examples: [
       { word: '木', reading: 'き', meaning: 'Arbre' },
       { word: '木曜日', reading: 'もくようび', meaning: 'Jeudi' },
@@ -264,6 +284,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['キン', 'コン'],
     kunyomi: ['かね', 'かな-', '-がね'],
     meaning: ['Or', 'Argent', 'Monnaie'],
+    category: 'Time',
     examples: [
       { word: 'お金', reading: 'おかね', meaning: 'Argent' },
       { word: '金曜日', reading: 'きんようび', meaning: 'Vendredi' },
@@ -276,6 +297,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ド', 'ト'],
     kunyomi: ['つち'],
     meaning: ['Sol', 'Terre'],
+    category: 'Time',
     examples: [
       { word: '土', reading: 'つち', meaning: 'Sol' },
       { word: '土曜日', reading: 'どようび', meaning: 'Samedi' },
@@ -289,6 +311,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ジン', 'ニン'],
     kunyomi: ['ひと', '-り', '-と'],
     meaning: ['Personne'],
+    category: 'People',
     examples: [
       { word: '人', reading: 'ひと', meaning: 'Personne' },
       { word: '日本人', reading: 'にほんじん', meaning: 'Japonais' },
@@ -302,6 +325,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['シ', 'ス'],
     kunyomi: ['こ', '-こ'],
     meaning: ['Enfant'],
+    category: 'People',
     examples: [
       { word: '子供', reading: 'こども', meaning: 'Enfant' },
       { word: '女子', reading: 'じょし', meaning: 'Fille / Femme' },
@@ -314,6 +338,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ジョ', 'ニョ', 'ニョウ'],
     kunyomi: ['おんな', 'め'],
     meaning: ['Femme'],
+    category: 'People',
     examples: [
       { word: '女', reading: 'おんな', meaning: 'Femme' },
       { word: '女の子', reading: 'おんなのこ', meaning: 'Fille' },
@@ -327,6 +352,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ダン', 'ナン'],
     kunyomi: ['おとこ', 'お'],
     meaning: ['Homme'],
+    category: 'People',
     examples: [
       { word: '男', reading: 'おとこ', meaning: 'Homme' },
       { word: '男の子', reading: 'おとこのこ', meaning: 'Garçon' },
@@ -339,6 +365,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['モク', 'ボク'],
     kunyomi: ['め', '-め', 'ま-'],
     meaning: ['Oeil'],
+    category: 'People',
     examples: [
       { word: '目', reading: 'め', meaning: 'Oeil' },
       { word: '目的', reading: 'もくてき', meaning: 'But / Objectif' },
@@ -351,6 +378,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['コウ', 'ク'],
     kunyomi: ['くち'],
     meaning: ['Bouche'],
+    category: 'People',
     examples: [
       { word: '口', reading: 'くち', meaning: 'Bouche' },
       { word: '入口', reading: 'いりぐち', meaning: 'Entrée' },
@@ -364,6 +392,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ジ'],
     kunyomi: ['みみ'],
     meaning: ['Oreille'],
+    category: 'People',
     examples: [{ word: '耳', reading: 'みみ', meaning: 'Oreille' }],
     strokes: 6,
     jlpt: 5,
@@ -373,6 +402,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['シュ', 'ズ'],
     kunyomi: ['て', 'て-'],
     meaning: ['Main'],
+    category: 'People',
     examples: [
       { word: '手', reading: 'て', meaning: 'Main' },
       { word: '上手', reading: 'じょうず', meaning: 'Doué / Habile' },
@@ -386,6 +416,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ソク'],
     kunyomi: ['あし', 'た.りる', 'た.す'],
     meaning: ['Jambe', 'Pied'],
+    category: 'People',
     examples: [
       { word: '足', reading: 'あし', meaning: 'Pied / Jambe' },
       { word: '足りる', reading: 'たりる', meaning: 'Suffire' },
@@ -400,6 +431,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['サン'],
     kunyomi: ['やま'],
     meaning: ['Montagne'],
+    category: 'Nature',
     examples: [
       { word: '山', reading: 'やま', meaning: 'Montagne' },
       { word: '富士山', reading: 'ふじさん', meaning: 'Mont Fuji' },
@@ -412,6 +444,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['セン'],
     kunyomi: ['かわ', '-がわ'],
     meaning: ['Rivière'],
+    category: 'Nature',
     examples: [
       { word: '川', reading: 'かわ', meaning: 'Rivière' },
       { word: 'ナイル川', reading: 'ナイルがわ', meaning: 'Le Nil' },
@@ -424,6 +457,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['クウ'],
     kunyomi: ['そら', 'あ.く', 'から'],
     meaning: ['Ciel', 'Vide'],
+    category: 'Nature',
     examples: [
       { word: '空', reading: 'そら', meaning: 'Ciel' },
       { word: '空気', reading: 'くうき', meaning: 'Air' },
@@ -436,6 +470,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ウ'],
     kunyomi: ['あめ', 'あま-'],
     meaning: ['Pluie'],
+    category: 'Nature',
     examples: [
       { word: '雨', reading: 'あめ', meaning: 'Pluie' },
       { word: '大雨', reading: 'おおあめ', meaning: 'Forte pluie' },
@@ -448,6 +483,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['テン'],
     kunyomi: ['あま-', 'あめ'],
     meaning: ['Paradis', 'Ciel'],
+    category: 'Nature',
     examples: [
       { word: '天気', reading: 'てんき', meaning: 'Météo' },
       { word: '天国', reading: 'てんごく', meaning: 'Paradis' },
@@ -460,6 +496,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['キ', 'ケ'],
     kunyomi: [],
     meaning: ['Esprit', 'Air', 'Atmosphère'],
+    category: 'Nature',
     examples: [
       { word: '元気', reading: 'げんき', meaning: 'En forme' },
       { word: '気分', reading: 'きぶん', meaning: 'Humeur / Sentiment' },
@@ -472,6 +509,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['デン'],
     kunyomi: [],
     meaning: ['Électricité'],
+    category: 'Nature',
     examples: [
       { word: '電車', reading: 'でんしゃ', meaning: 'Train' },
       { word: '電話', reading: 'でんわ', meaning: 'Téléphone' },
@@ -485,6 +523,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ジョウ'],
     kunyomi: ['うえ', 'あ.げる', 'のぼ.る'],
     meaning: ['Haut', 'Dessus', 'Monter'],
+    category: 'Directions',
     examples: [
       { word: '上', reading: 'うえ', meaning: 'Dessus / Haut' },
       { word: '上手', reading: 'じょうず', meaning: 'Doué' },
@@ -497,6 +536,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['カ', 'ゲ'],
     kunyomi: ['した', 'さ.げる', 'くだ.る'],
     meaning: ['Bas', 'Dessous', 'Descendre'],
+    category: 'Directions',
     examples: [
       { word: '下', reading: 'した', meaning: 'Dessous / Bas' },
       { word: '地下鉄', reading: 'ちかてつ', meaning: 'Métro' },
@@ -509,6 +549,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['チュウ'],
     kunyomi: ['なか'],
     meaning: ['Milieu', 'Dans', 'Centre'],
+    category: 'Directions',
     examples: [
       { word: '中', reading: 'なか', meaning: 'Intérieur' },
       { word: '中国', reading: 'ちゅうごく', meaning: 'Chine' },
@@ -521,6 +562,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ガイ', 'ゲ'],
     kunyomi: ['そと', 'はず.す'],
     meaning: ['Dehors', 'Extérieur'],
+    category: 'Directions',
     examples: [
       { word: '外', reading: 'そと', meaning: 'Dehors' },
       { word: '外国', reading: 'がいこく', meaning: 'Pays étranger' },
@@ -533,6 +575,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ウ', 'ユウ'],
     kunyomi: ['みぎ'],
     meaning: ['Droite'],
+    category: 'Directions',
     examples: [
       { word: '右', reading: 'みぎ', meaning: 'Droite' },
       { word: '右手', reading: 'みぎて', meaning: 'Main droite' },
@@ -545,6 +588,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['サ'],
     kunyomi: ['ひだり'],
     meaning: ['Gauche'],
+    category: 'Directions',
     examples: [
       { word: '左', reading: 'ひだり', meaning: 'Gauche' },
       { word: '左手', reading: 'ひだりて', meaning: 'Main gauche' },
@@ -557,6 +601,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ゼン'],
     kunyomi: ['まえ'],
     meaning: ['Devant', 'Avant'],
+    category: 'Directions',
     examples: [
       { word: '前', reading: 'まえ', meaning: 'Devant' },
       { word: '名前', reading: 'なまえ', meaning: 'Nom' },
@@ -569,6 +614,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ゴ', 'コウ'],
     kunyomi: ['うし.ろ', 'あと'],
     meaning: ['Derrière', 'Après'],
+    category: 'Directions',
     examples: [
       { word: '後ろ', reading: 'うしろ', meaning: 'Derrière' },
       { word: '午後', reading: 'ごご', meaning: 'Après-midi' },
@@ -581,6 +627,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['トウ'],
     kunyomi: ['ひがし'],
     meaning: ['Est'],
+    category: 'Directions',
     examples: [
       { word: '東', reading: 'ひがし', meaning: 'Est' },
       { word: '東京', reading: 'とうきょう', meaning: 'Tokyo' },
@@ -593,6 +640,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['セイ', 'サイ'],
     kunyomi: ['にし'],
     meaning: ['Ouest'],
+    category: 'Directions',
     examples: [
       { word: '西', reading: 'にし', meaning: 'Ouest' },
       { word: '関西', reading: 'かんさい', meaning: 'Kansai' },
@@ -605,6 +653,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ナン'],
     kunyomi: ['みなみ'],
     meaning: ['Sud'],
+    category: 'Directions',
     examples: [
       { word: '南', reading: 'みなみ', meaning: 'Sud' },
       { word: '南口', reading: 'みなみぐち', meaning: 'Entrée Sud' },
@@ -617,6 +666,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ホク'],
     kunyomi: ['きた'],
     meaning: ['Nord'],
+    category: 'Directions',
     examples: [
       { word: '北', reading: 'きた', meaning: 'Nord' },
       { word: '北海道', reading: 'ほっかいどう', meaning: 'Hokkaido' },
@@ -630,6 +680,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['コウ', 'ギョウ'],
     kunyomi: ['い.く', 'ゆ.く', 'おこな.う'],
     meaning: ['Aller'],
+    category: 'Verbs',
     examples: [
       { word: '行く', reading: 'いく', meaning: 'Aller' },
       { word: '銀行', reading: 'ぎんこう', meaning: 'Banque' },
@@ -642,6 +693,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ライ'],
     kunyomi: ['く.る', 'きた.る'],
     meaning: ['Venir'],
+    category: 'Verbs',
     examples: [
       { word: '来る', reading: 'くる', meaning: 'Venir' },
       { word: '来月', reading: 'らいげつ', meaning: 'Mois prochain' },
@@ -654,6 +706,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ショク'],
     kunyomi: ['た.べる', 'く.う'],
     meaning: ['Manger'],
+    category: 'Verbs',
     examples: [
       { word: '食べる', reading: 'たべる', meaning: 'Manger' },
       { word: '食事', reading: 'しょくじ', meaning: 'Repas' },
@@ -666,6 +719,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['イン'],
     kunyomi: ['の.む'],
     meaning: ['Boire'],
+    category: 'Verbs',
     examples: [
       { word: '飲む', reading: 'のむ', meaning: 'Boire' },
       { word: '飲み物', reading: 'のみもの', meaning: 'Boisson' },
@@ -678,6 +732,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ケン'],
     kunyomi: ['み.る', 'み.える'],
     meaning: ['Voir', 'Regarder'],
+    category: 'Verbs',
     examples: [
       { word: '見る', reading: 'みる', meaning: 'Voir' },
       { word: '意見', reading: 'いけん', meaning: 'Opinion' },
@@ -690,6 +745,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ブン', 'モン'],
     kunyomi: ['き.く', 'き.こえる'],
     meaning: ['Entendre', 'Écouter'],
+    category: 'Verbs',
     examples: [
       { word: '聞く', reading: 'きく', meaning: 'Écouter' },
       { word: '新聞', reading: 'しんぶん', meaning: 'Journal' },
@@ -702,6 +758,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ドク'],
     kunyomi: ['よ.む'],
     meaning: ['Lire'],
+    category: 'Verbs',
     examples: [
       { word: '読む', reading: 'よむ', meaning: 'Lire' },
       { word: '読書', reading: 'どくしょ', meaning: 'Lecture' },
@@ -714,6 +771,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ショ'],
     kunyomi: ['か.く'],
     meaning: ['Écrire'],
+    category: 'Verbs',
     examples: [
       { word: '書く', reading: 'かく', meaning: 'Écrire' },
       { word: '辞書', reading: 'じしょ', meaning: 'Dictionnaire' },
@@ -726,6 +784,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ワ'],
     kunyomi: ['はな.す', 'はなし'],
     meaning: ['Parler'],
+    category: 'Verbs',
     examples: [
       { word: '話す', reading: 'はなす', meaning: 'Parler' },
       { word: '電話', reading: 'でんわ', meaning: 'Téléphone' },
@@ -738,6 +797,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['バイ'],
     kunyomi: ['か.う'],
     meaning: ['Acheter'],
+    category: 'Verbs',
     examples: [
       { word: '買う', reading: 'かう', meaning: 'Acheter' },
       { word: '買い物', reading: 'かいもの', meaning: 'Shopping' },
@@ -751,6 +811,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ダイ', 'タイ'],
     kunyomi: ['おお.きい'],
     meaning: ['Grand'],
+    category: 'Adjectives',
     examples: [
       { word: '大きい', reading: 'おおきい', meaning: 'Grand' },
       { word: '大学', reading: 'だいがく', meaning: 'Université' },
@@ -763,6 +824,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ショウ'],
     kunyomi: ['ちい.さい', 'こ', 'お'],
     meaning: ['Petit'],
+    category: 'Adjectives',
     examples: [
       { word: '小さい', reading: 'ちいさい', meaning: 'Petit' },
       { word: '小学校', reading: 'しょうがっこう', meaning: 'École primaire' },
@@ -775,6 +837,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['コウ'],
     kunyomi: ['たか.い'],
     meaning: ['Haut', 'Cher'],
+    category: 'Adjectives',
     examples: [
       { word: '高い', reading: 'たかい', meaning: 'Haut / Cher' },
       { word: '高校', reading: 'こうこう', meaning: 'Lycée' },
@@ -787,6 +850,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['アン'],
     kunyomi: ['やす.い'],
     meaning: ['Bon marché', 'Paisible'],
+    category: 'Adjectives',
     examples: [
       { word: '安い', reading: 'やすい', meaning: 'Pas cher' },
       { word: '安心', reading: 'あんしん', meaning: 'Soulagement' },
@@ -799,6 +863,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['シン'],
     kunyomi: ['あたら.しい'],
     meaning: ['Nouveau'],
+    category: 'Adjectives',
     examples: [
       { word: '新しい', reading: 'あたらしい', meaning: 'Nouveau' },
       { word: '新聞', reading: 'しんぶん', meaning: 'Journal' },
@@ -811,6 +876,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['コ'],
     kunyomi: ['ふる.い'],
     meaning: ['Vieux'],
+    category: 'Adjectives',
     examples: [
       { word: '古い', reading: 'ふるい', meaning: 'Vieux' },
       { word: '中古', reading: 'ちゅうこ', meaning: 'Occasion (seconde main)' },
@@ -823,6 +889,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['タ'],
     kunyomi: ['おお.い'],
     meaning: ['Nombreux', 'Beaucoup'],
+    category: 'Adjectives',
     examples: [
       { word: '多い', reading: 'おおい', meaning: 'Nombreux' },
       { word: '多分', reading: 'たぶん', meaning: 'Peut-être' },
@@ -835,6 +902,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ショウ'],
     kunyomi: ['すく.ない', 'すこ.し'],
     meaning: ['Peu', 'Un peu'],
+    category: 'Adjectives',
     examples: [
       { word: '少ない', reading: 'すくない', meaning: 'Peu' },
       { word: '少し', reading: 'すこし', meaning: 'Un peu' },
@@ -847,6 +915,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['チョウ'],
     kunyomi: ['なが.い'],
     meaning: ['Long'],
+    category: 'Adjectives',
     examples: [
       { word: '長い', reading: 'ながい', meaning: 'Long' },
       { word: '社長', reading: 'しゃちょう', meaning: 'PDG / Président' },
@@ -859,6 +928,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ハク'],
     kunyomi: ['しろ', 'しろ.い'],
     meaning: ['Blanc'],
+    category: 'Adjectives',
     examples: [
       { word: '白い', reading: 'しろい', meaning: 'Blanc (adj)' },
       { word: '白', reading: 'しろ', meaning: 'Blanc (nom)' },
@@ -872,6 +942,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ホン'],
     kunyomi: ['もと'],
     meaning: ['Livre', 'Origine'],
+    category: 'Life',
     examples: [
       { word: '本', reading: 'ほん', meaning: 'Livre' },
       { word: '日本', reading: 'にほん', meaning: 'Japon' },
@@ -884,6 +955,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['セン'],
     kunyomi: ['さき'],
     meaning: ['Avant', 'Précédent'],
+    category: 'Life',
     examples: [
       { word: '先生', reading: 'せんせい', meaning: 'Professeur' },
       { word: '先月', reading: 'せんげつ', meaning: 'Mois dernier' },
@@ -896,6 +968,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['セイ', 'ショウ'],
     kunyomi: ['い.きる', 'う.まれる', 'なま'],
     meaning: ['Vie', 'Naître', 'Cru'],
+    category: 'Life',
     examples: [
       { word: '先生', reading: 'せんせい', meaning: 'Professeur' },
       { word: '学生', reading: 'がくせい', meaning: 'Étudiant' },
@@ -909,6 +982,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ユウ'],
     kunyomi: ['とも'],
     meaning: ['Ami'],
+    category: 'Life',
     examples: [
       { word: '友達', reading: 'ともだち', meaning: 'Ami' },
       { word: '友人', reading: 'ゆうじん', meaning: 'Ami (formel)' },
@@ -921,6 +995,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['メイ', 'ミョウ'],
     kunyomi: ['な'],
     meaning: ['Nom'],
+    category: 'Life',
     examples: [
       { word: '名前', reading: 'なまえ', meaning: 'Nom' },
       { word: '有名', reading: 'ゆうめい', meaning: 'Célèbre' },
@@ -933,6 +1008,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['シャ'],
     kunyomi: ['くるま'],
     meaning: ['Voiture'],
+    category: 'Life',
     examples: [
       { word: '車', reading: 'くるま', meaning: 'Voiture' },
       { word: '電車', reading: 'でんしゃ', meaning: 'Train' },
@@ -945,6 +1021,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['エキ'],
     kunyomi: [],
     meaning: ['Gare'],
+    category: 'Life',
     examples: [
       { word: '駅', reading: 'えき', meaning: 'Gare' },
       { word: '駅長', reading: 'えきちょう', meaning: 'Chef de gare' },
@@ -957,6 +1034,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['コク'],
     kunyomi: ['くに'],
     meaning: ['Pays'],
+    category: 'Life',
     examples: [
       { word: '国', reading: 'くに', meaning: 'Pays' },
       { word: '外国', reading: 'がいこく', meaning: 'Pays étranger' },
@@ -969,6 +1047,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['シャ'],
     kunyomi: ['やしろ'],
     meaning: ['Entreprise', 'Sanctuaire'],
+    category: 'Life',
     examples: [
       { word: '会社', reading: 'かいしゃ', meaning: 'Entreprise' },
       { word: '社会', reading: 'しゃかい', meaning: 'Société' },
@@ -981,6 +1060,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['フ'],
     kunyomi: ['ちち'],
     meaning: ['Père'],
+    category: 'Life',
     examples: [
       { word: '父', reading: 'ちち', meaning: 'Mon père' },
       { word: 'お父さん', reading: 'おとうさん', meaning: "Père (de qqn d'autre)" },
@@ -993,6 +1073,7 @@ export const kanjiList: Kanji[] = [
     onyomi: ['ボ'],
     kunyomi: ['はは'],
     meaning: ['Mère'],
+    category: 'Life',
     examples: [
       { word: '母', reading: 'はは', meaning: 'Ma mère' },
       { word: 'お母さん', reading: 'おかあさん', meaning: "Mère (de qqn d'autre)" },
