@@ -54,10 +54,12 @@ const handleLogout = async () => {
             <RouterLink to="/" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Accueil
             </RouterLink>
             <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
-              Tableaux</RouterLink>
+              Kanas</RouterLink>
 
             <RouterLink to="/kanji" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
             </RouterLink>
+            <RouterLink to="/vocabulary" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+              Vocabulaire</RouterLink>
             <RouterLink to="/grammar" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Grammaire</RouterLink>
             <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
@@ -106,11 +108,14 @@ const handleLogout = async () => {
             </RouterLink>
             <RouterLink to="/charts" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
-              Tableaux</RouterLink>
+              Kanas</RouterLink>
 
             <RouterLink to="/kanji" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Kanjis</RouterLink>
+            <RouterLink to="/vocabulary" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Vocabulaire</RouterLink>
             <RouterLink to="/grammar" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Grammaire</RouterLink>

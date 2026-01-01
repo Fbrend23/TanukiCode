@@ -59,6 +59,11 @@ const router = createRouter({
       name: 'grammar-detail',
       component: () => import('../views/GrammarDetailView.vue'),
     },
+    {
+      path: '/vocabulary',
+      name: 'vocabulary',
+      component: () => import('../views/VocabularyView.vue'),
+    },
   ],
 })
 
