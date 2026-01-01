@@ -67,24 +67,7 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
                 </div>
             </RouterLink>
 
-            <RouterLink to="/study"
-                class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
-                <div
-                    class="absolute top-2 right-4 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-100">
-                    {{ vocabProgress.mastered }}/{{ vocabProgress.total }}
-                </div>
-                <div class="bg-green-100 p-3 rounded-full mb-3 group-hover:bg-green-200 transition-colors">
-                    <BookOpen class="w-8 h-8 text-green-600" />
-                </div>
-                <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">Étude
-                </h3>
-                <p class="text-sm text-gray-400 mb-4">Cartes & Vocabulaire</p>
 
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
-                    <div class="h-full bg-green-500 transition-all duration-500"
-                        :style="{ width: getPercentage(vocabProgress) + '%' }"></div>
-                </div>
-            </RouterLink>
 
             <RouterLink to="/kanji"
                 class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
@@ -122,6 +105,25 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
                 <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
                     <div class="h-full bg-indigo-500 transition-all duration-500"
                         :style="{ width: getPercentage(grammarProgress) + '%' }"></div>
+                </div>
+            </RouterLink>
+
+            <RouterLink to="/study"
+                class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
+                <div
+                    class="absolute top-2 right-4 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-100">
+                    {{ vocabProgress.mastered }}/{{ vocabProgress.total }}
+                </div>
+                <div class="bg-green-100 p-3 rounded-full mb-3 group-hover:bg-green-200 transition-colors">
+                    <BookOpen class="w-8 h-8 text-green-600" />
+                </div>
+                <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">Étude
+                </h3>
+                <p class="text-sm text-gray-400 mb-4">Cartes & Vocabulaire</p>
+
+                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
+                    <div class="h-full bg-green-500 transition-all duration-500"
+                        :style="{ width: getPercentage(vocabProgress) + '%' }"></div>
                 </div>
             </RouterLink>
 

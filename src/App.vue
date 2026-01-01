@@ -55,12 +55,13 @@ const handleLogout = async () => {
             </RouterLink>
             <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Tableaux</RouterLink>
-            <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
-            </RouterLink>
+
             <RouterLink to="/kanji" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
             </RouterLink>
             <RouterLink to="/grammar" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Grammaire</RouterLink>
+            <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
+            </RouterLink>
             <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
             </RouterLink>
 
@@ -106,15 +107,16 @@ const handleLogout = async () => {
             <RouterLink to="/charts" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Tableaux</RouterLink>
-            <RouterLink to="/study" @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors">Étude
-            </RouterLink>
+
             <RouterLink to="/kanji" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Kanjis</RouterLink>
             <RouterLink to="/grammar" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Grammaire</RouterLink>
+            <RouterLink to="/study" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">Étude
+            </RouterLink>
             <RouterLink to="/quiz" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">Quiz
             </RouterLink>
