@@ -9,6 +9,20 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.9.1',
+    date: '2026-01-01',
+    sections: [
+      {
+        title: 'Correctifs UI',
+        items: [
+          "TABLEAUX : Correction de l'alignement du tableau des Yoon sur mobile et desktop.",
+          'TABLEAUX : Uniformisation de la largeur des tableaux et réduction des espaces vides.',
+          'MOBILE : Rétablissement de la grille à 5 colonnes pour les Kanas de base.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.9.0',
     date: '2025-12-31',
     sections: [
