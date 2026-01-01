@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.10.0] - 2026-01-01
+
+### Added
+
+- **Vocabulary**: Complete new module with 150+ words, native audio playback, and mastery tracking.
+- **Mastery**: Standardized mastery system across all modules (Kanji, Kana, Grammar, Vocabulary) with consistent UI.
+- **Kanjis**:
+  - **Content**: Added 50 new N5 Kanjis.
+  - **Interface**: New tabbed interface to filter Kanjis by category (Numbers, Time, People, etc.).
+- **Navigation**:
+  - **Separators**: Added visual hierarchy (Home | Encyclopedia | Practice).
+  - **Auto-Scroll**: Page now automatically scrolls to top on navigation.
+
+### Changed
+
+- **UI/UX**:
+  - **Mobile Menu**: Fixed overflow issues (scrollable) and improved separator visibility.
+  - **Cards**: Optimized Kana card layout (reduced font size, removed scaling) for better mobile experience.
+  - **Kanas**: Renamed "Tableaux" to "Kanas" in navigation.
+
 ## [0.9.1] - 2026-01-01
 
 ### Fixed

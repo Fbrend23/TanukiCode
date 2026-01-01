@@ -9,6 +9,29 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.10.0',
+    date: '2026-01-01',
+    sections: [
+      {
+        title: 'Contenu & Fonctionnalités',
+        items: [
+          'VOCABULAIRE : Explorez des centaines de mots avec prononciation audio native.',
+          'KANJIS : Ajout de 50 nouveaux Kanjis (N5) et nouvelle navigation par onglets.',
+          'MAÎTRISE : Cochez les mots et kanjis appris pour suivre votre progression.',
+        ],
+      },
+      {
+        title: 'Expérience Utilisateur',
+        items: [
+          'NAVIGATION : Nouvelle barre de navigation avec séparateurs visuels clairs.',
+          'MOBILE : Menu optimisé (scrollable) et séparateurs plus visibles.',
+          'CONFORT : Retour automatique en haut de page à chaque changement de menu.',
+          'UNIFORMISATION : Le système de "Coche Verte" est maintenant identique partout (Kanas, Kanjis, Grammaire).',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.9.1',
     date: '2026-01-01',
     sections: [
