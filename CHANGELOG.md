@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1] - 2026-01-01
+
+### Fixed
+
+- **Layout**: Fixed Yoon (Combos) table alignment on mobile and desktop.
+- **Layout**: Enforced 5-column grid for Basic Kana on mobile to maintain traditional rows.
+
 ## [0.9.0] - 2025-12-31
 
 ### Added
