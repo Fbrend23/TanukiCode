@@ -45,41 +45,46 @@ const emptyStateMessage = computed(() => {
 
 <template>
     <div class="flex flex-col items-center w-full px-4 mb-4 md:mb-0">
-        <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">
-            Grammaire (N5)
-        </h1>
+        <div class="text-center mb-2">
+            <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">
+                Grammaire (N5)
+            </h1>
+        </div>
 
-        <div class="flex flex-col items-center gap-4 mb-6 w-full max-w-6xl">
-            <div class="relative w-full max-w-md">
+        <div class="flex flex-col items-center w-full max-w-4xl mb-6">
+            <div class="relative w-full max-w-md mb-4">
                 <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input v-model="searchQuery" type="text" placeholder="Rechercher une leçon..."
                     class="w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-green rounded-xl focus:border-tanuki-green focus:outline-none transition-colors shadow-sm" />
             </div>
 
             <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide w-full md:justify-center">
-                <button v-for="cat in categories" :key="cat.value" @click="selectedCategory = cat.value"
-                    class="px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors flex-shrink-0"
-                    :class="selectedCategory === cat.value ? 'bg-tanuki-green text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'">
+                <button v-for="cat in categories" :key="cat.value" @click="selectedCategory = cat.value" :class="['px-4 py-1.5 rounded-full font-bold transition-all border-2 text-sm md:text-base whitespace-nowrap',
+                    selectedCategory === cat.value
+                        ? 'bg-tanuki-green text-white border-tanuki-green shadow-sm'
+                        : 'bg-white text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-green/50']">
                     {{ cat.label }}
                 </button>
             </div>
         </div>
+
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 w-full max-w-6xl px-0 md:px-4">
             <div v-for="lesson in filteredLessons" :key="lesson.id" @click="navigateToLesson(lesson.id)"
                 class="card p-3 md:p-6 group cursor-pointer hover:shadow-md transition-all flex flex-col h-full border-2"
                 :class="[isMastered(lesson.id) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:border-tanuki-green-light']">
 
-                <div class="flex justify-between items-start mb-2">
+                <button @click.stop="userStore.toggleMastery(lesson.id)"
+                    class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20"
+                    :class="[isMastered(lesson.id) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
+                    <Check class="w-3 h-3 stroke-[4]" />
+                </button>
+
+                <div class="flex justify-between items-start mb-2 pl-4 md:pl-0">
                     <div class="flex flex-wrap gap-1">
                         <span
                             class="bg-gray-100 text-gray-600 text-[10px] md:text-sm font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded">
                             {{ getCategoryLabel(lesson.category) }}
-                        </span>
-                        <span v-if="isMastered(lesson.id)"
-                            class="bg-tanuki-green text-white text-[10px] md:text-sm font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded flex items-center gap-1">
-                            <Check class="w-3 h-3 stroke-[3]" />
-                            <span>Maîtrisé</span>
                         </span>
                     </div>
                     <span

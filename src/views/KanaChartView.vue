@@ -60,7 +60,7 @@ function playSound(item: GridItem) {
 
 <template>
     <div class="flex flex-col items-center">
-        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Tableaux des Kana</h2>
+        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanas</h2>
 
         <div class="card flex p-1 mb-4 shadow-none border-tanuki-green/40">
             <button @click="mode = 'hiragana'"
@@ -94,18 +94,18 @@ function playSound(item: GridItem) {
             <span>Cliquez sur un kana pour écouter sa prononciation.</span>
         </div>
 
-        <div :class="['grid w-full p-4 transition-all relative', gridLayoutClass]">
+        <div :class="['grid w-full px-4 pb-4 pt-0 transition-all relative', gridLayoutClass]">
             <template v-for="(item, index) in displayedKana" :key="index">
                 <div v-if="item.type === 'spacer'" class="hidden md:flex items-center justify-center">
                     <div class="h-full w-0.5 bg-tanuki-brown/10 rounded-full"></div>
                 </div>
 
                 <div v-else @click="playSound(item)"
-                    class="aspect-square flex flex-col items-center justify-center bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden z-10"
-                    :class="[isMastered(item) ? 'border-tanuki-green bg-tanuki-green/5' : 'border-tanuki-beige hover:border-tanuki-green hover:bg-tanuki-beige/20']">
+                    class="aspect-[4/5] flex flex-col items-center justify-center pt-4 bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden z-10"
+                    :class="[isMastered(item) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:shadow-xl hover:border-tanuki-green-light']">
                     <template v-if="item.char">
                         <span
-                            :class="['font-bold transition-transform', isMastered(item) ? 'text-tanuki-green scale-105' : 'text-tanuki-brown-dark group-hover:scale-110', item.char.length > 1 ? 'text-3xl md:text-5xl' : 'text-4xl md:text-6xl']">
+                            :class="['font-bold', isMastered(item) ? 'text-tanuki-green' : 'text-tanuki-brown-dark', item.char.length > 1 ? 'text-2xl md:text-5xl' : 'text-3xl md:text-6xl']">
                             {{ item.char }}
                         </span>
                         <span
@@ -113,12 +113,14 @@ function playSound(item: GridItem) {
                             {{ item.romaji }}
                         </span>
 
-                        <div v-if="isMastered(item)" class="absolute top-1 right-1">
-                            <Check class="w-3 h-3 md:w-4 md:h-4 text-tanuki-green stroke-[3]" />
-                        </div>
+                        <button @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
+                            class="absolute top-1 left-1 p-1 rounded-full transition-colors z-20"
+                            :class="[isMastered(item) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
+                            <Check class="w-3 h-3 stroke-[4]" />
+                        </button>
 
-                        <div v-else class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Volume2 class="w-3 h-3 text-tanuki-gold/50" />
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Volume2 class="w-4 h-4 text-tanuki-gold/50" />
                         </div>
                     </template>
                 </div>
