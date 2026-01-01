@@ -53,6 +53,10 @@ const handleLogout = async () => {
           <nav aria-label="Navigation principale" class="hidden md:flex items-center gap-6 text-base">
             <RouterLink to="/" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Accueil
             </RouterLink>
+
+            <!-- Separator -->
+            <div class="h-4 w-px bg-tanuki-beige/30 md:block"></div>
+
             <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Kanas</RouterLink>
 
@@ -62,6 +66,10 @@ const handleLogout = async () => {
               Vocabulaire</RouterLink>
             <RouterLink to="/grammar" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Grammaire</RouterLink>
+
+            <!-- Separator -->
+            <div class="h-4 w-px bg-tanuki-beige/30 md:block"></div>
+
             <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
             </RouterLink>
             <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
@@ -102,10 +110,13 @@ const handleLogout = async () => {
         <!-- Mobile Menu Overlay -->
         <Transition name="slide">
           <nav aria-label="Navigation mobile" v-if="isMenuOpen"
-            class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-8 text-2xl pt-24 md:hidden overscroll-contain">
+            class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 md:hidden overflow-y-auto overscroll-contain pb-8">
             <RouterLink to="/" @click="isMenuOpen = false" class="font-bold hover:text-tanuki-gold transition-colors">
               Accueil
             </RouterLink>
+
+            <div class="w-16 border-t border-tanuki-beige/20 my-1 md:hidden"></div>
+
             <RouterLink to="/charts" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Kanas</RouterLink>
@@ -119,6 +130,9 @@ const handleLogout = async () => {
             <RouterLink to="/grammar" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Grammaire</RouterLink>
+
+            <div class="w-16 border-t border-tanuki-beige/20 my-1 md:hidden"></div>
+
             <RouterLink to="/study" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">Étude
             </RouterLink>
