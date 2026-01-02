@@ -1,19 +1,6 @@
 # Changelog
 
-## [0.10.1] - 2026-01-02
-
-### Added
-
-- **Home**: Added a "Login to Save Progress" call-to-action for guest users.
-- **Home**: Added unique background watermark characters (あ, 日, 文, 語, 学, 問) to dashboard cards.
-- **Access Control**: Restricted progress tracking (badges, checkmarks) to logged-in users only.
-
-### Changed
-
-- **Mascot**: Replaced main Tanuki mascot with "Student Tanuki" (scroll version) in Login CTA.
-- **Grammar**: Improved category filtering layout on mobile (now wraps to multiple lines).
-
-## [0.10.0] - 2026-01-01
+## [0.10.0] - 2026-01-02
 
 ### Added
 
@@ -38,6 +25,7 @@
   - **Mobile Menu**: Fixed overflow issues (scrollable) and improved separator visibility.
   - **Cards**: Optimized Kana card layout (reduced font size, removed scaling) for better mobile experience.
   - **Kanas**: Renamed "Tableaux" to "Kanas" in navigation.
+- **Grammar**: Improved category filtering layout on mobile (now wraps to multiple lines).
 
 ## [0.9.1] - 2026-01-01
 
