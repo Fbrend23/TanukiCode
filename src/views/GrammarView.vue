@@ -4,11 +4,13 @@ import { useRouter } from 'vue-router';
 import { grammarLessons } from '../data/grammar';
 import { Search, ChevronRight, Check } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/userStore';
+import { useAuthStore } from '@/stores/authStore';
 
 const router = useRouter();
 const searchQuery = ref('');
 const selectedCategory = ref<string | 'all'>('all');
 const userStore = useUserStore();
+const authStore = useAuthStore();
 
 const isMastered = (id: string) => userStore.masteredItems.includes(id);
 
@@ -58,7 +60,7 @@ const emptyStateMessage = computed(() => {
                     class="w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-green rounded-xl focus:border-tanuki-green focus:outline-none transition-colors shadow-sm" />
             </div>
 
-            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide w-full md:justify-center">
+            <div class="flex flex-wrap justify-center gap-2 w-full">
                 <button v-for="cat in categories" :key="cat.value" @click="selectedCategory = cat.value" :class="['px-4 py-1.5 rounded-full font-bold transition-all border-2 text-sm md:text-base whitespace-nowrap',
                     selectedCategory === cat.value
                         ? 'bg-tanuki-green text-white border-tanuki-green shadow-sm'
@@ -74,7 +76,7 @@ const emptyStateMessage = computed(() => {
                 class="card p-3 md:p-6 group cursor-pointer hover:shadow-md transition-all flex flex-col h-full border-2"
                 :class="[isMastered(lesson.id) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:border-tanuki-green-light']">
 
-                <button @click.stop="userStore.toggleMastery(lesson.id)"
+                <button v-if="authStore.user" @click.stop="userStore.toggleMastery(lesson.id)"
                     class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20"
                     :class="[isMastered(lesson.id) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
                     <Check class="w-3 h-3 stroke-[4]" />
