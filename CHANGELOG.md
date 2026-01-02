@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.11.0] - 2026-01-02
+
+### Added
+
+- **Profile**:
+  - **Avatars**: Integrated 12 new exclusive Tanuki avatars (Ninja, Samurai, Chef, etc.).
+  - **Customization**: Independent selection of avatar image and background color.
+- **Interface**:
+  - **Mobile**: Optimized profile editor (stacked buttons, adaptive grid).
+  - **Notifications**: New native "Slide-Down" notification system on mobile.
+
 ## [0.10.0] - 2026-01-02
 
 ### Added

@@ -9,6 +9,26 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.11.0',
+    date: '2026-01-02',
+    sections: [
+      {
+        title: 'Profil & Personnalisation',
+        items: [
+          'AVATARS : 12 nouveaux Tanukis exclusifs à collectionner (Ninja, Samouraï, Chef...).',
+          'STYLE : Choisissez votre avatar et votre couleur de fond indépendamment.',
+        ],
+      },
+      {
+        title: 'Expérience Mobile',
+        items: [
+          'ÉDITEUR : Interface repensée pour le tactile (boutons larges, grille adaptée).',
+          "NOTIFICATIONS : Nouvelles alertes fluides qui descendent du haut de l'écran.",
+        ],
+      },
+    ],
+  },
+  {
     version: '0.10.0',
     date: '2026-01-01',
     sections: [
