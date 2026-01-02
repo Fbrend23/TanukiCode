@@ -4,6 +4,7 @@ import { Volume2, Info, Check } from 'lucide-vue-next';
 import { hiragana, katakana, type KanaChar, type KanaType } from '@/data/kana';
 import { speakJapanese, playKanaAudio } from '@/utils/audio';
 import { useUserStore } from '@/stores/userStore';
+import { useAuthStore } from '@/stores/authStore';
 
 const mode = ref<'hiragana' | 'katakana'>('hiragana');
 const currentTab = ref<KanaType | 'modified'>('basic'); // 'modified' includes dakuten + handakuten
@@ -41,6 +42,7 @@ const gridLayoutClass = computed(() => {
 });
 
 const userStore = useUserStore();
+const authStore = useAuthStore();
 const isMastered = (item: { char?: string; romaji?: string }) => {
     const id = item.char || item.romaji; // Fallback to romaji if needed, but char is best
     return userStore.masteredItems.includes(id || '');
@@ -113,7 +115,7 @@ function playSound(item: GridItem) {
                             {{ item.romaji }}
                         </span>
 
-                        <button @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
+                        <button v-if="authStore.user" @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
                             class="absolute top-1 left-1 p-1 rounded-full transition-colors z-20"
                             :class="[isMastered(item) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
                             <Check class="w-3 h-3 stroke-[4]" />
