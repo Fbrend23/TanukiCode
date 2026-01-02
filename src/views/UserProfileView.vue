@@ -187,7 +187,7 @@ const handleDeleteAccount = async () => {
 
         <div class="space-y-6">
             <!-- 1. Identity Card -->
-            <div class="card p-4 md:p-8 relative">
+            <div class="card p-4 lg:p-8 relative">
                 <!-- Helper: Edit Button (Top Right) -->
                 <button v-if="!isEditing" @click="startEditing"
                     class="absolute top-4 right-4 p-2 text-tanuki-brown/50 hover:text-tanuki-green transition-colors">
@@ -287,18 +287,18 @@ const handleDeleteAccount = async () => {
                 <div class="card p-4 flex flex-col items-center justify-center gap-2 text-center">
                     <Trophy class="w-6 h-6 text-tanuki-gold mb-1" />
                     <p class="text-[10px] font-bold text-tanuki-brown/50 uppercase tracking-wide">Score</p>
-                    <p class="text-xl md:text-2xl font-bold text-tanuki-brown">{{ userStore.score }}</p>
+                    <p class="text-xl lg:text-2xl font-bold text-tanuki-brown">{{ userStore.score }}</p>
                 </div>
                 <div class="card p-4 flex flex-col items-center justify-center gap-2 text-center">
                     <Flame class="w-6 h-6 text-amber-500 mb-1" />
                     <p class="text-[10px] font-bold text-tanuki-brown/50 uppercase tracking-wide">Série</p>
-                    <p class="text-xl md:text-2xl font-bold text-tanuki-brown">{{ userStore.streak }} <span
+                    <p class="text-xl lg:text-2xl font-bold text-tanuki-brown">{{ userStore.streak }} <span
                             class="text-xs font-normal text-tanuki-brown/60">j</span></p>
                 </div>
                 <div class="card p-4 flex flex-col items-center justify-center gap-2 text-center">
                     <Zap class="w-6 h-6 text-yellow-500 mb-1" />
                     <p class="text-[10px] font-bold text-tanuki-brown/50 uppercase tracking-wide">Best Combo</p>
-                    <p class="text-xl md:text-2xl font-bold text-tanuki-brown">{{ userStore.bestCombo }}</p>
+                    <p class="text-xl lg:text-2xl font-bold text-tanuki-brown">{{ userStore.bestCombo }}</p>
                 </div>
             </div>
 

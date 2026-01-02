@@ -50,12 +50,12 @@ const handleLogout = async () => {
           </div>
 
           <!-- Desktop Nav -->
-          <nav aria-label="Navigation principale" class="hidden md:flex items-center gap-6 text-base">
+          <nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-6 text-base">
             <RouterLink to="/" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Accueil
             </RouterLink>
 
             <!-- Separator -->
-            <div class="h-4 w-px bg-tanuki-beige/30 md:block"></div>
+            <div class="h-4 w-px bg-tanuki-beige/30 lg:block"></div>
 
             <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Kanas</RouterLink>
@@ -68,9 +68,10 @@ const handleLogout = async () => {
               Grammaire</RouterLink>
 
             <!-- Separator -->
-            <div class="h-4 w-px bg-tanuki-beige/30 md:block"></div>
+            <div class="h-4 w-px bg-tanuki-beige/30 lg:block"></div>
 
-            <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Flashcards
+            <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+              Flashcards
             </RouterLink>
             <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
             </RouterLink>
@@ -101,7 +102,7 @@ const handleLogout = async () => {
 
           <!-- Mobile Menu Button -->
           <button @click="isMenuOpen = !isMenuOpen"
-            class="md:hidden p-2 text-tanuki-beige hover:text-white transition-colors z-50 relative">
+            class="lg:hidden p-2 text-tanuki-beige hover:text-white transition-colors z-50 relative">
             <Menu v-if="!isMenuOpen" class="w-8 h-8" />
             <X v-else class="w-8 h-8" />
           </button>
@@ -110,12 +111,12 @@ const handleLogout = async () => {
         <!-- Mobile Menu Overlay -->
         <Transition name="slide">
           <nav aria-label="Navigation mobile" v-if="isMenuOpen"
-            class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 md:hidden overflow-y-auto overscroll-contain pb-8">
+            class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 lg:hidden overflow-y-auto overscroll-contain pb-8">
             <RouterLink to="/" @click="isMenuOpen = false" class="font-bold hover:text-tanuki-gold transition-colors">
               Accueil
             </RouterLink>
 
-            <div class="w-16 border-t border-tanuki-beige/20 my-1 md:hidden"></div>
+            <div class="w-16 border-t border-tanuki-beige/20 my-1 lg:hidden"></div>
 
             <RouterLink to="/charts" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
@@ -131,10 +132,11 @@ const handleLogout = async () => {
               class="font-bold hover:text-tanuki-gold transition-colors">
               Grammaire</RouterLink>
 
-            <div class="w-16 border-t border-tanuki-beige/20 my-1 md:hidden"></div>
+            <div class="w-16 border-t border-tanuki-beige/20 my-1 lg:hidden"></div>
 
             <RouterLink to="/study" @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors">Flashcards
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Flashcards
             </RouterLink>
             <RouterLink to="/quiz" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">Quiz
