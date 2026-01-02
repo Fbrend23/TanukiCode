@@ -4,8 +4,10 @@ import { vocabulary, type VocabularyWord } from '@/data/vocabulary'
 import { Search, Volume2, Info, Check } from 'lucide-vue-next'
 import { speakJapanese } from '@/utils/audio'
 import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
 
 const userStore = useUserStore()
+const authStore = useAuthStore()
 const isMastered = (word: VocabularyWord) => userStore.masteredItems.includes(word.word)
 const toggleMastery = (word: VocabularyWord) => userStore.toggleMastery(word.word)
 
@@ -90,7 +92,7 @@ const playAudio = (word: VocabularyWord) => {
                 class="card p-4 flex flex-col items-center text-center bg-white hover:shadow-xl transition-all border-2 cursor-pointer relative group"
                 :class="[isMastered(word) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:border-tanuki-green-light']">
 
-                <button @click.stop="toggleMastery(word)"
+                <button v-if="authStore.user" @click.stop="toggleMastery(word)"
                     class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20"
                     :class="[isMastered(word) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
                     <Check class="w-3 h-3 stroke-[4]" />

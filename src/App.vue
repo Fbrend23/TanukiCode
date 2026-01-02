@@ -70,7 +70,7 @@ const handleLogout = async () => {
             <!-- Separator -->
             <div class="h-4 w-px bg-tanuki-beige/30 md:block"></div>
 
-            <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Étude
+            <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Flashcards
             </RouterLink>
             <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
             </RouterLink>
@@ -134,7 +134,7 @@ const handleLogout = async () => {
             <div class="w-16 border-t border-tanuki-beige/20 my-1 md:hidden"></div>
 
             <RouterLink to="/study" @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors">Étude
+              class="font-bold hover:text-tanuki-gold transition-colors">Flashcards
             </RouterLink>
             <RouterLink to="/quiz" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">Quiz
