@@ -9,6 +9,7 @@
   - **Customization**: Independent selection of avatar image and background color.
 - **Interface**:
   - **Mobile**: Optimized profile editor (stacked buttons, adaptive grid).
+  - **Tablet**: Improved layout adaption (Profile, Navbar, Notifications) for iPad and tablet devices.
   - **Notifications**: New native "Slide-Down" notification system on mobile.
 
 ## [0.10.0] - 2026-01-02
