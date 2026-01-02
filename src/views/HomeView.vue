@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Grid3x3, BookOpen, Gamepad2, ScrollText, PenTool } from 'lucide-vue-next';
+import { Grid3x3, BookOpen, Gamepad2, ScrollText, PenTool, Layers } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/userStore';
+import { useAuthStore } from '@/stores/authStore';
 import { hiragana, katakana } from '@/data/kana';
 import { vocabulary } from '@/data/vocabulary';
 import { kanjiList } from '@/data/kanji';
@@ -8,6 +9,7 @@ import { grammarLessons } from '@/data/grammar';
 import { computed } from 'vue';
 
 const userStore = useUserStore();
+const authStore = useAuthStore();
 
 const getMasteryProgress = (items: { char?: string; character?: string; word?: string; id?: string }[]) => {
     const total = items.length;
@@ -46,11 +48,20 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
                 Apprenez le japonais en vous amusant
             </p>
         </div>
+        
+        <div v-if="!authStore.user" class="w-full max-w-4xl mb-8 flex justify-center">
+             <RouterLink to="/auth"
+                class="bg-white border-2 border-tanuki-green/20 text-tanuki-green px-6 py-3 rounded-xl font-bold hover:bg-tanuki-green hover:text-white transition-all shadow-sm hover:shadow-md flex items-center gap-2 group">
+                <img src="@/assets/tanuki-scroll.png" alt="Tanuki Étudiant" class="w-10 h-10 object-contain -ml-2" />
+                Connectez-vous pour sauvegarder votre progression
+            </RouterLink>
+        </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             <RouterLink to="/charts"
                 class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
-                <div
+                <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">あ</div>
+                <div v-if="authStore.user"
                     class="absolute top-2 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full border border-blue-100">
                     {{ kanaProgress.mastered }}/{{ kanaProgress.total }}
                 </div>
@@ -61,7 +72,7 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
                 </h3>
                 <p class="text-sm text-gray-400 mb-4">Hiragana & Katakana</p>
 
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
+                <div v-if="authStore.user" class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
                     <div class="h-full bg-blue-500 transition-all duration-500"
                         :style="{ width: getPercentage(kanaProgress) + '%' }"></div>
                 </div>
@@ -72,7 +83,7 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
             <RouterLink to="/kanji"
                 class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
                 <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">日</div>
-                <div
+                <div v-if="authStore.user"
                     class="absolute top-2 right-4 text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded-full border border-red-100">
                     {{ kanjiProgress.mastered }}/{{ kanjiProgress.total }}
                 </div>
@@ -83,7 +94,7 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
                     Kanjis</h3>
                 <p class="text-sm text-gray-400 mb-4 z-10">Niveau N5</p>
 
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto z-10">
+                <div v-if="authStore.user" class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto z-10">
                     <div class="h-full bg-red-500 transition-all duration-500"
                         :style="{ width: getPercentage(kanjiProgress) + '%' }"></div>
                 </div>
@@ -91,7 +102,8 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
 
             <RouterLink to="/grammar"
                 class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden h-full">
-                <div
+                <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">文</div>
+                <div v-if="authStore.user"
                     class="absolute top-2 right-4 text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full border border-indigo-100">
                     {{ grammarProgress.mastered }}/{{ grammarProgress.total }}
                 </div>
@@ -102,34 +114,53 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
                     Grammaire</h3>
                 <p class="text-sm text-gray-400 mb-4">Particules & Phrases</p>
 
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
+                <div v-if="authStore.user" class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
                     <div class="h-full bg-indigo-500 transition-all duration-500"
                         :style="{ width: getPercentage(grammarProgress) + '%' }"></div>
                 </div>
             </RouterLink>
 
-            <RouterLink to="/study"
+            <RouterLink to="/vocabulary"
                 class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
-                <div
+                <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">語</div>
+                <div v-if="authStore.user"
                     class="absolute top-2 right-4 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-100">
                     {{ vocabProgress.mastered }}/{{ vocabProgress.total }}
                 </div>
                 <div class="bg-green-100 p-3 rounded-full mb-3 group-hover:bg-green-200 transition-colors">
                     <BookOpen class="w-8 h-8 text-green-600" />
                 </div>
-                <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">Étude
+                <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">
+                    Vocabulaire
                 </h3>
-                <p class="text-sm text-gray-400 mb-4">Cartes & Vocabulaire</p>
+                <p class="text-sm text-gray-400 mb-4">Mots & Expressions</p>
 
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
+                <div v-if="authStore.user" class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
                     <div class="h-full bg-green-500 transition-all duration-500"
                         :style="{ width: getPercentage(vocabProgress) + '%' }"></div>
                 </div>
             </RouterLink>
 
+            <RouterLink to="/study"
+                class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">学</div>
+                <div class="bg-teal-100 p-3 rounded-full mb-3 group-hover:bg-teal-200 transition-colors">
+                    <Layers class="w-8 h-8 text-teal-600" />
+                </div>
+                <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">
+                    Flashcards
+                </h3>
+                <p class="text-sm text-gray-400 mb-4">Révision Kanas & Vocab</p>
+
+                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto opacity-0">
+                    <!-- Placeholder for alignment -->
+                </div>
+            </RouterLink>
+
             <RouterLink to="/quiz"
-                class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden sm:col-span-2">
-                <div
+                class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">問</div>
+                <div v-if="authStore.user"
                     class="absolute top-2 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded-full border border-orange-100">
                     {{ userStore.masteredItems.length }} acquis
                 </div>
@@ -140,7 +171,7 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
                 </h3>
                 <p class="text-sm text-gray-400 mb-4">Testez vos connaissances</p>
 
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
+                <div v-if="authStore.user" class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
                     <div class="h-full bg-orange-500 transition-all duration-500"
                         :style="{ width: (userStore.masteredItems.length / (kanaProgress.total + vocabProgress.total + kanjiProgress.total + grammarProgress.total) * 100) + '%' }">
                     </div>
