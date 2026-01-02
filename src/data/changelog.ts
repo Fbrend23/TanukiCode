@@ -9,9 +9,36 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.10.1',
+    date: '2026-01-02',
+    sections: [
+      {
+        title: 'Expérience Utilisateur',
+        items: [
+          'ACCUEIL : Ajout d\'une bannière "Login" incitative pour les visiteurs.',
+          'DESIGN : Filigranes thématiques ajoutés sur toutes les tuiles du dashboard.',
+          'ACCÈS : Restriction des indicateurs de progression aux utilisateurs connectés.',
+          'MASCOTTE : Tanuki Étudiant vous invite à vous connecter !',
+        ],
+      },
+      {
+        title: 'Correctifs',
+        items: ["MOBILE : Les catégories de grammaire s'affichent désormais sur plusieurs lignes."],
+      },
+    ],
+  },
+  {
     version: '0.10.0',
     date: '2026-01-01',
     sections: [
+      {
+        title: 'Interface & Navigation',
+        items: [
+          'ACCUEIL : Ajout d\'une tuile dédiée "Vocabulaire" pour un accès rapide au dictionnaire.',
+          'CLARTÉ : Renommage du mode "Étude" en "Flashcards" pour éviter la confusion.',
+          'LAYOUT : Réorganisation du tableau de bord en grille sur 2 colonnes.',
+        ],
+      },
       {
         title: 'Contenu & Fonctionnalités',
         items: [

@@ -1,9 +1,26 @@
 # Changelog
 
+## [0.10.1] - 2026-01-02
+
+### Added
+
+- **Home**: Added a "Login to Save Progress" call-to-action for guest users.
+- **Home**: Added unique background watermark characters (あ, 日, 文, 語, 学, 問) to dashboard cards.
+- **Access Control**: Restricted progress tracking (badges, checkmarks) to logged-in users only.
+
+### Changed
+
+- **Mascot**: Replaced main Tanuki mascot with "Student Tanuki" (scroll version) in Login CTA.
+- **Grammar**: Improved category filtering layout on mobile (now wraps to multiple lines).
+
 ## [0.10.0] - 2026-01-01
 
 ### Added
 
+- **Home**: Added a dedicated card for "Vocabulaire" linking directly to the dictionary view.
+- **Home**: Added a "Login to Save Progress" call-to-action for guest users.
+- **Home**: Added unique background watermark characters (あ, 日, 文, 語, 学, 問) to dashboard cards.
+- **Access Control**: Restricted progress tracking (badges, checkmarks) to logged-in users only.
 - **Vocabulary**: Complete new module with 150+ words, native audio playback, and mastery tracking.
 - **Mastery**: Standardized mastery system across all modules (Kanji, Kana, Grammar, Vocabulary) with consistent UI.
 - **Kanjis**:
@@ -15,6 +32,8 @@
 
 ### Changed
 
+- **Home**: Renamed the generic "Étude" card to "Flashcards" to clearly distinguish it from the vocabulary list.
+- **Home**: Reorganized the dashboard into a structured 2-column layout (Kanas/Kanjis, Grammar/Vocab, Flashcards/Quiz).
 - **UI/UX**:
   - **Mobile Menu**: Fixed overflow issues (scrollable) and improved separator visibility.
   - **Cards**: Optimized Kana card layout (reduced font size, removed scaling) for better mobile experience.
