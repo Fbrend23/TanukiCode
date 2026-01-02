@@ -20,7 +20,7 @@ const colors = {
 </script>
 
 <template>
-  <div class="fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 z-50 flex flex-col gap-2 pointer-events-none">
+  <div class="fixed top-4 left-4 right-4 lg:left-auto lg:right-4 lg:w-96 z-50 flex flex-col gap-2 pointer-events-none">
     <TransitionGroup enter-active-class="transition ease-out duration-300 transform"
       enter-from-class="-translate-y-8 opacity-0" enter-to-class="translate-y-0 opacity-100"
       leave-active-class="transition ease-in duration-200 transform" leave-from-class="translate-y-0 opacity-100"
