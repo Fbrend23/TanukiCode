@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior() {
+    return { top: 0 }
+  },
   routes: [
     {
       path: '/',
@@ -58,6 +61,11 @@ const router = createRouter({
       path: '/grammar/:id',
       name: 'grammar-detail',
       component: () => import('../views/GrammarDetailView.vue'),
+    },
+    {
+      path: '/vocabulary',
+      name: 'vocabulary',
+      component: () => import('../views/VocabularyView.vue'),
     },
   ],
 })
