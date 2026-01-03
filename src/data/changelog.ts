@@ -15,15 +15,23 @@ export const changelog: ChangelogEntry[] = [
       {
         title: 'Profil & Personnalisation',
         items: [
-          'AVATARS : 12 nouveaux Tanukis exclusifs à collectionner (Ninja, Samouraï, Chef...).',
+          'AVATARS : 12 nouveaux Tanukis exclusifs (Ninja, Samouraï...) et **9 Avatars Pays** (France, Japon, USA, Corée...).',
           'STYLE : Choisissez votre avatar et votre couleur de fond indépendamment.',
+          "NAVBAR : Votre avatar s'affiche désormais dans la barre de navigation.",
         ],
       },
       {
-        title: 'Expérience Mobile',
+        title: 'Expérience Mobile & Tablette',
         items: [
           'ÉDITEUR : Interface repensée pour le tactile (boutons larges, grille adaptée).',
           "NOTIFICATIONS : Nouvelles alertes fluides qui descendent du haut de l'écran.",
+          'TABLETTE : Adaptation du layout pour les iPad et autres tablettes (md -> lg).',
+        ],
+      },
+      {
+        title: 'Sécurité',
+        items: [
+          'ACCÈS : Protection des routes `/profile` et `/update-password` (redirection automatique pour les invités).',
         ],
       },
     ],
