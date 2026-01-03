@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,11 +47,13 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: () => import('../views/UserProfileView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/update-password',
       name: 'update-password',
       component: () => import('../views/UpdatePasswordView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/grammar',
@@ -68,6 +71,24 @@ const router = createRouter({
       component: () => import('../views/VocabularyView.vue'),
     },
   ],
+})
+
+// Navigation Guard
+router.beforeEach(async (to, from, next) => {
+  const auth = useAuthStore()
+
+  // Wait for session initialization
+  await auth.initialized
+
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+
+  if (requiresAuth && !auth.user) {
+    next('/auth')
+  } else if (to.path === '/auth' && auth.user) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router
