@@ -46,6 +46,7 @@ export const useUserStore = defineStore('user', () => {
 
   const username = ref('')
   const avatarColor = ref('gold') // Default color
+  const avatarImage = ref('default') // Default image (tanuki-head)
   const lastStudiedAt = ref<string | null>(null)
   const loading = ref(false)
 
@@ -70,7 +71,21 @@ export const useUserStore = defineStore('user', () => {
       if (data.best_combo) bestCombo.value = data.best_combo
       if (data.current_combo) currentCombo.value = data.current_combo
       if (data.username) username.value = data.username
-      if (data.avatar_url) avatarColor.value = data.avatar_url
+      if (data.avatar_url) {
+        if (data.avatar_url.includes('|')) {
+          const [c, i] = data.avatar_url.split('|')
+          avatarColor.value = c
+          avatarImage.value = i
+        } else if (data.avatar_url.includes('.')) {
+          // Legacy: it was just an image
+          avatarColor.value = 'white'
+          avatarImage.value = data.avatar_url
+        } else {
+          // Legacy: it was just a color
+          avatarColor.value = data.avatar_url
+          avatarImage.value = 'default'
+        }
+      }
       if (data.last_studied_at) lastStudiedAt.value = data.last_studied_at
       if (data.mastered_items) masteredItems.value = data.mastered_items || []
     }
@@ -78,13 +93,15 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // Update profile (username & avatar)
-  const updateProfile = async (newUsername: string, newColor: string) => {
+  const updateProfile = async (newUsername: string, newColor: string, newImage: string) => {
     if (!auth.user) return
+
+    const combinedAvatar = `${newColor}|${newImage}`
 
     const { error } = await supabase.from('profiles').upsert({
       id: auth.user.id,
       username: newUsername,
-      avatar_url: newColor,
+      avatar_url: combinedAvatar,
       updated_at: new Date(),
     })
 
@@ -92,6 +109,7 @@ export const useUserStore = defineStore('user', () => {
 
     username.value = newUsername
     avatarColor.value = newColor
+    avatarImage.value = newImage
   }
 
   // Save progress to Supabase
@@ -221,6 +239,7 @@ export const useUserStore = defineStore('user', () => {
         bestCombo.value = 0
         username.value = ''
         avatarColor.value = 'gold'
+        avatarImage.value = 'default'
         lastStudiedAt.value = null
         masteredItems.value = []
       }
@@ -238,6 +257,7 @@ export const useUserStore = defineStore('user', () => {
     masteredItems,
     username,
     avatarColor,
+    avatarImage,
     lastStudiedAt,
     loading,
     recordAnswer,

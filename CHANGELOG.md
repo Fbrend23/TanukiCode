@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.11.0] - 2026-01-02
+
+### Added
+
+- **Profile**:
+  - **Avatars**: Integrated 12 new exclusive Tanuki avatars (Ninja, Samurai, Chef, etc.) and **9 Country Avatars** (France, Switzerland, Japan, USA, Italy, Mexico, UK, Spain, Germany, Korea).
+  - **Customization**: Independent selection of avatar image and background color.
+- **Interface**:
+  - **Mobile**: Optimized profile editor (stacked buttons, adaptive grid).
+  - **Tablet**: Improved layout adaption (Profile, Navbar, Notifications) for iPad and tablet devices.
+  - **Notifications**: New native "Slide-Down" notification system on mobile.
+  - **Navbar**: Now displays the user's custom avatar instead of a generic icon.
+- **Security**:
+  - **Auth**: Protected `/profile` and `/update-password` routes against guest access with automatic redirection.
+
 ## [0.10.0] - 2026-01-02
 
 ### Added

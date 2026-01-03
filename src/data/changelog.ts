@@ -9,6 +9,34 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.11.0',
+    date: '2026-01-02',
+    sections: [
+      {
+        title: 'Profil & Personnalisation',
+        items: [
+          'AVATARS : 12 nouveaux Tanukis exclusifs (Ninja, Samouraï...) et **9 Avatars Pays** (France, Japon, USA, Corée...).',
+          'STYLE : Choisissez votre avatar et votre couleur de fond indépendamment.',
+          "NAVBAR : Votre avatar s'affiche désormais dans la barre de navigation.",
+        ],
+      },
+      {
+        title: 'Expérience Mobile & Tablette',
+        items: [
+          'ÉDITEUR : Interface repensée pour le tactile (boutons larges, grille adaptée).',
+          "NOTIFICATIONS : Nouvelles alertes fluides qui descendent du haut de l'écran.",
+          'TABLETTE : Adaptation du layout pour les iPad et autres tablettes (md -> lg).',
+        ],
+      },
+      {
+        title: 'Sécurité',
+        items: [
+          'ACCÈS : Protection des routes `/profile` et `/update-password` (redirection automatique pour les invités).',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.10.0',
     date: '2026-01-01',
     sections: [
