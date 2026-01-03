@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
-import { LogOut, User as UserIcon, Menu, X } from 'lucide-vue-next';
+import { LogOut, Menu, X } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/authStore'
+import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
+import { supabase } from '@/lib/supabase'
 import ToastContainer from '@/components/ToastContainer.vue'
 import ChangelogModal from '@/components/ChangelogModal.vue'
 import pkg from '../package.json'
+import defaultTanuki from '@/assets/tanuki-head.png'
 
 const auth = useAuthStore()
+const userStore = useUserStore()
 const router = useRouter()
 const appVersion = pkg.version;
 const isMenuOpen = ref(false)
@@ -17,6 +21,27 @@ const handleLogout = async () => {
   isMenuOpen.value = false
   await auth.signOut()
   router.push('/')
+}
+
+// Avatar Logic
+const colors = [
+    { value: 'gold', bg: 'bg-tanuki-gold' },
+    { value: 'green', bg: 'bg-emerald-500' },
+    { value: 'blue', bg: 'bg-blue-500' },
+    { value: 'red', bg: 'bg-red-500' },
+    { value: 'black', bg: 'bg-gray-800' },
+    { value: 'pink', bg: 'bg-pink-400' },
+]
+
+const getColorClass = (colorName: string) => {
+    if (colorName && colorName.includes('.')) return 'bg-white'
+    const c = colors.find(c => c.value === colorName)
+    return c ? c.bg : 'bg-tanuki-gold'
+}
+
+const getAvatarSrc = (avatarValue: string) => {
+    if (!avatarValue || avatarValue === 'default') return null
+    return supabase.storage.from('avatars').getPublicUrl(avatarValue).data.publicUrl
 }
 </script>
 
@@ -82,8 +107,12 @@ const handleLogout = async () => {
                 <RouterLink to="/profile"
                   class="flex items-center gap-2 text-tanuki-gold group hover:text-tanuki-brown transition-colors"
                   title="Mon Profil">
-                  <div class="bg-tanuki-gold/20 p-2 rounded-full hover:bg-tanuki-gold/30 transition-colors">
-                    <UserIcon class="w-6 h-6" />
+                  <div class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
+                       :class="getColorClass(userStore.avatarColor)">
+                      <img v-if="(userStore.avatarImage || 'default') !== 'default'"
+                           :src="getAvatarSrc(userStore.avatarImage) || ''"
+                           alt="Avatar" class="w-full h-full object-cover p-0.5" />
+                      <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-0.5" />
                   </div>
                 </RouterLink>
                 <button @click="handleLogout"
@@ -147,7 +176,13 @@ const handleLogout = async () => {
               <template v-if="auth.user">
                 <RouterLink to="/profile" @click="isMenuOpen = false"
                   class="flex items-center gap-2 text-tanuki-gold hover:text-white transition-colors text-xl">
-                  <UserIcon class="w-6 h-6" />
+                  <div class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
+                       :class="getColorClass(userStore.avatarColor)">
+                      <img v-if="(userStore.avatarImage || 'default') !== 'default'"
+                           :src="getAvatarSrc(userStore.avatarImage) || ''"
+                           alt="Avatar" class="w-full h-full object-cover p-0.5" />
+                      <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-0.5" />
+                  </div>
                   Mon Profil
                 </RouterLink>
                 <button @click="handleLogout(); isMenuOpen = false"
