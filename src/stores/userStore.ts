@@ -172,10 +172,13 @@ export const useUserStore = defineStore('user', () => {
     saveProgress()
   }
 
-  const recordAnswer = (isCorrect: boolean) => {
+  const recordAnswer = async (isCorrect: boolean) => {
     totalQuestions.value++
 
-    if (!isCorrect) return
+    if (!isCorrect) {
+      await saveProgress()
+      return
+    }
 
     score.value++
 
@@ -211,7 +214,7 @@ export const useUserStore = defineStore('user', () => {
     }
 
     lastStudiedAt.value = now.toISOString()
-    saveProgress()
+    await saveProgress()
   }
 
   const resetProgress = () => {
