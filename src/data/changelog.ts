@@ -23,7 +23,7 @@ export const changelog: ChangelogEntry[] = [
       {
         title: 'Interface & Style',
         items: [
-          'FILTRES MODERNES : Nouvelle modale de filtres fluide et responsive pour les Kanjis.',
+          'FILTRES MODERNES : Nouvelle modale de filtres fluide et responsive pour toutes les sections.',
           'CONSISTANCE : Standardisation des barres de recherche et des boutons sur tout le site.',
           'DESIGN : Application du thème "Tanuki" (Brun/Vert) aux éléments d\'interface.',
         ],
