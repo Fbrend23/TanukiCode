@@ -2,17 +2,19 @@
 import { ref, computed, watch } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
+import { kanjiList, type Kanji } from '@/data/kanji';
 import { RefreshCw, Volume2 } from 'lucide-vue-next';
 import { speakJapanese, playKanaAudio } from '@/utils/audio';
 
-type CardData = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
+type CardData = (KanaChar | VocabularyWord | Kanji) & { romaji?: string; meaning?: string[] | string };
 
-const mode = ref<'hiragana' | 'katakana' | 'vocabulary'>('hiragana');
+const mode = ref<'hiragana' | 'katakana' | 'vocabulary' | 'kanji'>('hiragana');
 const isFlipped = ref(false);
 
 const currentList = computed(() => {
     if (mode.value === 'hiragana') return hiragana.filter(k => k.char);
     if (mode.value === 'katakana') return katakana.filter(k => k.char);
+    if (mode.value === 'kanji') return kanjiList;
     return vocabulary;
 });
 
@@ -33,6 +35,9 @@ const frontText = computed(() => {
     const card = currentCard.value;
     if ('char' in card) {
         return (card as KanaChar).char;
+    }
+    if ('character' in card) {
+        return (card as Kanji).character;
     }
     if ('word' in card) {
         return (card as VocabularyWord).word;
@@ -93,6 +98,10 @@ const fontSizeClass = computed(() => {
                 :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Katakana
             </button>
+            <button @click="mode = 'kanji'"
+                :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'kanji' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                Kanji
+            </button>
             <button @click="mode = 'vocabulary'"
                 :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Vocabulaire
@@ -114,7 +123,7 @@ const fontSizeClass = computed(() => {
                     </div>
 
                     <!-- Audio Button -->
-                    <button @click="playSound"
+                    <button v-if="mode !== 'kanji'" @click="playSound"
                         class="absolute top-4 right-4 p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-colors">
                         <Volume2 class="w-6 h-6" />
                     </button>
@@ -125,11 +134,11 @@ const fontSizeClass = computed(() => {
                 <!-- Back -->
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
-                    <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning ||
-                        currentCard.romaji
-                        }}</span>
-                    <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
-                    <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji
+                    <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">
+                        {{ Array.isArray(currentCard.meaning) ? currentCard.meaning.join(', ') : (currentCard.meaning || currentCard.romaji) }}
+                    </span>
+                    <span v-if="mode !== 'kanji'" class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
+                    <span v-if="currentCard.meaning && !Array.isArray(currentCard.meaning)" class="text-sm mt-2 opacity-60">({{ currentCard.romaji
                         }})</span>
                 </div>
             </div>
