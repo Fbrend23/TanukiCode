@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.12.0] - 2026-01-04
+
+### Added
+
+- **Kanji Flashcards**: Explore and review Kanjis with the new "Front/Back" (Meaning/Character) flashcard mode.
+- **Interface**:
+  - **Advanced Filters**: New "Mobile-First" filter panel for Kanjis (sleek modal).
+  - **Unified Search**: Standardized search bars (Vocabulary, Grammar, Kanji) for perfect consistency.
+  - **Multi-Select**: Select multiple Kanji categories simultaneously.
+- **Progress**:
+  - **Progress Bar**: Visualize your N5 mastery directly in the Kanji grid.
+  - **"Mastered" Filter**: Hide known Kanjis with one click to focus on what you need to learn.
+- **Style**:
+  - **Tanuki Theme**: Applied "Brown/Green" theme to toggles, examples, and separators.
+  - **Utility Classes**: CSS code refactoring for simplified maintenance (`.search-bar`, `.btn-filter`).
+
 ## [0.11.0] - 2026-01-02
 
 ### Added
