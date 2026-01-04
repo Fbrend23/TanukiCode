@@ -72,7 +72,7 @@ function playSound(item: GridItem) {
         <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">Kanas</h2>
 
         <!-- Mode Toggles -->
-        <div class="card flex p-1 mb-4 shadow-none border-tanuki-green/40">
+        <div class="card flex p-1 mb-4 shadow-none border-2 border-tanuki-green">
             <button @click="mode = 'hiragana'"
                 :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Hiragana
