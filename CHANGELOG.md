@@ -6,16 +6,22 @@
 
 - **Kanji Flashcards**: Explore and review Kanjis with the new "Front/Back" (Meaning/Character) flashcard mode.
 - **Interface**:
+  - **Major UI Refinement**: Centered headers and standardized layouts across all learning modules.
   - **Advanced Filters**: New "Mobile-First" filter panel for Kanjis (sleek modal).
   - **Unified Search**: Standardized search bars and filters (Vocabulary, Grammar, Kanji) for perfect consistency.
   - **Multi-Select**: Select multiple categories simultaneously across all study modes.
   - **Quiz UI**: Improved layout with centered title and compact toolbar for better focus.
+  - **Quiz Filters**: Translated categories and improved configurations (solid Green border).
 - **Progress**:
-  - **Progress Bar**: Visualize your N5 mastery directly in the Kanji grid.
-  - **"Mastered" Filter**: Hide known Kanjis with one click to focus on what you need to learn.
+  - **Anti-Cheat**: Quiz scores and combos are now saved immediately to the cloud and local storage upon answering, preventing refresh-based cheating.
+  - **Progress Bar**: Reusable `MasteryBar` component to visualize N5 mastery in Kanji grid and Kana charts.
+  - **"Mastered" Filter**: Hide known items (Kanji, Flashcards) with one click to focus on what you need to learn.
 - **Style**:
-  - **Tanuki Theme**: Applied "Brown/Green" theme to toggles, examples, and separators.
+  - **Navbar**: Active tabs now use the hover color (tanuki-brown) for better feedback.
+  - **Footer**: Added more breathing room between main content and the bottom of the page.
+  - **Tanuki Theme**: Applied "Brown/Green" theme to toggles, examples, and separators across all views.
   - **Utility Classes**: CSS code refactoring for simplified maintenance (`.search-bar`, `.btn-filter`).
+  - **Mobile**: Scaled down Flashcard categories for smaller mobile devices.
 
 ## [0.11.0] - 2026-01-02
 
