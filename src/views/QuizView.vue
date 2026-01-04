@@ -7,8 +7,8 @@ import { grammarLessons, type GrammarLesson } from '@/data/grammar';
 import { Check, X, Trophy, Settings2, Grid3x3, BookOpen, ScrollText, PenTool } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/userStore';
 
-type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson) & { 
-    romaji?: string; 
+type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson) & {
+    romaji?: string;
     meaning?: string | string[];
     title?: string;
     summary?: string;
@@ -83,13 +83,13 @@ function getAnswerText(item: QuizItem): string {
 function generateOptions(correct: QuizItem): QuizItem[] {
     const opts = [correct];
     const correctId = getId(correct);
-    
+
     // Try to pick options from the same category first for difficulty
     const sameCategoryItems = filteredItems.value.filter(i => {
-        const isCorrectType = ('char' in correct && 'char' in i) || 
-                             ('character' in correct && 'character' in i) ||
-                             ('word' in correct && 'word' in i) ||
-                             ('id' in correct && 'id' in i);
+        const isCorrectType = ('char' in correct && 'char' in i) ||
+            ('character' in correct && 'character' in i) ||
+            ('word' in correct && 'word' in i) ||
+            ('id' in correct && 'id' in i);
         return isCorrectType && getId(i) !== correctId;
     });
 
@@ -98,7 +98,7 @@ function generateOptions(correct: QuizItem): QuizItem[] {
     while (opts.length < 4) {
         const randomItem = pool[Math.floor(Math.random() * pool.length)];
         if (!randomItem) break;
-        
+
         const randomId = getId(randomItem);
         const randomAns = getAnswerText(randomItem);
 
@@ -174,31 +174,53 @@ function toggleCategory(cat: keyof typeof categories.value) {
 
 <template>
     <div class="w-full flex flex-col items-center max-w-3xl mx-auto px-4 md:px-0">
-        <div class="w-full flex justify-between items-center mb-4 md:mb-8 px-2">
-            <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green">Quiz</h2>
-            <button @click="showSettings = !showSettings" 
-                class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border-2 border-tanuki-green hover:bg-tanuki-beige/30 text-tanuki-green transition-all font-bold text-sm">
-                <Settings2 class="w-5 h-5" />
-                <span>Filtres</span>
-            </button>
+        <!-- Center Title -->
+        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-6 text-center">Quiz</h2>
+
+        <!-- Toolbar: Score + Filter -->
+        <div class="relative w-full max-w-2xl flex flex-col md:block mb-6">
+
+            <!-- Score & Streak (Centered) -->
+            <div class="relative w-full max-w-md mx-auto z-10">
+                <div
+                    class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full bg-white">
+                    <div class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown">
+                        <Trophy class="w-4 h-4 text-tanuki-gold" />
+                        <span>{{ score }}/{{ total }}</span>
+                    </div>
+                    <div class="h-4 w-[2px] bg-tanuki-brown rounded-full"></div>
+                    <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
+                        <span>{{ combo }}</span>
+                        <span class="text-xs">🔥</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Button (Absolute Right Desktop) -->
+            <div
+                class="mt-3 md:mt-0 flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center z-0">
+                <button @click="showSettings = !showSettings"
+                    class="btn-filter !py-2 !px-3 shadow-sm md:w-auto w-full max-w-md">
+                    <Settings2 class="w-5 h-5" />
+                    <span class="inline">Filtres</span>
+                </button>
+            </div>
         </div>
 
         <!-- Settings Section - Redesigned (Flat/Premium) -->
-        <div v-if="showSettings" class="card w-full mb-6 p-6 animate-fade-in shadow-none">
+        <div v-if="showSettings" class="card w-full mb-6 p-6 animate-fade-in shadow-none border-2 border-tanuki-green">
             <h3 class="font-bold text-tanuki-brown-dark mb-6 flex items-center gap-2 text-lg">
-                <Settings2 class="w-5 h-5 text-tanuki-green" /> 
+                <Settings2 class="w-5 h-5 text-tanuki-green" />
                 <span>Configuration du Quiz</span>
             </h3>
-            
+
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button v-for="(val, key) in categories" :key="key"
-                    @click="toggleCategory(key as any)"
-                    :class="['flex flex-col items-center gap-3 p-4 rounded-2xl transition-all border-2 relative group', 
-                        val 
-                        ? 'bg-tanuki-green/5 border-tanuki-green text-tanuki-green' 
+                <button v-for="(val, key) in categories" :key="key" @click="toggleCategory(key as any)" :class="['flex flex-col items-center gap-3 p-4 rounded-2xl transition-all border-2 relative group',
+                    val
+                        ? 'bg-tanuki-green/5 border-tanuki-green text-tanuki-green'
                         : 'bg-white border-tanuki-beige text-gray-400 hover:border-tanuki-green/20']">
-                    
-                    <div :class="['p-3 rounded-full transition-colors', 
+
+                    <div :class="['p-3 rounded-full transition-colors',
                         val ? 'bg-tanuki-green/20' : 'bg-tanuki-beige/50 group-hover:bg-tanuki-beige']">
                         <Grid3x3 v-if="key === 'kana'" class="w-6 h-6" />
                         <BookOpen v-else-if="key === 'vocabulary'" class="w-6 h-6" />
@@ -206,10 +228,14 @@ function toggleCategory(cat: keyof typeof categories.value) {
                         <PenTool v-else-if="key === 'grammar'" class="w-6 h-6" />
                     </div>
 
-                    <span class="font-bold capitalize text-sm">{{ key }}</span>
+                    <span class="font-bold capitalize text-sm">
+                        {{ key === 'kana' ? 'Kanas' : key === 'vocabulary' ? 'Vocabulaire' : key === 'kanji' ? 'Kanjis'
+                            : 'Grammaire' }}
+                    </span>
 
                     <!-- Check Indicator -->
-                    <div v-if="val" class="absolute -top-2 -right-2 bg-tanuki-green text-white p-1 rounded-full border-2 border-white">
+                    <div v-if="val"
+                        class="absolute -top-2 -right-2 bg-tanuki-green text-white p-1 rounded-full border-2 border-white">
                         <Check class="w-3 h-3 stroke-[3]" />
                     </div>
                 </button>
@@ -220,22 +246,15 @@ function toggleCategory(cat: keyof typeof categories.value) {
             </p>
         </div>
 
-        <div class="flex justify-between w-full mb-4 card p-3">
-            <div class="flex items-center gap-2 text-tanuki-brown font-bold">
-                <Trophy class="w-5 h-5 text-tanuki-gold" />
-                <span>Score: {{ score }} / {{ total }}</span>
-            </div>
-            <div class="text-tanuki-green font-bold">
-                Série: {{ combo }} 🔥
-            </div>
-        </div>
-
+        <!-- Quiz Card -->
         <div
             class="card w-full text-center mb-4 relative overflow-hidden group p-8 md:p-12 min-h-[30vh] flex flex-col items-center justify-center">
 
             <!-- Type Badge -->
-            <div class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded">
-                {{ 'char' in currentQuestion ? 'Kana' : 'character' in currentQuestion ? 'Kanji' : 'word' in currentQuestion ? 'Vocabulaire' : 'Grammaire' }}
+            <div
+                class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded">
+                {{ 'char' in currentQuestion ? 'Kana' : 'character' in currentQuestion ? 'Kanji' : 'word' in
+                    currentQuestion ? 'Vocabulaire' : 'Grammaire' }}
             </div>
 
             <!-- Fixed height container for question text to prevent layout shift -->
@@ -289,8 +308,15 @@ function toggleCategory(cat: keyof typeof categories.value) {
 }
 
 @keyframes bounce-short {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .animate-fade-in {
@@ -298,7 +324,14 @@ function toggleCategory(cat: keyof typeof categories.value) {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 </style>
