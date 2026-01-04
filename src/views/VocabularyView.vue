@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary'
-import { Search, Volume2, Info, Check } from 'lucide-vue-next'
+import { Search, Volume2, Check, Settings2 } from 'lucide-vue-next'
 import { speakJapanese } from '@/utils/audio'
 import { useUserStore } from '@/stores/userStore'
 import { useAuthStore } from '@/stores/authStore'
+import MasteryBar from '@/components/MasteryBar.vue'
+import FilterModal from '@/components/FilterModal.vue'
 
 const userStore = useUserStore()
 const authStore = useAuthStore()
@@ -12,7 +14,14 @@ const isMastered = (word: VocabularyWord) => userStore.masteredItems.includes(wo
 const toggleMastery = (word: VocabularyWord) => userStore.toggleMastery(word.word)
 
 const searchQuery = ref('')
-const currentCategory = ref('All')
+const selectedCategories = ref<string[]>([])
+const isFilterModalOpen = ref(false)
+
+// Mastery Stats
+const totalWords = computed(() => vocabulary.length)
+const masteredWords = computed(() => {
+    return vocabulary.filter(w => userStore.masteredItems.includes(w.word)).length
+})
 
 // Extract unique categories from data
 const categories = ['All', ...new Set(vocabulary.map(v => v.category))]
@@ -28,11 +37,25 @@ const categoryTranslations: Record<string, string> = {
     'family': 'Famille'
 }
 
+const toggleCategory = (cat: string) => {
+    if (cat === 'All') {
+        selectedCategories.value = []
+        return
+    }
+
+    const index = selectedCategories.value.indexOf(cat)
+    if (index === -1) {
+        selectedCategories.value.push(cat)
+    } else {
+        selectedCategories.value.splice(index, 1)
+    }
+}
+
 const filteredVocabulary = computed(() => {
     const query = searchQuery.value.toLowerCase()
     return vocabulary.filter(word => {
         // Filter by Category
-        if (currentCategory.value !== 'All' && word.category !== currentCategory.value) return false
+        if (selectedCategories.value.length > 0 && !selectedCategories.value.includes(word.category)) return false
 
         // Search by word, reading, romaji, or meaning
         if (!query) return true
@@ -58,33 +81,27 @@ const playAudio = (word: VocabularyWord) => {
                 <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Vocabulaire</h1>
             </div>
 
-            <!-- Search Bar -->
-            <div class="relative w-full max-w-md mb-4">
-                <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input v-model="searchQuery" type="text" placeholder="Rechercher (Chat, Inu...)"
-                    class="w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-green focus:border-tanuki-green outline-none rounded-xl transition-colors shadow-sm" />
-            </div>
+            <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
+                <!-- Search (Centered) -->
+                <div class="relative w-full max-w-md mx-auto z-10">
+                    <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input v-model="searchQuery" type="text" placeholder="Rechercher (Chat, Inu...)"
+                        class="search-bar" />
+                </div>
 
-            <!-- Category Tabs -->
-            <div class="w-full">
-                <div class="flex flex-wrap justify-center gap-2 px-2">
-                    <button v-for="cat in categories" :key="cat" @click="currentCategory = cat" :class="['px-4 py-1.5 rounded-full font-bold transition-all border-2 text-sm md:text-base whitespace-nowrap',
-                        currentCategory === cat
-                            ? 'bg-tanuki-green text-white border-tanuki-green shadow-sm'
-                            : 'bg-white text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-green/50']">
-                        {{ categoryTranslations[cat as string] || cat }}
+                <!-- Filter Button (Absolute Right on Desktop) -->
+                <div class="flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center">
+                    <button @click="isFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md">
+                        <Settings2 class="w-5 h-5" />
+                        <span>Filtres</span>
+                        <div v-if="selectedCategories.length > 0" class="w-2 h-2 rounded-full bg-tanuki-gold"></div>
                     </button>
                 </div>
             </div>
+
+            <!-- Progress Bar -->
+            <MasteryBar label="Progression Vocabulaire" :current="masteredWords" :total="totalWords" />
         </div>
-
-        <div
-            class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 py-2 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige">
-            <Info class="w-4 h-4 text-tanuki-gold" />
-            <span>Cliquez sur un mot pour écouter sa prononciation.</span>
-        </div>
-
-
         <!-- Grid -->
         <div v-if="filteredVocabulary.length > 0"
             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-5xl">
@@ -122,5 +139,21 @@ const playAudio = (word: VocabularyWord) => {
         <div v-else class="text-center py-12 text-gray-400">
             <p>Aucun mot trouvé pour "{{ searchQuery }}" dans cette catégorie.</p>
         </div>
+
+        <!-- Filter Modal -->
+        <FilterModal v-model:isOpen="isFilterModalOpen">
+            <!-- Categories -->
+            <div class="flex flex-col gap-3">
+                <h3 class="font-bold text-tanuki-brown">Catégorie</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button v-for="cat in categories" :key="cat" @click="toggleCategory(cat)" :class="['px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
+                        (cat === 'All' ? selectedCategories.length === 0 : selectedCategories.includes(cat))
+                            ? 'bg-tanuki-green text-white border-tanuki-green'
+                            : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50']">
+                        {{ categoryTranslations[cat as string] || cat }}
+                    </button>
+                </div>
+            </div>
+        </FilterModal>
     </div>
 </template>

@@ -7,8 +7,8 @@
 - **Kanji Flashcards**: Explore and review Kanjis with the new "Front/Back" (Meaning/Character) flashcard mode.
 - **Interface**:
   - **Advanced Filters**: New "Mobile-First" filter panel for Kanjis (sleek modal).
-  - **Unified Search**: Standardized search bars (Vocabulary, Grammar, Kanji) for perfect consistency.
-  - **Multi-Select**: Select multiple Kanji categories simultaneously.
+  - **Unified Search**: Standardized search bars and filters (Vocabulary, Grammar, Kanji) for perfect consistency.
+  - **Multi-Select**: Select multiple categories simultaneously across all study modes.
 - **Progress**:
   - **Progress Bar**: Visualize your N5 mastery directly in the Kanji grid.
   - **"Mastered" Filter**: Hide known Kanjis with one click to focus on what you need to learn.

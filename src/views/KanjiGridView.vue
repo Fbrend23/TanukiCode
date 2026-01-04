@@ -3,7 +3,9 @@ import { ref, computed } from 'vue'
 import { kanjiList, type Kanji } from '@/data/kanji'
 import KanjiCard from '@/components/KanjiCard.vue'
 import KanjiModal from '@/components/KanjiModal.vue'
-import { Search, Settings2, X } from 'lucide-vue-next'
+import MasteryBar from '@/components/MasteryBar.vue'
+import FilterModal from '@/components/FilterModal.vue'
+import { Search, Settings2 } from 'lucide-vue-next'
 import { useUserStore } from '@/stores/userStore'
 
 const searchQuery = ref('')
@@ -22,10 +24,6 @@ const masteredKanji = computed(() => {
     k.jlpt === selectedLevel.value &&
     userStore.masteredItems.includes(k.character)
   ).length
-})
-const progressPercentage = computed(() => {
-  if (totalKanji.value === 0) return 0
-  return Math.round((masteredKanji.value / totalKanji.value) * 100)
 })
 
 const categories = [
@@ -107,7 +105,7 @@ const toggleCategory = (cat: string) => {
     <div class="flex flex-col items-center w-full max-w-4xl mb-6">
       <div class="text-center mb-2">
         <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanji N{{ selectedLevel
-          }}</h1>
+        }}</h1>
       </div>
 
       <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
@@ -128,20 +126,7 @@ const toggleCategory = (cat: string) => {
       </div>
 
       <!-- Progress Bar -->
-      <div class="w-full max-w-4xl px-2 mb-1">
-        <div class="flex flex-col gap-1 ">
-          <div class="flex justify-between text-sm font-bold text-tanuki-brown">
-            <span>Progression N{{ selectedLevel }}</span>
-            <span>{{ masteredKanji }} / {{ totalKanji }} ({{ progressPercentage }}%)</span>
-          </div>
-          <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full bg-tanuki-gold transition-all duration-500 ease-out"
-              :style="{ width: `${progressPercentage}%` }"></div>
-          </div>
-        </div>
-
-
-      </div>
+      <MasteryBar :label="`Progression N${selectedLevel}`" :current="masteredKanji" :total="totalKanji" />
 
 
     </div>
@@ -163,49 +148,33 @@ const toggleCategory = (cat: string) => {
     <KanjiModal :kanji="selectedKanji" :is-open="isModalOpen" @close="closeModal" />
 
     <!-- Filter Modal -->
-    <div v-if="isFilterModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="isFilterModalOpen = false"></div>
-      <div
-        class="relative bg-white rounded-3xl w-full max-w-sm max-h-[80vh] overflow-y-auto shadow-xl p-6 flex flex-col gap-6 animate-in fade-in zoom-in duration-200">
-        <div class="flex items-center justify-between">
-          <h2 class="text-2xl font-display font-bold text-tanuki-green">Filtres</h2>
-          <button @click="isFilterModalOpen = false" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
-            <X class="w-6 h-6 text-gray-400" />
+    <FilterModal v-model:isOpen="isFilterModalOpen">
+      <!-- Categories -->
+      <div class="flex flex-col gap-3">
+        <h3 class="font-bold text-tanuki-brown">Catégorie</h3>
+        <div class="flex flex-wrap gap-2">
+          <button v-for="cat in categories" :key="cat" @click="toggleCategory(cat)" :class="['px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
+            (cat === 'All' ? selectedCategories.length === 0 : selectedCategories.includes(cat))
+              ? 'bg-tanuki-green text-white border-tanuki-green'
+              : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50']">
+            {{ categoryTranslations[cat] }}
           </button>
         </div>
+      </div>
 
-        <!-- Categories -->
-        <div class="flex flex-col gap-3">
-          <h3 class="font-bold text-tanuki-brown">Catégorie</h3>
-          <div class="flex flex-wrap gap-2">
-            <button v-for="cat in categories" :key="cat" @click="toggleCategory(cat)" :class="['px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
-              (cat === 'All' ? selectedCategories.length === 0 : selectedCategories.includes(cat))
-                ? 'bg-tanuki-green text-white border-tanuki-green'
-                : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50']">
-              {{ categoryTranslations[cat] }}
-            </button>
+      <div class="h-[1px] bg-gray-100 w-full"></div>
+
+      <!-- Toggle Mastered -->
+      <label
+        class="flex items-center justify-between p-4 bg-white border-2 border-tanuki-brown rounded-xl cursor-pointer select-none">
+        <span class="font-bold text-tanuki-brown">Masquer maîtrisés</span>
+        <div class="relative">
+          <input type="checkbox" v-model="hideMastered" class="peer sr-only">
+          <div
+            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green">
           </div>
         </div>
-
-        <div class="h-[1px] bg-gray-100 w-full"></div>
-
-        <!-- Toggle Mastered -->
-        <label
-          class="flex items-center justify-between p-4 bg-white border-2 border-tanuki-brown rounded-xl cursor-pointer select-none">
-          <span class="font-bold text-tanuki-brown">Masquer maîtrisés</span>
-          <div class="relative">
-            <input type="checkbox" v-model="hideMastered" class="peer sr-only">
-            <div
-              class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green">
-            </div>
-          </div>
-        </label>
-
-        <button @click="isFilterModalOpen = false"
-          class="w-full py-3 bg-tanuki-green text-white font-bold rounded-xl shadow-lg shadow-tanuki-green/20 hover:bg-tanuki-green-dark transition-colors mt-2">
-          Voir les résultats
-        </button>
-      </div>
-    </div>
+      </label>
+    </FilterModal>
   </div>
 </template>

@@ -91,7 +91,7 @@ function playSound(item: GridItem) {
         </div>
 
         <div
-            class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 py-2 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige">
+            class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige">
             <Info class="w-4 h-4 text-tanuki-gold" />
             <span>Cliquez sur un kana pour écouter sa prononciation.</span>
         </div>
@@ -115,7 +115,8 @@ function playSound(item: GridItem) {
                             {{ item.romaji }}
                         </span>
 
-                        <button v-if="authStore.user" @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
+                        <button v-if="authStore.user"
+                            @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
                             class="absolute top-1 left-1 p-1 rounded-full transition-colors z-20"
                             :class="[isMastered(item) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
                             <Check class="w-3 h-3 stroke-[4]" />

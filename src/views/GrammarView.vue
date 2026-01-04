@@ -2,17 +2,26 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { grammarLessons } from '../data/grammar';
-import { Search, ChevronRight, Check } from 'lucide-vue-next';
+import { Search, ChevronRight, Check, Settings2 } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/userStore';
 import { useAuthStore } from '@/stores/authStore';
+import MasteryBar from '@/components/MasteryBar.vue';
+import FilterModal from '@/components/FilterModal.vue';
 
 const router = useRouter();
 const searchQuery = ref('');
-const selectedCategory = ref<string | 'all'>('all');
+const selectedCategories = ref<string[]>([]);
+const isFilterModalOpen = ref(false);
 const userStore = useUserStore();
 const authStore = useAuthStore();
 
 const isMastered = (id: string) => userStore.masteredItems.includes(id);
+
+// Mastery Stats
+const totalLessons = computed(() => grammarLessons.length);
+const masteredLessons = computed(() => {
+    return grammarLessons.filter(l => userStore.masteredItems.includes(l.id)).length;
+});
 
 const categories = [
     { value: 'all', label: 'Tout' },
@@ -21,11 +30,25 @@ const categories = [
     { value: 'conjugation', label: 'Conjugaison' },
 ];
 
+const toggleCategory = (cat: string) => {
+    if (cat === 'all') {
+        selectedCategories.value = []
+        return
+    }
+
+    const index = selectedCategories.value.indexOf(cat)
+    if (index === -1) {
+        selectedCategories.value.push(cat)
+    } else {
+        selectedCategories.value.splice(index, 1)
+    }
+}
+
 const filteredLessons = computed(() => {
     return grammarLessons.filter((lesson) => {
         const matchesSearch = lesson.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             lesson.summary.toLowerCase().includes(searchQuery.value.toLowerCase());
-        const matchesCategory = selectedCategory.value === 'all' || lesson.category === selectedCategory.value;
+        const matchesCategory = selectedCategories.value.length === 0 || selectedCategories.value.includes(lesson.category);
         return matchesSearch && matchesCategory;
     });
 });
@@ -40,7 +63,7 @@ const getCategoryLabel = (cat: string) => {
 
 const emptyStateMessage = computed(() => {
     if (searchQuery.value) return `Aucune leçon trouvée pour "${searchQuery.value}"`;
-    if (selectedCategory.value !== 'all') return `Aucune leçon dans la catégorie "${getCategoryLabel(selectedCategory.value)}"`;
+    if (selectedCategories.value.length > 0) return `Aucune leçon dans les catégories sélectionnées`;
     return 'Aucune leçon disponible.';
 });
 </script>
@@ -54,20 +77,25 @@ const emptyStateMessage = computed(() => {
         </div>
 
         <div class="flex flex-col items-center w-full max-w-4xl mb-6">
-            <div class="relative w-full max-w-md mb-4">
-                <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input v-model="searchQuery" type="text" placeholder="Rechercher une leçon..."
-                    class="w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-green rounded-xl focus:border-tanuki-green focus:outline-none transition-colors shadow-sm" />
+            <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
+                <!-- Search (Centered) -->
+                <div class="relative w-full max-w-md mx-auto z-10">
+                    <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input v-model="searchQuery" type="text" placeholder="Rechercher une leçon..." class="search-bar" />
+                </div>
+
+                <!-- Filter Button (Absolute Right on Desktop) -->
+                <div class="flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center">
+                    <button @click="isFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md">
+                        <Settings2 class="w-5 h-5" />
+                        <span>Filtres</span>
+                        <div v-if="selectedCategories.length > 0" class="w-2 h-2 rounded-full bg-tanuki-gold"></div>
+                    </button>
+                </div>
             </div>
 
-            <div class="flex flex-wrap justify-center gap-2 w-full">
-                <button v-for="cat in categories" :key="cat.value" @click="selectedCategory = cat.value" :class="['px-4 py-1.5 rounded-full font-bold transition-all border-2 text-sm md:text-base whitespace-nowrap',
-                    selectedCategory === cat.value
-                        ? 'bg-tanuki-green text-white border-tanuki-green shadow-sm'
-                        : 'bg-white text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-green/50']">
-                    {{ cat.label }}
-                </button>
-            </div>
+            <!-- Progress Bar -->
+            <MasteryBar label="Progression Grammaire" :current="masteredLessons" :total="totalLessons" />
         </div>
 
 
@@ -115,6 +143,22 @@ const emptyStateMessage = computed(() => {
         <div v-if="filteredLessons.length === 0" class="text-center py-12 text-gray-500">
             <p>{{ emptyStateMessage }}</p>
         </div>
+
+        <!-- Filter Modal -->
+        <FilterModal v-model:isOpen="isFilterModalOpen">
+            <!-- Categories -->
+            <div class="flex flex-col gap-3">
+                <h3 class="font-bold text-tanuki-brown">Catégorie</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button v-for="cat in categories" :key="cat.value" @click="toggleCategory(cat.value)" :class="['px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
+                        (cat.value === 'all' ? selectedCategories.length === 0 : selectedCategories.includes(cat.value))
+                            ? 'bg-tanuki-green text-white border-tanuki-green'
+                            : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50']">
+                        {{ cat.label }}
+                    </button>
+                </div>
+            </div>
+        </FilterModal>
     </div>
 </template>
 
