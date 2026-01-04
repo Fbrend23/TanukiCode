@@ -13,7 +13,7 @@
   - **Quiz UI**: Improved layout with centered title and compact toolbar for better focus.
   - **Quiz Filters**: Translated categories and improved configurations (solid Green border).
 - **Progress**:
-  - **Anti-Cheat**: Quiz scores and combos are now saved immediately to the cloud and local storage upon answering, preventing refresh-based cheating.
+  - **Bug Fix**: Quiz scores and combos are now saved immediately to the cloud and local storage upon answering, preventing refresh-based cheating.
   - **Progress Bar**: Reusable `MasteryBar` component to visualize N5 mastery in Kanji grid and Kana charts.
   - **"Mastered" Filter**: Hide known items (Kanji, Flashcards) with one click to focus on what you need to learn.
 - **Style**:
