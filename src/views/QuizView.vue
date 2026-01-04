@@ -112,7 +112,7 @@ function generateOptions(correct: QuizItem): QuizItem[] {
     return opts.sort(() => Math.random() - 0.5);
 }
 
-function checkAnswer(option: QuizItem) {
+async function checkAnswer(option: QuizItem) {
     if (isAnswered.value) return;
 
     selectedOption.value = option;
@@ -129,7 +129,7 @@ function checkAnswer(option: QuizItem) {
     }
 
     userStore.updateBestCombo(newCombo);
-    userStore.recordAnswer(isCorrectAnswer);
+    await userStore.recordAnswer(isCorrectAnswer);
 }
 
 function nextQuestion() {
