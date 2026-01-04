@@ -5,11 +5,17 @@ import { hiragana, katakana, type KanaChar, type KanaType } from '@/data/kana';
 import { speakJapanese, playKanaAudio } from '@/utils/audio';
 import { useUserStore } from '@/stores/userStore';
 import { useAuthStore } from '@/stores/authStore';
+import MasteryBar from '@/components/MasteryBar.vue';
 
 const mode = ref<'hiragana' | 'katakana'>('hiragana');
 const currentTab = ref<KanaType | 'modified'>('basic'); // 'modified' includes dakuten + handakuten
 
 const currentKanaList = computed(() => mode.value === 'hiragana' ? hiragana : katakana);
+
+const kanaTotal = computed(() => currentKanaList.value.filter(k => k.char).length);
+const kanaMastered = computed(() => {
+    return currentKanaList.value.filter(k => k.char && userStore.masteredItems.includes(k.char)).length;
+});
 
 const displayedKana = computed(() => {
     if (currentTab.value === 'basic') {
@@ -61,9 +67,11 @@ function playSound(item: GridItem) {
 </script>
 
 <template>
-    <div class="flex flex-col items-center">
-        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanas</h2>
+    <div class="flex flex-col items-center w-full px-4">
+        <!-- Header -->
+        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">Kanas</h2>
 
+        <!-- Mode Toggles -->
         <div class="card flex p-1 mb-4 shadow-none border-tanuki-green/40">
             <button @click="mode = 'hiragana'"
                 :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
@@ -75,28 +83,33 @@ function playSound(item: GridItem) {
             </button>
         </div>
 
-        <div class="flex gap-2 mb-6 overflow-x-auto max-w-full px-4 text-sm md:text-base scrollbar-hide">
+        <!-- Tab Navigation -->
+        <div class="flex gap-2 mb-6 overflow-x-auto max-w-full px-1 py-1 text-sm md:text-base scrollbar-hide">
             <button @click="currentTab = 'basic'"
-                :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2', currentTab === 'basic' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
+                :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'basic' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
                 De base
             </button>
             <button @click="currentTab = 'modified'"
-                :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2', currentTab === 'modified' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
+                :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'modified' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
                 Dérivés (Dakuten)
             </button>
             <button @click="currentTab = 'yoon'"
-                :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2', currentTab === 'yoon' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
+                :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'yoon' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
                 Combos (Yoon)
             </button>
         </div>
 
+        <!-- Progress Bar -->
+        <MasteryBar :label="`Progression ${mode === 'hiragana' ? 'Hiragana' : 'Katakana'}`" :current="kanaMastered"
+            :total="kanaTotal" class="mb-4" />
+
         <div
-            class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige">
+            class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige py-2">
             <Info class="w-4 h-4 text-tanuki-gold" />
             <span>Cliquez sur un kana pour écouter sa prononciation.</span>
         </div>
 
-        <div :class="['grid w-full px-4 pb-4 pt-0 transition-all relative', gridLayoutClass]">
+        <div :class="['grid w-full px-0 pb-4 pt-0 transition-all relative', gridLayoutClass]">
             <template v-for="(item, index) in displayedKana" :key="index">
                 <div v-if="item.type === 'spacer'" class="hidden md:flex items-center justify-center">
                     <div class="h-full w-0.5 bg-tanuki-brown/10 rounded-full"></div>
