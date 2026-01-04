@@ -218,7 +218,7 @@ const getAvatarSrc = (avatarValue: string) => {
     </main>
 
     <!-- Footer -->
-    <footer class="bg-tanuki-brown-dark text-tanuki-beige py-2 md:py-4">
+    <footer class="bg-tanuki-brown-dark text-tanuki-beige py-2 md:py-4 mt-8 md:mt-12">
       <div class="container mx-auto px-4 flex flex-col items-center gap-2 md:gap-4">
         <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
         <div class="flex gap-4 text-xs opacity-60">
