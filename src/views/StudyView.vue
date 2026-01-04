@@ -2,18 +2,33 @@
 import { ref, computed, watch } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
+import { kanjiList, type Kanji } from '@/data/kanji';
 import { RefreshCw, Volume2 } from 'lucide-vue-next';
 import { speakJapanese, playKanaAudio } from '@/utils/audio';
 
-type CardData = (KanaChar | VocabularyWord) & { romaji?: string; meaning?: string };
+import { useUserStore } from '@/stores/userStore';
 
-const mode = ref<'hiragana' | 'katakana' | 'vocabulary'>('hiragana');
+type CardData = (KanaChar | VocabularyWord | Kanji) & { romaji?: string; meaning?: string[] | string };
+
+const userStore = useUserStore();
+const mode = ref<'hiragana' | 'katakana' | 'vocabulary' | 'kanji'>('hiragana');
 const isFlipped = ref(false);
+const hideMastered = ref(false);
 
 const currentList = computed(() => {
-    if (mode.value === 'hiragana') return hiragana.filter(k => k.char);
-    if (mode.value === 'katakana') return katakana.filter(k => k.char);
-    return vocabulary;
+    let list: (KanaChar | VocabularyWord | Kanji)[] = [];
+    if (mode.value === 'hiragana') list = hiragana.filter(k => k.char);
+    else if (mode.value === 'katakana') list = katakana.filter(k => k.char);
+    else if (mode.value === 'kanji') list = kanjiList;
+    else list = vocabulary;
+
+    if (hideMastered.value) {
+        return list.filter(item => {
+            const id = 'char' in item ? item.char : ('word' in item ? item.word : item.character);
+            return !userStore.masteredItems.includes(id);
+        });
+    }
+    return list;
 });
 
 const currentCard = ref<CardData>(getRandomItem());
@@ -34,13 +49,16 @@ const frontText = computed(() => {
     if ('char' in card) {
         return (card as KanaChar).char;
     }
+    if ('character' in card) {
+        return (card as Kanji).character;
+    }
     if ('word' in card) {
         return (card as VocabularyWord).word;
     }
     return '';
 });
 
-watch(mode, () => {
+watch([mode, hideMastered], () => {
     isFlipped.value = false;
     currentCard.value = getRandomItem();
 });
@@ -84,20 +102,32 @@ const fontSizeClass = computed(() => {
         <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Flashcards</h2>
 
         <!-- Mode Toggle -->
-        <div class="card flex flex-wrap justify-center p-1 mb-2 md:mb-8 max-w-full">
+        <div class="card flex flex-wrap justify-center p-1 mb-2 md:mb-4 max-w-full">
             <button @click="mode = 'hiragana'"
-                :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Hiragana
             </button>
             <button @click="mode = 'katakana'"
-                :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Katakana
             </button>
+            <button @click="mode = 'kanji'"
+                :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'kanji' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                Kanji
+            </button>
             <button @click="mode = 'vocabulary'"
-                :class="['px-4 py-2 rounded-full font-bold transition-all capitalize text-sm md:text-base', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                 Vocabulaire
             </button>
         </div>
+
+        <!-- Filter Toggle -->
+        <label
+            class="flex items-center gap-2 mb-4 cursor-pointer select-none text-tanuki-brown/80 hover:text-tanuki-green transition-colors">
+            <input type="checkbox" v-model="hideMastered"
+                class="w-4 h-4 rounded border-tanuki-green text-tanuki-green focus:ring-tanuki-green">
+            <span class="text-sm font-bold">Masquer les éléments maîtrisés</span>
+        </label>
 
         <!-- Flashcard Scene -->
         <div class="scene w-72 h-80 md:w-[36rem] md:h-[26rem] perspective-1000 cursor-pointer group" @click="flipCard">
@@ -114,7 +144,7 @@ const fontSizeClass = computed(() => {
                     </div>
 
                     <!-- Audio Button -->
-                    <button @click="playSound"
+                    <button v-if="mode !== 'kanji'" @click="playSound"
                         class="absolute top-4 right-4 p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-colors">
                         <Volume2 class="w-6 h-6" />
                     </button>
@@ -125,11 +155,14 @@ const fontSizeClass = computed(() => {
                 <!-- Back -->
                 <div
                     class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
-                    <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">{{ currentCard.meaning ||
-                        currentCard.romaji
-                        }}</span>
-                    <span class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' : 'Romaji' }}</span>
-                    <span v-if="currentCard.meaning" class="text-sm mt-2 opacity-60">({{ currentCard.romaji
+                    <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">
+                        {{ Array.isArray(currentCard.meaning) ? currentCard.meaning.join(', ') : (currentCard.meaning ||
+                            currentCard.romaji) }}
+                    </span>
+                    <span v-if="mode !== 'kanji'" class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' :
+                        'Romaji' }}</span>
+                    <span v-if="currentCard.meaning && !Array.isArray(currentCard.meaning)"
+                        class="text-sm mt-2 opacity-60">({{ currentCard.romaji
                         }})</span>
                 </div>
             </div>

@@ -9,6 +9,38 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.12.0',
+    date: '2026-01-04',
+    sections: [
+      {
+        title: 'Apprentissage & Flashcards',
+        items: [
+          'MODE KANJI : Révisez maintenant vos Kanjis avec le nouveau mode Flashcards.',
+          'MAÎTRISE : Visualisez votre progression N5 directement dans la grille des Kanjis et les tableaux de Kanas.',
+          'FILTRES : Nouveau mode "Cacher les maîtrisés" disponible dans les Flashcards et les Kanjis.',
+          'BUG FIX : Les scores et séries du Quiz sont désormais sauvegardés instantanément pour éviter les pertes de données.',
+        ],
+      },
+      {
+        title: 'Interface & Expérience',
+        items: [
+          'HARMONISATION : Les titres et la navigation sont désormais parfaitement centrés et cohérents sur toutes les pages.',
+          "NAVIGATION : L'onglet actif dans la barre de menu est maintenant mis en évidence par une couleur brune.",
+          'MULTI-SÉLECTION : Choisissez plusieurs catégories de filtres simultanément.',
+          "MOBILE : Optimisation de l'affichage des catégories sur petit écran.",
+          "FOOTER : Ajout d'espace supplémentaire pour une navigation plus aérée.",
+        ],
+      },
+      {
+        title: 'Style & Design',
+        items: [
+          'THEME TANUKI : Extension du pack de style "Brun/Vert" aux barres de progression, séparateurs et volets de filtres.',
+          'BARRE DE SCORE : Nouveau design compact du score dans le Quiz avec bordure et séparateur colorés.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.11.0',
     date: '2026-01-02',
     sections: [
