@@ -42,6 +42,15 @@
   .btn-brown {
     @apply bg-tanuki-brown text-white border-tanuki-brown-dark hover:bg-amber-600;
   }
+
+  /* Utility Classes for Filters */
+  .search-bar {
+    @apply w-full pl-10 pr-4 py-2 bg-white border-2 border-tanuki-green focus:border-tanuki-green outline-none rounded-xl transition-colors shadow-sm;
+  }
+
+  .btn-filter {
+    @apply flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white border-2 border-tanuki-green hover:bg-tanuki-beige/30 text-tanuki-green transition-all font-bold text-sm shadow-sm;
+  }
 }
 
 body {
