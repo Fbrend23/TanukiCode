@@ -9,6 +9,7 @@
   - **Advanced Filters**: New "Mobile-First" filter panel for Kanjis (sleek modal).
   - **Unified Search**: Standardized search bars and filters (Vocabulary, Grammar, Kanji) for perfect consistency.
   - **Multi-Select**: Select multiple categories simultaneously across all study modes.
+  - **Quiz UI**: Improved layout with centered title and compact toolbar for better focus.
 - **Progress**:
   - **Progress Bar**: Visualize your N5 mastery directly in the Kanji grid.
   - **"Mastered" Filter**: Hide known Kanjis with one click to focus on what you need to learn.
