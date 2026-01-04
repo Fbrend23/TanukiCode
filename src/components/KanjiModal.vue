@@ -109,11 +109,11 @@ watch(() => props.isOpen, (newVal) => {
 
                         <!-- Examples Section -->
                         <div v-if="kanji.examples && kanji.examples.length > 0"
-                            class="mt-6 border-t border-tanuki-beige pt-6 pb-8">
+                            class="mt-6 border-t-2 border-tanuki-brown pt-6 pb-8">
                             <h3 class="text-center text-tanuki-brown text-lg font-bold mb-4">Exemples</h3>
                             <div class="space-y-3">
                                 <div v-for="(ex, idx) in kanji.examples" :key="idx"
-                                    class="bg-white border border-tanuki-beige rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+                                    class="bg-white border-2 border-tanuki-brown rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
                                     <div class="flex flex-col">
                                         <div class="flex flex-wrap items-baseline gap-x-2 md:gap-x-3 gap-y-1">
                                             <span class="font-bold text-tanuki-brown-dark text-xl md:text-2xl">{{

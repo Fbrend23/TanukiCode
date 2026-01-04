@@ -9,6 +9,28 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.12.0',
+    date: '2026-01-04',
+    sections: [
+      {
+        title: 'Flashcards & Kanjis',
+        items: [
+          'MODE KANJI : Révisez maintenant vos Kanjis avec le mode Flashcards.',
+          'MAÎTRISE : Visualisez votre progression N5 directement dans la grille des Kanjis.',
+          'FILTRE : Nouveau mode "Cacher les maîtrisés" pour optimiser vos révisions.',
+        ],
+      },
+      {
+        title: 'Interface & Style',
+        items: [
+          'FILTRES MODERNES : Nouvelle modale de filtres fluide et responsive pour les Kanjis.',
+          'CONSISTANCE : Standardisation des barres de recherche et des boutons sur tout le site.',
+          'DESIGN : Application du thème "Tanuki" (Brun/Vert) aux éléments d\'interface.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.11.0',
     date: '2026-01-02',
     sections: [
