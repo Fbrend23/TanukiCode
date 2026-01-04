@@ -25,23 +25,23 @@ const handleLogout = async () => {
 
 // Avatar Logic
 const colors = [
-    { value: 'gold', bg: 'bg-tanuki-gold' },
-    { value: 'green', bg: 'bg-emerald-500' },
-    { value: 'blue', bg: 'bg-blue-500' },
-    { value: 'red', bg: 'bg-red-500' },
-    { value: 'black', bg: 'bg-gray-800' },
-    { value: 'pink', bg: 'bg-pink-400' },
+  { value: 'gold', bg: 'bg-tanuki-gold' },
+  { value: 'green', bg: 'bg-emerald-500' },
+  { value: 'blue', bg: 'bg-blue-500' },
+  { value: 'red', bg: 'bg-red-500' },
+  { value: 'black', bg: 'bg-gray-800' },
+  { value: 'pink', bg: 'bg-pink-400' },
 ]
 
 const getColorClass = (colorName: string) => {
-    if (colorName && colorName.includes('.')) return 'bg-white'
-    const c = colors.find(c => c.value === colorName)
-    return c ? c.bg : 'bg-tanuki-gold'
+  if (colorName && colorName.includes('.')) return 'bg-white'
+  const c = colors.find(c => c.value === colorName)
+  return c ? c.bg : 'bg-tanuki-gold'
 }
 
 const getAvatarSrc = (avatarValue: string) => {
-    if (!avatarValue || avatarValue === 'default') return null
-    return supabase.storage.from('avatars').getPublicUrl(avatarValue).data.publicUrl
+  if (!avatarValue || avatarValue === 'default') return null
+  return supabase.storage.from('avatars').getPublicUrl(avatarValue).data.publicUrl
 }
 </script>
 
@@ -76,29 +76,36 @@ const getAvatarSrc = (avatarValue: string) => {
 
           <!-- Desktop Nav -->
           <nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-6 text-base">
-            <RouterLink to="/" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Accueil
+            <RouterLink to="/" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Accueil
             </RouterLink>
 
             <!-- Separator -->
             <div class="h-4 w-px bg-tanuki-beige/30 lg:block"></div>
 
-            <RouterLink to="/charts" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+            <RouterLink to="/charts" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Kanas</RouterLink>
 
-            <RouterLink to="/kanji" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
+            <RouterLink to="/kanji" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
             </RouterLink>
-            <RouterLink to="/vocabulary" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+            <RouterLink to="/vocabulary" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Vocabulaire</RouterLink>
-            <RouterLink to="/grammar" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+            <RouterLink to="/grammar" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Grammaire</RouterLink>
 
             <!-- Separator -->
             <div class="h-4 w-px bg-tanuki-beige/30 lg:block"></div>
 
-            <RouterLink to="/study" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+            <RouterLink to="/study" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Flashcards
             </RouterLink>
-            <RouterLink to="/quiz" class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
+            <RouterLink to="/quiz" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
             </RouterLink>
 
             <!-- Auth Section Desktop -->
@@ -107,12 +114,13 @@ const getAvatarSrc = (avatarValue: string) => {
                 <RouterLink to="/profile"
                   class="flex items-center gap-2 text-tanuki-gold group hover:text-tanuki-brown transition-colors"
                   title="Mon Profil">
-                  <div class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
-                       :class="getColorClass(userStore.avatarColor)">
-                      <img v-if="(userStore.avatarImage || 'default') !== 'default'"
-                           :src="getAvatarSrc(userStore.avatarImage) || ''"
-                           alt="Avatar" class="w-full h-full object-cover p-0.5" />
-                      <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-0.5" />
+                  <div
+                    class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
+                    :class="getColorClass(userStore.avatarColor)">
+                    <img v-if="(userStore.avatarImage || 'default') !== 'default'"
+                      :src="getAvatarSrc(userStore.avatarImage) || ''" alt="Avatar"
+                      class="w-full h-full object-cover p-0.5" />
+                    <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-0.5" />
                   </div>
                 </RouterLink>
                 <button @click="handleLogout"
@@ -176,12 +184,13 @@ const getAvatarSrc = (avatarValue: string) => {
               <template v-if="auth.user">
                 <RouterLink to="/profile" @click="isMenuOpen = false"
                   class="flex items-center gap-2 text-tanuki-gold hover:text-white transition-colors text-xl">
-                  <div class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
-                       :class="getColorClass(userStore.avatarColor)">
-                      <img v-if="(userStore.avatarImage || 'default') !== 'default'"
-                           :src="getAvatarSrc(userStore.avatarImage) || ''"
-                           alt="Avatar" class="w-full h-full object-cover p-0.5" />
-                      <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-0.5" />
+                  <div
+                    class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
+                    :class="getColorClass(userStore.avatarColor)">
+                    <img v-if="(userStore.avatarImage || 'default') !== 'default'"
+                      :src="getAvatarSrc(userStore.avatarImage) || ''" alt="Avatar"
+                      class="w-full h-full object-cover p-0.5" />
+                    <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-0.5" />
                   </div>
                   Mon Profil
                 </RouterLink>
