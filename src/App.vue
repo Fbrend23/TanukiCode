@@ -148,7 +148,8 @@ const getAvatarSrc = (avatarValue: string) => {
         <!-- Mobile Menu Overlay -->
         <Transition name="slide">
           <nav aria-label="Navigation mobile" v-if="isMenuOpen"
-            class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 lg:hidden overflow-y-auto overscroll-contain pb-8">
+            class="fixed inset-0 bg-tanuki-green/95 dark:bg-gray-900/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 lg:hidden overflow-y-auto overscroll-contain pb-8 text-white">
+
             <RouterLink to="/" @click="isMenuOpen = false" class="font-bold hover:text-tanuki-gold transition-colors">
               Accueil
             </RouterLink>

@@ -215,7 +215,7 @@ onUnmounted(() => {
             <!-- Score & Streak (Centered) -->
             <div class="relative w-full max-w-md mx-auto z-10">
                 <div
-                    class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full bg-white">
+                    class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full">
                     <div class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown">
                         <Trophy class="w-4 h-4 text-tanuki-gold" />
                         <span>{{ score }}/{{ total }}</span>
@@ -317,19 +317,24 @@ onUnmounted(() => {
         <!-- Options -->
         <div class="grid grid-cols-2 gap-3 md:gap-4 w-full">
             <button v-for="(option, idx) in options" :key="idx" @click="checkAnswer(option)" :disabled="isAnswered"
-                class="btn-3d w-full z-10" :class="[
+                class="btn-3d w-full z-10 relative group" :class="[
                     isAnswered && getId(option) === getId(currentQuestion) ? 'bg-green-500 text-white border-green-700' :
                         isAnswered && selectedOption === option && getId(option) !== getId(currentQuestion) ? 'bg-red-500 text-white border-red-700' :
                             'btn-secondary'
                 ]">
+                <span
+                    class="absolute top-2 left-3 text-[10px] font-bold opacity-30 group-hover:opacity-100 transition-opacity hidden md:block border border-current px-1 rounded">{{
+                        idx + 1 }}</span>
                 <span class="text-sm md:text-base leading-tight">{{ getAnswerText(option) }}</span>
             </button>
         </div>
 
         <!-- Next Button -->
-        <button @click="nextQuestion" class="mt-8 btn-3d btn-gold w-full"
+        <button @click="nextQuestion" class="mt-8 btn-3d btn-gold w-full flex items-center justify-center gap-2 group"
             :class="isAnswered ? 'animate-fade-in' : 'invisible'">
-            Question Suivante
+            <span>Question Suivante</span>
+            <span
+                class="text-[10px] font-bold bg-white/20 px-1.5 py-0.5 rounded text-white/80 hidden md:block group-hover:bg-white/30 transition-colors">ENTER</span>
         </button>
     </div>
 </template>

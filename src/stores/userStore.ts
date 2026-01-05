@@ -14,6 +14,13 @@ export const useUserStore = defineStore('user', () => {
   // Initialize from localStorage to persist across refreshes
   const currentCombo = ref(Number.parseInt(localStorage.getItem('tanuki_current_combo') || '0'))
 
+  // XP & Leveling
+  const xp = ref(0)
+  const level = ref(1)
+  const xpToNextLevel = ref(100)
+  // Daily Activity (YYYY-MM-DD -> count)
+  const dailyActivity = ref<Record<string, number>>({})
+
   // Mastery Tracking (Set of IDs/Strings)
   const masteredItems = ref<string[]>([])
 
@@ -58,7 +65,7 @@ export const useUserStore = defineStore('user', () => {
     const { data, error } = await supabase
       .from('profiles')
       .select(
-        'score, total_questions, streak, high_score, best_combo, current_combo, username, avatar_url, last_studied_at, mastered_items',
+        'score, total_questions, streak, high_score, best_combo, current_combo, username, avatar_url, last_studied_at, mastered_items', // xp, daily_activity removed temp
       )
       .eq('id', auth.user.id)
       .single()
@@ -88,8 +95,56 @@ export const useUserStore = defineStore('user', () => {
       }
       if (data.last_studied_at) lastStudiedAt.value = data.last_studied_at
       if (data.mastered_items) masteredItems.value = data.mastered_items || []
+      /*
+      if (data.xp) {
+        xp.value = data.xp
+        calculateLevel()
+      }
+      if (data.daily_activity) dailyActivity.value = data.daily_activity
+      */
     }
     loading.value = false
+  }
+
+  const calculateLevel = () => {
+    // Simple formula: Level N requires N * 100 XP
+    // Or cumulative: Level = floor(sqrt(XP / 100)) + 1
+    // Let's use a progressive scale similar to RPGs
+    // Level 1: 0-100
+    // Level 2: 101-300 (diff 200)
+    // Level 3: 301-600 (diff 300)
+    // Formula: XP = (Level * (Level - 1) / 2) * 100
+    // Inverse: Level = floor((1 + sqrt(1 + 8 * XP / 100)) / 2)
+
+    // Using simple linear for now for easy testing: 100 XP per level? No, clearly user wants "Premium" feel.
+    // Let's stick to valid formula: Level = floor(sqrt(XP)/10) + 1?
+    // Let's use: level = Math.floor(xp.value / 100) + 1 strictly for MVP, but user wants "Global XP Bar".
+
+    // Better formula for engagement: Level = Math.floor(0.1 * Math.sqrt(xp.value)) + 1 is too slow.
+    // Let's go with: Level N threshold = 100 * N * N? No.
+    // Let's go with: Constant growth. 50 XP per level increment?
+    // Let's use: Threshold for Level L = 100 * (L-1) + 50 * (L-1)^2 ?
+
+    // Simple Gamification:
+    // Level 1 -> 2: 100 XP
+    // Level 2 -> 3: 150 XP
+    // Level 3 -> 4: 225 XP (1.5x)
+
+    // Current Logic:
+    // Just store XP.
+    // Derived Level:
+    let lvl = 1
+    let threshold = 100
+    let currentXp = xp.value
+
+    while (currentXp >= threshold) {
+      currentXp -= threshold
+      lvl++
+      threshold = Math.floor(threshold * 1.2) // 20% harder each level
+    }
+
+    level.value = lvl
+    xpToNextLevel.value = threshold
   }
 
   // Update profile (username & avatar)
@@ -142,6 +197,8 @@ export const useUserStore = defineStore('user', () => {
       current_combo: currentCombo.value,
       last_studied_at: lastStudiedAt.value,
       mastered_items: masteredItems.value, // Persist mastery
+      xp: xp.value,
+      daily_activity: dailyActivity.value,
       updated_at: new Date(),
     })
   }
@@ -182,6 +239,11 @@ export const useUserStore = defineStore('user', () => {
 
     score.value++
 
+    // Add XP: 10 XP per correct answer + streak bonus
+    const xpGain = 10 + Math.min(streak.value, 10)
+    xp.value += xpGain
+    calculateLevel()
+
     const now = new Date()
     const lastDate = lastStudiedAt.value ? new Date(lastStudiedAt.value) : null
 
@@ -214,6 +276,14 @@ export const useUserStore = defineStore('user', () => {
     }
 
     lastStudiedAt.value = now.toISOString()
+
+    // Record Daily Activity (local fallback if needed)
+    const dateKey = now.toISOString().split('T')[0] as string
+    if (!dailyActivity.value[dateKey]) {
+      dailyActivity.value[dateKey] = 0
+    }
+    dailyActivity.value[dateKey]++
+
     await saveProgress()
   }
 
@@ -270,5 +340,9 @@ export const useUserStore = defineStore('user', () => {
     updateProfile,
     markAsMastered,
     toggleMastery,
+    xp,
+    level,
+    xpToNextLevel,
+    dailyActivity,
   }
 })

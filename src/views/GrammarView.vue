@@ -101,13 +101,13 @@ const emptyStateMessage = computed(() => {
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 w-full max-w-6xl px-0 md:px-4">
             <div v-for="lesson in filteredLessons" :key="lesson.id" @click="navigateToLesson(lesson.id)"
-                class="card p-3 md:p-6 group cursor-pointer hover:shadow-md transition-all flex flex-col h-full border-2"
+                class="card p-3 md:p-6 group cursor-pointer hover:shadow-md transition-all flex flex-col h-full border-2 relative"
                 :class="[isMastered(lesson.id) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:border-tanuki-green-light']">
 
                 <button v-if="authStore.user" @click.stop="userStore.toggleMastery(lesson.id)"
                     class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20"
                     :class="[isMastered(lesson.id) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
-                    <Check class="w-3 h-3 stroke-[4]" />
+                    <Check class="w-3 h-3 stroke-4" />
                 </button>
 
                 <div class="flex justify-between items-start mb-2 pl-4 md:pl-0">
@@ -118,7 +118,7 @@ const emptyStateMessage = computed(() => {
                         </span>
                     </div>
                     <span
-                        class="bg-tanuki-beige text-tanuki-brown-dark text-[10px] md:text-sm font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded flex-shrink-0">
+                        class="bg-tanuki-beige text-tanuki-brown-dark text-[10px] md:text-sm font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded shrink-0">
                         {{ lesson.level }}
                     </span>
                 </div>
@@ -128,7 +128,7 @@ const emptyStateMessage = computed(() => {
                     {{ lesson.title }}
                 </h3>
 
-                <p class="text-gray-500 text-xs md:text-base mb-3 md:mb-6 line-clamp-2 md:line-clamp-3 flex-grow">
+                <p class="text-gray-500 text-xs md:text-base mb-3 md:mb-6 line-clamp-2 md:line-clamp-3 grow">
                     {{ lesson.summary }}
                 </p>
 
