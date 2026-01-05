@@ -54,7 +54,7 @@ const chartData = computed(() => {
   const sStreak = Math.min((userStore.streak / 30) * 100, 100);
 
   return {
-    labels: ['Kanas', 'Kanjis', 'Vocabulaire', 'Grammaire', 'Assiduité'],
+    labels: ['Kanas', 'Kanjis', 'Vocabulaire', 'Grammaire', 'Série'],
     datasets: [
       {
         label: 'Compétences',
@@ -71,6 +71,9 @@ const chartData = computed(() => {
 })
 
 const chartOptions = {
+  layout: {
+    padding: -10
+  },
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -98,7 +101,7 @@ const chartOptions = {
       },
       pointLabels: {
         font: {
-          family: '"Baloo 2", cursive',
+          family: "'Fredoka', sans-serif",
           size: 12
         },
         color: '#795548'
@@ -115,12 +118,12 @@ const chartOptions = {
 </script>
 
 <template>
-  <div class="card p-5 w-full h-72 flex flex-col overflow-hidden">
-    <h3 class="text-lg font-bold text-tanuki-brown mb-4 flex items-center gap-2">
+  <div class="card p-2 md:p-3 w-full h-72 flex flex-col overflow-hidden">
+    <h3 class="text-lg font-bold text-tanuki-brown mb-4 flex items-center justify-center gap-2">
       <Hexagon class="w-5 h-5 text-tanuki-green" />
       Radar Compétences
     </h3>
-    <div class="w-full flex-1 min-h-0 relative flex items-center justify-center">
+    <div class="w-full flex-1 min-h-0 relative">
       <Radar :data="chartData" :options="chartOptions" />
     </div>
   </div>

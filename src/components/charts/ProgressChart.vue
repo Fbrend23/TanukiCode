@@ -106,8 +106,8 @@ const chartOptions = {
 </script>
 
 <template>
-  <div class="card p-5 w-full h-72 flex flex-col overflow-hidden">
-    <h3 class="text-lg font-bold text-tanuki-brown mb-4 flex items-center gap-2">
+  <div class="card p-2 md:p-3 w-full h-72 flex flex-col overflow-hidden">
+    <h3 class="text-lg font-bold text-tanuki-brown mb-4 flex items-center justify-center gap-2">
       <TrendingUp class="w-5 h-5 text-tanuki-green" />
       Progression (7 jours)
     </h3>

@@ -97,22 +97,24 @@ const unlockedCount = computed(() => badges.value.filter(b => b.isUnlocked).leng
 </script>
 
 <template>
-  <div class="card p-5">
-    <div class="flex items-center justify-between mb-4">
+  <div class="card p-2 md:p-3 relative">
+    <!-- Counter moved to top right -->
+    <span
+      class="absolute top-3 right-3 text-xs font-bold bg-tanuki-green/10 text-tanuki-green px-3 py-1 rounded-full border border-tanuki-green/20">
+      {{ unlockedCount }} / {{ badges.length }}
+    </span>
+
+    <div class="flex items-center justify-center mb-4">
       <h3 class="text-lg font-bold text-tanuki-brown flex items-center gap-2">
-        <Medal class="w-5 h-5 text-tanuki-gold" />
+        <Medal class="w-5 h-5 text-tanuki-green" />
         Badges & Succès
       </h3>
-      <span
-        class="text-xs font-bold bg-tanuki-green/10 text-tanuki-green px-3 py-1 rounded-full border border-tanuki-green/20">
-        {{ unlockedCount }} / {{ badges.length }}
-      </span>
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div v-for="badge in badges" :key="badge.id"
         class="relative flex flex-col items-center text-center p-4 rounded-xl border-2 transition-all duration-300"
-        :class="badge.isUnlocked ? 'bg-white border-tanuki-green/30 shadow-sm' : 'bg-gray-50 border-gray-100 opacity-60 grayscale'">
+        :class="badge.isUnlocked ? 'bg-white border-tanuki-green shadow-sm' : 'bg-gray-50 border-gray-100 opacity-60 grayscale'">
 
         <div class="p-3 rounded-full mb-3" :class="badge.isUnlocked ? 'bg-gray-50' : 'bg-gray-200'">
           <component :is="badge.icon" class="w-8 h-8" :class="badge.isUnlocked ? badge.color : 'text-gray-400'" />
