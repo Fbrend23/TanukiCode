@@ -213,8 +213,12 @@ const getAvatarSrc = (avatarValue: string) => {
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow container mx-auto py-1 md:py-8 flex flex-col">
-      <RouterView />
+    <main class="grow container mx-auto py-1 md:py-8 flex flex-col">
+      <RouterView v-slot="{ Component }">
+        <Transition name="page" mode="out-in">
+          <component :is="Component" />
+        </Transition>
+      </RouterView>
     </main>
 
     <!-- Footer -->

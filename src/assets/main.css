@@ -20,7 +20,7 @@
 
   /* 3D Button Components */
   .btn-3d {
-    @apply font-display font-bold text-center transition-all active:translate-y-1 active:border-b-transparent py-3 px-6 rounded-2xl border-b-4 uppercase tracking-wider;
+    @apply font-display font-bold text-center transition-all active:scale-95 active:translate-y-1 active:border-b-transparent py-3 px-6 rounded-2xl border-b-4 uppercase tracking-wider;
   }
 
   .btn-primary {
@@ -73,4 +73,18 @@ h5,
 h6 {
   font-family: var(--font-display);
   color: var(--color-tanuki-green);
+}
+
+/* Page Transitions */
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }

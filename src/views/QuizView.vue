@@ -6,6 +6,8 @@ import { kanjiList, type Kanji } from '@/data/kanji';
 import { grammarLessons, type GrammarLesson } from '@/data/grammar';
 import { Check, X, Trophy, Settings2, Grid3x3, BookOpen, ScrollText, PenTool } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/userStore';
+import { happyConfetti } from '@/utils/confetti';
+import { onMounted, onUnmounted } from 'vue';
 
 type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson) & {
     romaji?: string;
@@ -123,6 +125,9 @@ async function checkAnswer(option: QuizItem) {
     let newCombo = userStore.currentCombo;
     if (isCorrectAnswer) {
         newCombo++;
+        if ([10, 25, 50, 100].includes(newCombo)) {
+            happyConfetti();
+        }
         userStore.markAsMastered(getId(currentQuestion.value));
     } else {
         newCombo = 0;
@@ -170,6 +175,33 @@ function toggleCategory(cat: keyof typeof categories.value) {
     }
     nextQuestion();
 }
+
+const handleKeydown = (e: KeyboardEvent) => {
+    // Ignore if typing in an input (if any exist, like search bar in filter)
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+    if (isAnswered.value) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            nextQuestion();
+        }
+    } else {
+        if (['1', '2', '3', '4'].includes(e.key)) {
+            const idx = parseInt(e.key) - 1;
+            if (options.value[idx]) {
+                checkAnswer(options.value[idx]);
+            }
+        }
+    }
+};
+
+onMounted(() => {
+    window.addEventListener('keydown', handleKeydown);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeydown);
+});
 </script>
 
 <template>
@@ -188,7 +220,7 @@ function toggleCategory(cat: keyof typeof categories.value) {
                         <Trophy class="w-4 h-4 text-tanuki-gold" />
                         <span>{{ score }}/{{ total }}</span>
                     </div>
-                    <div class="h-4 w-[2px] bg-tanuki-brown rounded-full"></div>
+                    <div class="h-4 w-0.5 bg-tanuki-brown rounded-full"></div>
                     <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
                         <span>{{ combo }}</span>
                         <span class="text-xs">🔥</span>
@@ -200,7 +232,7 @@ function toggleCategory(cat: keyof typeof categories.value) {
             <div
                 class="mt-3 md:mt-0 flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center z-0">
                 <button @click="showSettings = !showSettings"
-                    class="btn-filter !py-2 !px-3 shadow-sm md:w-auto w-full max-w-md">
+                    class="btn-filter py-2! px-3! shadow-sm md:w-auto w-full max-w-md">
                     <Settings2 class="w-5 h-5" />
                     <span class="inline">Filtres</span>
                 </button>
@@ -236,7 +268,7 @@ function toggleCategory(cat: keyof typeof categories.value) {
                     <!-- Check Indicator -->
                     <div v-if="val"
                         class="absolute -top-2 -right-2 bg-tanuki-green text-white p-1 rounded-full border-2 border-white">
-                        <Check class="w-3 h-3 stroke-[3]" />
+                        <Check class="w-3 h-3 stroke-3" />
                     </div>
                 </button>
             </div>
@@ -259,7 +291,7 @@ function toggleCategory(cat: keyof typeof categories.value) {
 
             <!-- Fixed height container for question text to prevent layout shift -->
             <div class="h-32 md:h-40 w-full flex items-center justify-center mb-4 pt-4">
-                <div :class="['font-bold text-tanuki-brown-dark break-words text-center', fontSizeClass]">
+                <div :class="['font-bold text-tanuki-brown-dark text-wrap text-center', fontSizeClass]">
                     {{ getDisplayText(currentQuestion) }}
                 </div>
             </div>
