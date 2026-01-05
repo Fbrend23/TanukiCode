@@ -65,7 +65,7 @@ export const useUserStore = defineStore('user', () => {
     const { data, error } = await supabase
       .from('profiles')
       .select(
-        'score, total_questions, streak, high_score, best_combo, current_combo, username, avatar_url, last_studied_at, mastered_items', // xp, daily_activity removed temp
+        'score, total_questions, streak, high_score, best_combo, current_combo, username, avatar_url, last_studied_at, mastered_items, xp, daily_activity',
       )
       .eq('id', auth.user.id)
       .single()
@@ -95,13 +95,13 @@ export const useUserStore = defineStore('user', () => {
       }
       if (data.last_studied_at) lastStudiedAt.value = data.last_studied_at
       if (data.mastered_items) masteredItems.value = data.mastered_items || []
-      /*
       if (data.xp) {
         xp.value = data.xp
         calculateLevel()
       }
-      if (data.daily_activity) dailyActivity.value = data.daily_activity
-      */
+      if (data.daily_activity) {
+        dailyActivity.value = data.daily_activity
+      }
     }
     loading.value = false
   }
