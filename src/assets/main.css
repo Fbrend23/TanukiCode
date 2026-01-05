@@ -53,10 +53,19 @@
   }
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   background-color: var(--color-tanuki-beige);
   color: var(--color-tanuki-brown-dark);
   font-family: var(--font-body);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-tanuki-green);
+  outline-offset: 2px;
 }
 
 button,
