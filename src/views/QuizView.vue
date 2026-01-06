@@ -8,6 +8,9 @@ import { Check, X, Trophy, Settings2, Grid3x3, BookOpen, ScrollText, PenTool } f
 import { useUserStore } from '@/stores/userStore';
 import { happyConfetti } from '@/utils/confetti';
 import { onMounted, onUnmounted } from 'vue';
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
+
+const isLoading = ref(true);
 
 type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson) & {
     romaji?: string;
@@ -197,6 +200,7 @@ const handleKeydown = (e: KeyboardEvent) => {
 
 onMounted(() => {
     window.addEventListener('keydown', handleKeydown);
+    setTimeout(() => { isLoading.value = false; }, 800);
 });
 
 onUnmounted(() => {
@@ -205,137 +209,147 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="w-full flex flex-col items-center max-w-3xl mx-auto px-4 md:px-0">
-        <!-- Center Title -->
-        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-6 text-center">Quiz</h2>
+    <div class="w-full h-full min-h-[60vh]">
+        <!-- Loading State -->
+        <div v-if="isLoading" class="w-full flex justify-center py-32">
+            <LoadingSpinner size="xl" text="Préparation du Quiz..." />
+        </div>
 
-        <!-- Toolbar: Score + Filter -->
-        <div class="relative w-full max-w-2xl flex flex-col md:block mb-6">
+        <div v-else class="w-full flex flex-col items-center max-w-3xl mx-auto px-4 md:px-0">
+            <!-- Center Title -->
+            <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-6 text-center">Quiz</h2>
 
-            <!-- Score & Streak (Centered) -->
-            <div class="relative w-full max-w-md mx-auto z-10">
+            <!-- Toolbar: Score + Filter -->
+            <div class="relative w-full max-w-2xl flex flex-col md:block mb-6">
+
+                <!-- Score & Streak (Centered) -->
+                <div class="relative w-full max-w-md mx-auto z-10">
+                    <div
+                        class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full">
+                        <div class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown">
+                            <Trophy class="w-4 h-4 text-tanuki-gold" />
+                            <span>{{ score }}/{{ total }}</span>
+                        </div>
+                        <div class="h-4 w-0.5 bg-tanuki-brown rounded-full"></div>
+                        <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
+                            <span>{{ combo }}</span>
+                            <span class="text-xs">🔥</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Button (Absolute Right Desktop) -->
                 <div
-                    class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full">
-                    <div class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown">
-                        <Trophy class="w-4 h-4 text-tanuki-gold" />
-                        <span>{{ score }}/{{ total }}</span>
+                    class="mt-3 md:mt-0 flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center z-0">
+                    <button @click="showSettings = !showSettings"
+                        class="btn-filter py-2! px-3! shadow-sm md:w-auto w-full max-w-md">
+                        <Settings2 class="w-5 h-5" />
+                        <span class="inline">Filtres</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Section - Redesigned (Flat/Premium) -->
+            <div v-if="showSettings"
+                class="card w-full mb-6 p-6 animate-fade-in shadow-none border-2 border-tanuki-green">
+                <h3 class="font-bold text-tanuki-brown-dark mb-6 flex items-center gap-2 text-lg">
+                    <Settings2 class="w-5 h-5 text-tanuki-green" />
+                    <span>Configuration du Quiz</span>
+                </h3>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button v-for="(val, key) in categories" :key="key" @click="toggleCategory(key as any)" :class="['flex flex-col items-center gap-3 p-4 rounded-2xl transition-all border-2 relative group',
+                        val
+                            ? 'bg-tanuki-green/5 border-tanuki-green text-tanuki-green'
+                            : 'bg-white border-tanuki-beige text-gray-400 hover:border-tanuki-green/20']">
+
+                        <div :class="['p-3 rounded-full transition-colors',
+                            val ? 'bg-tanuki-green/20' : 'bg-tanuki-beige/50 group-hover:bg-tanuki-beige']">
+                            <Grid3x3 v-if="key === 'kana'" class="w-6 h-6" />
+                            <BookOpen v-else-if="key === 'vocabulary'" class="w-6 h-6" />
+                            <ScrollText v-else-if="key === 'kanji'" class="w-6 h-6" />
+                            <PenTool v-else-if="key === 'grammar'" class="w-6 h-6" />
+                        </div>
+
+                        <span class="font-bold capitalize text-sm">
+                            {{ key === 'kana' ? 'Kanas' : key === 'vocabulary' ? 'Vocabulaire' : key === 'kanji' ?
+                                'Kanjis'
+                                : 'Grammaire' }}
+                        </span>
+
+                        <!-- Check Indicator -->
+                        <div v-if="val"
+                            class="absolute -top-2 -right-2 bg-tanuki-green text-white p-1 rounded-full border-2 border-white">
+                            <Check class="w-3 h-3 stroke-3" />
+                        </div>
+                    </button>
+                </div>
+
+                <p class="text-xs text-gray-400 mt-6 text-center italic">
+                    Activez les catégories pour les inclure dans votre session d'entraînement.
+                </p>
+            </div>
+
+            <!-- Quiz Card -->
+            <div
+                class="card w-full text-center mb-4 relative overflow-hidden group p-8 md:p-12 min-h-[30vh] flex flex-col items-center justify-center">
+
+                <!-- Type Badge -->
+                <div
+                    class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded">
+                    {{ 'char' in currentQuestion ? 'Kana' : 'character' in currentQuestion ? 'Kanji' : 'word' in
+                        currentQuestion ? 'Vocabulaire' : 'Grammaire' }}
+                </div>
+
+                <!-- Fixed height container for question text to prevent layout shift -->
+                <div class="h-32 md:h-40 w-full flex items-center justify-center mb-4 pt-4">
+                    <div :class="['font-bold text-tanuki-brown-dark text-wrap text-center', fontSizeClass]">
+                        {{ getDisplayText(currentQuestion) }}
                     </div>
-                    <div class="h-4 w-0.5 bg-tanuki-brown rounded-full"></div>
-                    <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
-                        <span>{{ combo }}</span>
-                        <span class="text-xs">🔥</span>
+                </div>
+
+                <p class="text-gray-400">Choisir la bonne Signification / Romaji</p>
+
+                <!-- Feedback Overlay -->
+                <div v-if="isAnswered"
+                    class="absolute inset-0 flex items-center justify-center bg-opacity-90 transition-all backdrop-blur-sm z-20"
+                    :class="isCorrect ? 'bg-green-100/50' : 'bg-red-100/50'">
+                    <div v-if="isCorrect" class="text-green-600 flex flex-col items-center animate-bounce-short">
+                        <Check class="w-20 h-20" />
+                        <span class="text-2xl font-bold">Correct !</span>
+                    </div>
+                    <div v-else class="text-red-500 flex flex-col items-center">
+                        <X class="w-20 h-20" />
+                        <span class="text-2xl font-bold">Oups !</span>
+                        <span class="text-lg text-gray-600 mt-2">C'était "{{ getAnswerText(currentQuestion) }}"</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Filter Button (Absolute Right Desktop) -->
-            <div
-                class="mt-3 md:mt-0 flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center z-0">
-                <button @click="showSettings = !showSettings"
-                    class="btn-filter py-2! px-3! shadow-sm md:w-auto w-full max-w-md">
-                    <Settings2 class="w-5 h-5" />
-                    <span class="inline">Filtres</span>
+            <!-- Options -->
+            <div class="grid grid-cols-2 gap-3 md:gap-4 w-full">
+                <button v-for="(option, idx) in options" :key="idx" @click="checkAnswer(option)" :disabled="isAnswered"
+                    class="btn-3d w-full z-10 relative group" :class="[
+                        isAnswered && getId(option) === getId(currentQuestion) ? 'bg-green-500 text-white border-green-700' :
+                            isAnswered && selectedOption === option && getId(option) !== getId(currentQuestion) ? 'bg-red-500 text-white border-red-700' :
+                                'btn-secondary'
+                    ]">
+                    <span
+                        class="absolute top-2 left-3 text-[10px] font-bold opacity-30 group-hover:opacity-100 transition-opacity hidden md:block border border-current px-1 rounded">{{
+                            idx + 1 }}</span>
+                    <span class="text-sm md:text-base leading-tight">{{ getAnswerText(option) }}</span>
                 </button>
             </div>
-        </div>
 
-        <!-- Settings Section - Redesigned (Flat/Premium) -->
-        <div v-if="showSettings" class="card w-full mb-6 p-6 animate-fade-in shadow-none border-2 border-tanuki-green">
-            <h3 class="font-bold text-tanuki-brown-dark mb-6 flex items-center gap-2 text-lg">
-                <Settings2 class="w-5 h-5 text-tanuki-green" />
-                <span>Configuration du Quiz</span>
-            </h3>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button v-for="(val, key) in categories" :key="key" @click="toggleCategory(key as any)" :class="['flex flex-col items-center gap-3 p-4 rounded-2xl transition-all border-2 relative group',
-                    val
-                        ? 'bg-tanuki-green/5 border-tanuki-green text-tanuki-green'
-                        : 'bg-white border-tanuki-beige text-gray-400 hover:border-tanuki-green/20']">
-
-                    <div :class="['p-3 rounded-full transition-colors',
-                        val ? 'bg-tanuki-green/20' : 'bg-tanuki-beige/50 group-hover:bg-tanuki-beige']">
-                        <Grid3x3 v-if="key === 'kana'" class="w-6 h-6" />
-                        <BookOpen v-else-if="key === 'vocabulary'" class="w-6 h-6" />
-                        <ScrollText v-else-if="key === 'kanji'" class="w-6 h-6" />
-                        <PenTool v-else-if="key === 'grammar'" class="w-6 h-6" />
-                    </div>
-
-                    <span class="font-bold capitalize text-sm">
-                        {{ key === 'kana' ? 'Kanas' : key === 'vocabulary' ? 'Vocabulaire' : key === 'kanji' ? 'Kanjis'
-                            : 'Grammaire' }}
-                    </span>
-
-                    <!-- Check Indicator -->
-                    <div v-if="val"
-                        class="absolute -top-2 -right-2 bg-tanuki-green text-white p-1 rounded-full border-2 border-white">
-                        <Check class="w-3 h-3 stroke-3" />
-                    </div>
-                </button>
-            </div>
-
-            <p class="text-xs text-gray-400 mt-6 text-center italic">
-                Activez les catégories pour les inclure dans votre session d'entraînement.
-            </p>
-        </div>
-
-        <!-- Quiz Card -->
-        <div
-            class="card w-full text-center mb-4 relative overflow-hidden group p-8 md:p-12 min-h-[30vh] flex flex-col items-center justify-center">
-
-            <!-- Type Badge -->
-            <div
-                class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded">
-                {{ 'char' in currentQuestion ? 'Kana' : 'character' in currentQuestion ? 'Kanji' : 'word' in
-                    currentQuestion ? 'Vocabulaire' : 'Grammaire' }}
-            </div>
-
-            <!-- Fixed height container for question text to prevent layout shift -->
-            <div class="h-32 md:h-40 w-full flex items-center justify-center mb-4 pt-4">
-                <div :class="['font-bold text-tanuki-brown-dark text-wrap text-center', fontSizeClass]">
-                    {{ getDisplayText(currentQuestion) }}
-                </div>
-            </div>
-
-            <p class="text-gray-400">Choisir la bonne Signification / Romaji</p>
-
-            <!-- Feedback Overlay -->
-            <div v-if="isAnswered"
-                class="absolute inset-0 flex items-center justify-center bg-opacity-90 transition-all backdrop-blur-sm z-20"
-                :class="isCorrect ? 'bg-green-100/50' : 'bg-red-100/50'">
-                <div v-if="isCorrect" class="text-green-600 flex flex-col items-center animate-bounce-short">
-                    <Check class="w-20 h-20" />
-                    <span class="text-2xl font-bold">Correct !</span>
-                </div>
-                <div v-else class="text-red-500 flex flex-col items-center">
-                    <X class="w-20 h-20" />
-                    <span class="text-2xl font-bold">Oups !</span>
-                    <span class="text-lg text-gray-600 mt-2">C'était "{{ getAnswerText(currentQuestion) }}"</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Options -->
-        <div class="grid grid-cols-2 gap-3 md:gap-4 w-full">
-            <button v-for="(option, idx) in options" :key="idx" @click="checkAnswer(option)" :disabled="isAnswered"
-                class="btn-3d w-full z-10 relative group" :class="[
-                    isAnswered && getId(option) === getId(currentQuestion) ? 'bg-green-500 text-white border-green-700' :
-                        isAnswered && selectedOption === option && getId(option) !== getId(currentQuestion) ? 'bg-red-500 text-white border-red-700' :
-                            'btn-secondary'
-                ]">
+            <!-- Next Button -->
+            <button @click="nextQuestion"
+                class="mt-8 btn-3d btn-gold w-full flex items-center justify-center gap-2 group"
+                :class="isAnswered ? 'animate-fade-in' : 'invisible'">
+                <span>Question Suivante</span>
                 <span
-                    class="absolute top-2 left-3 text-[10px] font-bold opacity-30 group-hover:opacity-100 transition-opacity hidden md:block border border-current px-1 rounded">{{
-                        idx + 1 }}</span>
-                <span class="text-sm md:text-base leading-tight">{{ getAnswerText(option) }}</span>
+                    class="text-[10px] font-bold bg-white/20 px-1.5 py-0.5 rounded text-white/80 hidden md:block group-hover:bg-white/30 transition-colors">ENTER</span>
             </button>
         </div>
-
-        <!-- Next Button -->
-        <button @click="nextQuestion" class="mt-8 btn-3d btn-gold w-full flex items-center justify-center gap-2 group"
-            :class="isAnswered ? 'animate-fade-in' : 'invisible'">
-            <span>Question Suivante</span>
-            <span
-                class="text-[10px] font-bold bg-white/20 px-1.5 py-0.5 rounded text-white/80 hidden md:block group-hover:bg-white/30 transition-colors">ENTER</span>
-        </button>
     </div>
 </template>
 

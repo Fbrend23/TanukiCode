@@ -233,8 +233,8 @@ const formatDate = (dateStr: string) => {
             enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-75 ease-in"
             leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
             <div v-if="tooltip.visible"
-                class="fixed z-[9999] px-3 py-1.5 text-xs font-bold text-white bg-gray-900/90 backdrop-blur-sm shadow-xl rounded-lg pointer-events-none transform -translate-y-full border border-white/10 whitespace-nowrap"
-                :class="tooltip.align === 'left' ? 'translate-x-[0px]' : (tooltip.align === 'right' ? '-translate-x-full' : '-translate-x-1/2')"
+                class="fixed z-9999 px-3 py-1.5 text-xs font-bold text-white bg-gray-900/90 backdrop-blur-sm shadow-xl rounded-lg pointer-events-none transform -translate-y-full border border-white/10 whitespace-nowrap"
+                :class="tooltip.align === 'left' ? 'translate-x-0' : (tooltip.align === 'right' ? '-translate-x-full' : '-translate-x-1/2')"
                 :style="{ left: `${tooltip.x}px`, top: `${tooltip.y}px` }">
                 {{ tooltip.count }} activités le {{ formatDate(tooltip.date) }}
             </div>

@@ -29,6 +29,17 @@ const grammarProgress = computed(() => getMasteryProgress(grammarLessons));
 const getPercentage = (progress: { mastered: number; total: number }) => {
   return (progress.mastered / progress.total) * 100;
 };
+
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
+import { ref, onMounted } from 'vue';
+
+const isLoading = ref(true);
+
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 800);
+});
 </script>
 
 <template>
@@ -62,7 +73,12 @@ const getPercentage = (progress: { mastered: number; total: number }) => {
       <XPBar />
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+    <!-- Loading State -->
+    <div v-if="isLoading" class="w-full flex justify-center py-12">
+      <LoadingSpinner size="xl" text="Réveil du Tanuki..." />
+    </div>
+
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
       <RouterLink to="/charts"
         class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
         <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">あ</div>

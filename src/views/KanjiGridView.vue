@@ -98,6 +98,17 @@ const toggleCategory = (cat: string) => {
     selectedCategories.value.splice(index, 1)
   }
 }
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import { onMounted } from 'vue'
+
+const isLoading = ref(true)
+
+onMounted(() => {
+  // Simulate network delay using the spinner
+  setTimeout(() => {
+    isLoading.value = false
+  }, 600)
+})
 </script>
 
 <template>
@@ -105,7 +116,7 @@ const toggleCategory = (cat: string) => {
     <div class="flex flex-col items-center w-full max-w-4xl mb-6">
       <div class="text-center mb-2">
         <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanji N{{ selectedLevel
-        }}</h1>
+          }}</h1>
       </div>
 
       <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
@@ -133,10 +144,15 @@ const toggleCategory = (cat: string) => {
 
 
 
+    <!-- Loading State -->
+    <div v-if="isLoading" class="w-full flex justify-center py-24">
+      <LoadingSpinner size="xl" text="Chargement des Kanjis..." />
+    </div>
+
     <!-- Grid -->
-    <div v-if="filteredKanji.length > 0" class="flex flex-wrap justify-center items-stretch gap-2 md:gap-4 w-full">
+    <div v-else-if="filteredKanji.length > 0" class="flex flex-wrap justify-center items-stretch gap-2 md:gap-4 w-full">
       <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)"
-        class="w-[calc(50%-0.5rem)] flex-grow md:flex-grow-0 md:w-52 lg:w-60" />
+        class="w-[calc(50%-0.5rem)] grow md:grow-0 md:w-52 lg:w-60" />
     </div>
 
     <!-- Empty State -->
@@ -162,7 +178,7 @@ const toggleCategory = (cat: string) => {
         </div>
       </div>
 
-      <div class="h-[1px] bg-gray-100 w-full"></div>
+      <div class="h-px bg-gray-100 w-full"></div>
 
       <!-- Toggle Mastered -->
       <label
@@ -171,7 +187,7 @@ const toggleCategory = (cat: string) => {
         <div class="relative">
           <input type="checkbox" v-model="hideMastered" class="peer sr-only">
           <div
-            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green">
+            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green">
           </div>
         </div>
       </label>
