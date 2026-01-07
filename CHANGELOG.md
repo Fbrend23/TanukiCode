@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.0] - 2026-01-07
+
+### Added
+
+- **Content (JLPT N5)**:
+  - **Complete N5 Set**: Added the final ~25 missing Kanjis to reach 100% coverage of the N5 curriculum (106 Kanjis total).
+  - **New Categories**: Time (Year, Week), Colors (Red, Blue, Black), School, Nature, and Essential Verbs.
+
 ## [0.13.0] - 2026-01-07
 
 ### Added
