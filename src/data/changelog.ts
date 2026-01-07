@@ -9,6 +9,19 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.14.0',
+    date: '2026-01-07',
+    sections: [
+      {
+        title: 'Contenu Certifié N5',
+        items: [
+          'OBJECTIF 100% : Le set de Kanjis N5 est maintenant complet ! (106 caractères)',
+          'NOUVEAUX THÈMES : Temps, Couleurs, École, Nature et Verbes essentiels ajoutés.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.13.0',
     date: '2026-01-07',
     sections: [
