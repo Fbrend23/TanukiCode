@@ -46,9 +46,7 @@ const goBack = () => {
 const isLoading = ref(true);
 
 onMounted(() => {
-    setTimeout(() => {
-        isLoading.value = false;
-    }, 600);
+    isLoading.value = false;
 });
 </script>
 

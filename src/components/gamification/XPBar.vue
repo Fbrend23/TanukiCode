@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import { Star, Info } from 'lucide-vue-next';
 
 const userStore = useUserStore();
+const isMounted = ref(false);
+
+onMounted(() => {
+  setTimeout(() => {
+    isMounted.value = true;
+  }, 100);
+});
 
 const level = computed(() => userStore.level);
 const xp = computed(() => userStore.xp);
@@ -72,7 +79,7 @@ const currentLevelProgress = computed(() => {
 
       <div class="h-4 bg-gray-200 rounded-full overflow-hidden shadow-inner border border-gray-100 relative">
         <div class="h-full bg-linear-to-r from-tanuki-gold to-yellow-400 transition-all duration-1000 ease-out relative"
-          :style="{ width: `${currentLevelProgress.percent}%` }">
+          :style="{ width: `${isMounted ? currentLevelProgress.percent : 0}%` }">
           <!-- Inner glint -->
           <div class="absolute top-0 left-0 w-full h-px bg-white/50"></div>
           <div class="absolute bottom-0 left-0 w-full h-px bg-black/10"></div>

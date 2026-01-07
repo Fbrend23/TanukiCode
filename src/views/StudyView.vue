@@ -13,7 +13,7 @@ import { onMounted } from 'vue';
 const isLoading = ref(true);
 
 onMounted(() => {
-    setTimeout(() => { isLoading.value = false; }, 600);
+    isLoading.value = false;
 });
 
 type CardData = (KanaChar | VocabularyWord | Kanji) & { romaji?: string; meaning?: string[] | string };

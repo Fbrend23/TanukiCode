@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import tanukiHead from '@/assets/tanuki-head.png';
+import tanukiHead from '@/assets/tanuki-detective.png';
 
 withDefaults(defineProps<{
     size?: 'sm' | 'md' | 'lg' | 'xl'

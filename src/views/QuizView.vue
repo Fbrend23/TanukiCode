@@ -200,7 +200,7 @@ const handleKeydown = (e: KeyboardEvent) => {
 
 onMounted(() => {
     window.addEventListener('keydown', handleKeydown);
-    setTimeout(() => { isLoading.value = false; }, 800);
+    isLoading.value = false;
 });
 
 onUnmounted(() => {

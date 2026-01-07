@@ -86,11 +86,8 @@ const fetchAvatars = async () => {
 }
 
 onMounted(async () => {
-    fetchAvatars()
-    // Simulate loading or wait for real data
-    setTimeout(() => {
-        isLoading.value = false
-    }, 800)
+    await fetchAvatars()
+    isLoading.value = false
 })
 
 const getAvatarSrc = (avatarValue: string) => {
