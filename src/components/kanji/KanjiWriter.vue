@@ -7,13 +7,18 @@ import tanukiImg from '@/assets/tanuki-detective.png';
 const props = defineProps<{
     character: string;
     size?: number;
+    initialMode?: 'view' | 'quiz';
+}>();
+
+const emit = defineEmits<{
+    (e: 'quiz-success'): void;
 }>();
 
 const writerContainer = ref<HTMLElement | null>(null);
 const writer = ref<HanziWriter | null>(null);
 const isLoading = ref(true);
 const error = ref<string | null>(null);
-const mode = ref<'view' | 'quiz'>('view');
+const mode = ref<'view' | 'quiz'>(props.initialMode || 'view');
 
 const initWriter = () => {
     if (!writerContainer.value) return;
@@ -62,13 +67,19 @@ const initWriter = () => {
             },
             onLoadCharDataSuccess: () => {
                 isLoading.value = false;
-                animate();
+                if (props.initialMode === 'quiz') {
+                    startQuiz();
+                } else {
+                    animate();
+                }
             },
             onLoadCharDataError: () => {
                 isLoading.value = false;
                 error.value = "Impossible de charger le tracé.";
             }
         });
+
+        // Removed invalid listener code
     } catch (e) {
         console.error(e);
         error.value = "Erreur d'initialisation du moteur d'écriture.";
@@ -85,7 +96,11 @@ const animate = () => {
 const startQuiz = () => {
     if (!writer.value) return;
     mode.value = 'quiz';
-    writer.value.quiz();
+    writer.value.quiz({
+        onComplete: () => {
+            emit('quiz-success');
+        }
+    });
 };
 
 watch(() => props.character, () => {
@@ -126,8 +141,8 @@ onUnmounted(() => {
             <div ref="writerContainer" class="cursor-pointer"></div>
         </div>
 
-        <!-- Controls -->
-        <div class="flex gap-4">
+        <!-- Controls (Hidden if initialMode is set, e.g. in Quiz) -->
+        <div v-if="!initialMode" class="flex gap-4">
             <button @click="animate"
                 class="flex items-center gap-2 px-4 py-2 rounded-xl transition-all font-bold text-sm"
                 :class="mode === 'view' ? 'bg-tanuki-green text-white shadow-md' : 'bg-white text-tanuki-green border border-tanuki-green hover:bg-green-50'">
@@ -143,7 +158,7 @@ onUnmounted(() => {
             </button>
         </div>
 
-        <p class="mt-4 text-xs text-stone-500 italic max-w-xs text-center">
+        <p v-if="!initialMode || mode === 'quiz'" class="text-xs text-stone-500 italic max-w-xs text-center">
             <span v-if="mode === 'view'">Regardez l'animation pour apprendre l'ordre des traits.</span>
             <span v-else>Dessinez le caractère par-dessus le modèle.
                 <span class="block mt-1 text-amber-600 font-bold">Respectez l'ordre et le sens !</span>
