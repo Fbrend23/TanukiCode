@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { X, Info, Volume2 } from 'lucide-vue-next'
-import { ref, watch } from 'vue'
-import type { Kanji } from '@/data/kanji'
+import { X, BookOpen, PenTool } from 'lucide-vue-next';
+import { type Kanji } from '@/data/kanji';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
+import KanjiWriter from './kanji/KanjiWriter.vue';
 import { playKanjiAudio } from '@/utils/audio'
+import { Info, Volume2 } from 'lucide-vue-next'
+
 
 const props = defineProps<{
-    kanji: Kanji | null
-    isOpen: boolean
-}>()
+    kanji: Kanji | null;
+    isOpen: boolean;
+}>();
 
-const emit = defineEmits(['close'])
+const emit = defineEmits<{
+    (e: 'close'): void;
+}>();
+
+const activeTab = ref<'details' | 'write'>('details');
+
+
 
 const showInfo = ref(false)
 
@@ -18,59 +27,93 @@ const playExample = (reading: string, index: number) => {
     playKanjiAudio(props.kanji.character, index, reading)
 }
 
-// Auto-play sound when modal opens
-watch(() => props.isOpen, (newVal) => {
-    if (newVal && props.kanji) {
-        // Auto-play removed per user request
+// Reset tab when modal opens
+onMounted(() => {
+    activeTab.value = 'details';
+});
+
+// Empêcher le scroll du body quand la modale est ouverte
+watch(() => props.isOpen, (isOpen) => {
+    if (isOpen) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = 'auto';
     }
-})
+});
+
+onUnmounted(() => {
+    document.body.style.overflow = 'auto';
+});
 </script>
 
 <template>
     <Transition name="fade">
         <div v-if="isOpen && kanji" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <!-- Backdrop -->
-            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="emit('close')"></div>
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="emit('close')"></div>
 
             <!-- Modal Content -->
             <div
-                class="bg-white rounded-3xl w-full max-w-lg md:max-w-2xl shadow-2xl relative max-h-[90vh] z-10 animate-modal-in border-4 border-tanuki-green overflow-y-auto overscroll-contain">
-                <!-- Header Pattern -->
-                <div class="h-16 md:h-20 bg-tanuki-green relative shrink-0 flex items-center justify-center z-0">
+                class="relative w-full max-w-lg bg-tanuki-beige-light rounded-3xl shadow-2xl overflow-hidden transform transition-all border-4 border-tanuki-beige flex flex-col max-h-[90vh]">
+
+                <!-- Header with Kanji -->
+                <div class="relative bg-tanuki-green text-white p-8 pb-12 flex flex-col items-center shrink-0">
+                    <button @click="emit('close')"
+                        class="absolute top-4 right-4 p-2 rounded-full hover:bg-white/20 transition-colors">
+                        <X class="w-6 h-6" />
+                    </button>
+
                     <div
-                        class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+                        class="text-8xl font-serif font-bold mb-2 filter drop-shadow-md bg-white/10 rounded-3xl w-32 h-32 flex items-center justify-center border-2 border-white/20">
+                        {{ kanji.character }}
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 justify-center mt-4">
+                        <span v-for="m in kanji.meaning" :key="m"
+                            class="px-4 py-1.5 bg-white/90 text-tanuki-green font-bold rounded-full shadow-sm text-sm">
+                            {{ m }}
+                        </span>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="absolute bottom-0 left-0 right-0 flex justify-center translate-y-1/2 px-6 z-10">
+                        <div class="flex bg-white rounded-full shadow-lg p-1.5 border border-tanuki-beige">
+                            <button @click="activeTab = 'details'"
+                                class="flex items-center gap-2 px-6 py-2.5 rounded-full transition-all text-sm font-bold"
+                                :class="activeTab === 'details' ? 'bg-tanuki-green text-white shadow-md' : 'text-stone-500 hover:bg-stone-100'">
+                                <BookOpen class="w-4 h-4" />
+                                Détails
+                            </button>
+                            <button @click="activeTab = 'write'"
+                                class="flex items-center gap-2 px-6 py-2.5 rounded-full transition-all text-sm font-bold"
+                                :class="activeTab === 'write' ? 'bg-tanuki-green text-white shadow-md' : 'text-stone-500 hover:bg-stone-100'">
+                                <PenTool class="w-4 h-4" />
+                                Écriture
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Close Button (Fixed above everything) -->
-                <button @click="emit('close')"
-                    class="absolute top-3 right-3 md:top-4 md:right-4 bg-white/20 hover:bg-white/30 active:bg-white/40 text-white p-3 rounded-full transition-colors z-50 shadow-sm backdrop-blur-sm">
-                    <X class="w-6 h-6" />
-                </button>
+                <!-- Scrollable Content -->
+                <div class="p-8 pt-12 overflow-y-auto bg-white flex-1">
 
-                <!-- Body (Scrollable) -->
-                <div class="p-5 md:p-8 -mt-10 md:-mt-12 relative z-10">
-                    <!-- Character Circle -->
-                    <div
-                        class="relative w-24 h-24 md:w-32 md:h-32 bg-white rounded-full mx-auto flex items-center justify-center shadow-lg border-4 border-tanuki-gold mb-4 md:mb-6 shrink-0">
-                        <span class="font-display text-6xl md:text-8xl text-tanuki-brown-dark">{{ kanji.character
-                            }}</span>
+                    <!-- Writer Tab -->
+                    <div v-if="activeTab === 'write'" class="flex flex-col items-center animate-fadeIn min-h-[300px]">
+                        <KanjiWriter :character="kanji.character" :size="280" />
                     </div>
 
-                    <div class="text-center mb-6">
-                        <h2 class="text-3xl font-bold text-tanuki-green mb-2 capitalize">{{ kanji.meaning.join(', ') }}
-                        </h2>
-                        <div class="flex items-center justify-center gap-2">
+                    <!-- Details Tab -->
+                    <div v-else class="space-y-8 animate-fadeIn">
+
+                        <!-- Header Info -->
+                        <div class="flex justify-center gap-4">
                             <span
                                 class="bg-tanuki-beige px-3 py-1 rounded-full text-tanuki-brown text-sm font-bold">JLPT
                                 N{{ kanji.jlpt }}</span>
                             <span class="bg-tanuki-beige px-3 py-1 rounded-full text-tanuki-brown text-sm font-bold">{{
                                 kanji.strokes }} Traits</span>
                         </div>
-                    </div>
 
-                    <!-- Readings Grid -->
-                    <div class="space-y-4">
                         <!-- Info Toggle -->
                         <div class="flex justify-center">
                             <button @click="showInfo = !showInfo"
@@ -88,12 +131,13 @@ watch(() => props.isOpen, (newVal) => {
                                 quand le kanji est seul (ex: 日).</p>
                         </div>
 
+                        <!-- Readings Grid -->
                         <div class="grid grid-cols-2 gap-4">
                             <!-- Onyomi Card -->
                             <div class="bg-blue-50/50 border-2 border-blue-100 p-4 rounded-2xl text-center">
                                 <div class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">Onyomi</div>
-                                <div class="text-xl font-bold text-blue-900 font-body break-words">{{
-                                    kanji.onyomi.join('・') }}
+                                <div class="text-xl font-bold text-blue-900 font-body break-words">
+                                    {{ kanji.onyomi.length ? kanji.onyomi.join('・') : '-' }}
                                 </div>
                             </div>
                             <!-- Kunyomi Card -->
@@ -101,8 +145,8 @@ watch(() => props.isOpen, (newVal) => {
                                 class="bg-tanuki-beige/50 border-2 border-tanuki-green-light/30 p-4 rounded-2xl text-center">
                                 <div class="text-xs font-bold text-tanuki-green-light uppercase tracking-widest mb-2">
                                     Kunyomi</div>
-                                <div class="text-xl font-bold text-tanuki-brown-dark font-body break-words">{{
-                                    kanji.kunyomi.join('・') }}
+                                <div class="text-xl font-bold text-tanuki-brown-dark font-body break-words">
+                                    {{ kanji.kunyomi.length ? kanji.kunyomi.join('・') : '-' }}
                                 </div>
                             </div>
                         </div>
