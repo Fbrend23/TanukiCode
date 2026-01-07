@@ -24,9 +24,34 @@ import { ShieldCheck, UserMinus, Mail } from 'lucide-vue-next';
                 <p class="mt-4 italic">Nous ne vendons ni ne partageons vos données avec des tiers.</p>
             </section>
 
+            <!-- Credits & Licenses -->
+            <section>
+                <h2 class="text-2xl font-bold text-tanuki-green mb-4">2. Crédits & Licences</h2>
+                <div class="space-y-4">
+                    <p>
+                        <strong>Données des Kanjis (Tracé) :</strong> Les animations et données d'ordre des traits des
+                        Kanjis proviennent du projet
+                        <a href="https://github.com/parsimonhi/animCJK" target="_blank"
+                            class="text-tanuki-green hover:underline">AnimCJK</a>,
+                        sous licence <strong>Arphic Public License</strong> (1999) et/ou <strong>LGPL</strong>.
+                        Ces données sont utilisées pour fournir une expérience d'apprentissage interactive et ne sont
+                        pas vendues séparément.
+                    </p>
+                    <p>
+                        <strong>Moteur d'Écriture :</strong> Le module d'écriture utilise la librairie
+                        <a href="https://hanziwriter.org" target="_blank"
+                            class="text-tanuki-green hover:underline">Hanzi Writer</a>, distribuée sous licence MIT.
+                    </p>
+                    <p>
+                        <strong>Images & Assets :</strong> Les illustrations (comme le Tanuki) sont la propriété
+                        exclusive de TanukiCode.
+                    </p>
+                </div>
+            </section>
+
             <!-- Usage -->
             <section>
-                <h2 class="text-2xl font-bold text-tanuki-green mb-4">2. Utilisation des données</h2>
+                <h2 class="text-2xl font-bold text-tanuki-green mb-4">3. Utilisation des données</h2>
                 <p class="leading-relaxed">
                     Vos données sont stockées chez notre partenaire technique <strong>Supabase</strong> (infrastructure
                     sécurisée).

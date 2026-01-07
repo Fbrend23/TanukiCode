@@ -7,6 +7,10 @@
 - **Content (JLPT N5)**:
   - **Complete N5 Set**: Added the final ~25 missing Kanjis to reach 100% coverage of the N5 curriculum (106 Kanjis total).
   - **New Categories**: Time (Year, Week), Colors (Red, Blue, Black), School, Nature, and Essential Verbs.
+- **Features**:
+  - **Kanji Writing**: Interactive handwriting module for all Kanjis.
+  - **Stroke Animation**: Watch the stroke order animation trait-by-trait.
+  - **Practice Mode**: Draw the character yourself with real-time feedback.
 
 ## [0.13.0] - 2026-01-07
 

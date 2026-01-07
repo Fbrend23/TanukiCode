@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "canvas-confetti": "^1.9.4",
     "chart.js": "^4.5.1",
+    "hanzi-writer": "^3.7.3",
     "lucide-vue-next": "^0.562.0",
     "pinia": "^3.0.4",
     "tailwindcss": "^4.1.18",
