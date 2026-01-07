@@ -19,6 +19,14 @@ export const changelog: ChangelogEntry[] = [
           'NOUVEAUX THÈMES : Temps, Couleurs, École, Nature et Verbes essentiels ajoutés.',
         ],
       },
+      {
+        title: 'Module Écriture',
+        items: [
+          'TRACÉ INTERACTIF : Apprenez à écrire chaque Kanji trait par trait avec le nouveau module animé.',
+          "MODE QUIZ : Testez votre mémoire en dessinant le caractère directement sur l'écran.",
+          'GUIDAGE : Ordre des traits officiel japonais inclus.',
+        ],
+      },
     ],
   },
   {
