@@ -11,6 +11,7 @@
   - **Kanji Writing**: Interactive handwriting module for all Kanjis.
   - **Stroke Animation**: Watch the stroke order animation trait-by-trait.
   - **Practice Mode**: Draw the character yourself with real-time feedback.
+  - **XP Bonus**: Earn up to **x2.0 XP** (Tanuki Mode) by activating multiple categories simultaneously (Kana, Kanji, Vocab, Grammar).
 
 ## [0.13.0] - 2026-01-07
 

@@ -25,6 +25,7 @@ export const changelog: ChangelogEntry[] = [
           'TRACÉ INTERACTIF : Apprenez à écrire chaque Kanji trait par trait avec le nouveau module animé.',
           "MODE QUIZ : Testez votre mémoire en dessinant le caractère directement sur l'écran.",
           'GUIDAGE : Ordre des traits officiel japonais inclus.',
+          "BONUS XP : Gagnez jusqu'à x2.0 XP en activant plusieurs catégories simultanément !",
         ],
       },
     ],

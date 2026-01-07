@@ -207,7 +207,7 @@ async function checkAnswer(option: QuizItem) {
     }
 
     userStore.updateBestCombo(newCombo);
-    await userStore.recordAnswer(isCorrectAnswer);
+    await userStore.recordAnswer(isCorrectAnswer, xpMultiplier.value);
 }
 
 // Specific handler for Writing success
@@ -223,7 +223,7 @@ async function handleWritingSuccess() {
     }
     userStore.markAsMastered(getId(currentQuestion.value));
     userStore.updateBestCombo(newCombo);
-    await userStore.recordAnswer(true);
+    await userStore.recordAnswer(true, xpMultiplier.value);
 
     // Auto next after short delay for writing? or wait for user?
     // Let's wait for user to click next, but show success state
@@ -287,6 +287,16 @@ function toggleCategory(cat: keyof typeof categories.value) {
     }
 }
 
+const xpMultiplier = computed(() => {
+    const activeCount = Object.values(categories.value).filter(Boolean).length;
+    switch (activeCount) {
+        case 4: return 2.0;
+        case 3: return 1.5;
+        case 2: return 1.2;
+        default: return 1.0;
+    }
+});
+
 const handleKeydown = (e: KeyboardEvent) => {
     // Ignore if typing in an input (if any exist, like search bar in filter)
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
@@ -342,6 +352,12 @@ onUnmounted(() => {
                         <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
                             <span>{{ combo }}</span>
                             <span class="text-xs">🔥</span>
+                        </div>
+
+                        <!-- Bonus Pill -->
+                        <div v-if="xpMultiplier > 1"
+                            class="absolute -right-3 -top-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                            XP x{{ xpMultiplier }}
                         </div>
                     </div>
                 </div>
