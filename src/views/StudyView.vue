@@ -7,6 +7,14 @@ import { RefreshCw, Volume2 } from 'lucide-vue-next';
 import { speakJapanese, playKanaAudio } from '@/utils/audio';
 
 import { useUserStore } from '@/stores/userStore';
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
+import { onMounted } from 'vue';
+
+const isLoading = ref(true);
+
+onMounted(() => {
+    isLoading.value = false;
+});
 
 type CardData = (KanaChar | VocabularyWord | Kanji) & { romaji?: string; meaning?: string[] | string };
 
@@ -99,82 +107,90 @@ const fontSizeClass = computed(() => {
 
 <template>
     <div class="flex flex-col items-center justify-start min-h-[60vh] pb-6 md:pb-0">
-        <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Flashcards</h2>
-
-        <!-- Mode Toggle -->
-        <div class="card flex flex-wrap justify-center p-1 mb-2 md:mb-4 max-w-full">
-            <button @click="mode = 'hiragana'"
-                :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
-                Hiragana
-            </button>
-            <button @click="mode = 'katakana'"
-                :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
-                Katakana
-            </button>
-            <button @click="mode = 'kanji'"
-                :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'kanji' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
-                Kanji
-            </button>
-            <button @click="mode = 'vocabulary'"
-                :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
-                Vocabulaire
-            </button>
+        <!-- Loading State -->
+        <div v-if="isLoading" class="w-full flex justify-center py-24">
+            <LoadingSpinner size="xl" text="Mélange des cartes..." />
         </div>
 
-        <!-- Filter Toggle -->
-        <label
-            class="flex items-center gap-2 mb-4 cursor-pointer select-none text-tanuki-brown/80 hover:text-tanuki-green transition-colors">
-            <input type="checkbox" v-model="hideMastered"
-                class="w-4 h-4 rounded border-tanuki-green text-tanuki-green focus:ring-tanuki-green">
-            <span class="text-sm font-bold">Masquer les éléments maîtrisés</span>
-        </label>
+        <div v-else class="w-full flex flex-col items-center">
+            <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Flashcards</h2>
 
-        <!-- Flashcard Scene -->
-        <div class="scene w-72 h-80 md:w-[36rem] md:h-[26rem] perspective-1000 cursor-pointer group" @click="flipCard">
-            <div class="relative w-full h-full transition-transform duration-500 transform-style-3d shadow-xl rounded-2xl"
-                :class="{ 'rotate-y-180': isFlipped }">
-                <!-- Front -->
-                <div
-                    class="face front absolute w-full h-full bg-white flex items-center justify-center rounded-2xl backface-hidden border-2 border-tanuki-green">
-                    <div class="text-center px-4">
-                        <span
-                            :class="['block font-bold text-tanuki-brown-dark mb-2 break-all transition-all', fontSizeClass]">{{
-                                frontText }}</span>
-                        <!-- Show reading for vocab on front if needed, or keeping it hidden -->
+            <!-- Mode Toggle -->
+            <div class="card flex flex-wrap justify-center p-1 mb-2 md:mb-4 max-w-full">
+                <button @click="mode = 'hiragana'"
+                    :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                    Hiragana
+                </button>
+                <button @click="mode = 'katakana'"
+                    :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                    Katakana
+                </button>
+                <button @click="mode = 'kanji'"
+                    :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'kanji' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                    Kanji
+                </button>
+                <button @click="mode = 'vocabulary'"
+                    :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                    Vocabulaire
+                </button>
+            </div>
+
+            <!-- Filter Toggle -->
+            <label
+                class="flex items-center gap-2 mb-4 cursor-pointer select-none text-tanuki-brown/80 hover:text-tanuki-green transition-colors">
+                <input type="checkbox" v-model="hideMastered"
+                    class="w-4 h-4 rounded border-tanuki-green text-tanuki-green focus:ring-tanuki-green">
+                <span class="text-sm font-bold">Masquer les éléments maîtrisés</span>
+            </label>
+
+            <!-- Flashcard Scene -->
+            <div class="scene w-72 h-80 md:w-xl md:h-104 perspective-1000 cursor-pointer group" @click="flipCard">
+                <div class="relative w-full h-full transition-transform duration-500 transform-style-3d shadow-xl rounded-2xl"
+                    :class="{ 'rotate-y-180': isFlipped }">
+                    <!-- Front -->
+                    <div
+                        class="face front absolute w-full h-full bg-white flex items-center justify-center rounded-2xl backface-hidden border-2 border-tanuki-green">
+                        <div class="text-center px-4">
+                            <span
+                                :class="['block font-bold text-tanuki-brown-dark mb-2 break-all transition-all', fontSizeClass]">{{
+                                    frontText }}</span>
+                            <!-- Show reading for vocab on front if needed, or keeping it hidden -->
+                        </div>
+
+                        <!-- Audio Button -->
+                        <button v-if="mode !== 'kanji'" @click="playSound"
+                            class="absolute top-4 right-4 p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-colors">
+                            <Volume2 class="w-6 h-6" />
+                        </button>
+
+                        <span class="absolute bottom-4 text-gray-400 text-sm">Appuyer pour révéler</span>
                     </div>
 
-                    <!-- Audio Button -->
-                    <button v-if="mode !== 'kanji'" @click="playSound"
-                        class="absolute top-4 right-4 p-2 rounded-full hover:bg-tanuki-beige/50 text-tanuki-gold transition-colors">
-                        <Volume2 class="w-6 h-6" />
-                    </button>
-
-                    <span class="absolute bottom-4 text-gray-400 text-sm">Appuyer pour révéler</span>
-                </div>
-
-                <!-- Back -->
-                <div
-                    class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
-                    <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">
-                        {{ Array.isArray(currentCard.meaning) ? currentCard.meaning.join(', ') : (currentCard.meaning ||
-                            currentCard.romaji) }}
-                    </span>
-                    <span v-if="mode !== 'kanji'" class="text-xl opacity-80">{{ currentCard.meaning ? 'Signification' :
-                        'Romaji' }}</span>
-                    <span v-if="currentCard.meaning && !Array.isArray(currentCard.meaning)"
-                        class="text-sm mt-2 opacity-60">({{ currentCard.romaji
-                        }})</span>
+                    <!-- Back -->
+                    <div
+                        class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
+                        <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">
+                            {{ Array.isArray(currentCard.meaning) ? currentCard.meaning.join(', ') :
+                                (currentCard.meaning ||
+                                    currentCard.romaji) }}
+                        </span>
+                        <span v-if="mode !== 'kanji'" class="text-xl opacity-80">{{ currentCard.meaning ?
+                            'Signification' :
+                            'Romaji' }}</span>
+                        <span v-if="currentCard.meaning && !Array.isArray(currentCard.meaning)"
+                            class="text-sm mt-2 opacity-60">({{ currentCard.romaji
+                            }})</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Controls -->
-        <div class="mt-6 flex gap-4">
-            <button @click="nextCard"
-                class="btn-3d btn-gold flex items-center gap-2 py-3 px-8 text-lg w-auto inline-flex">
-                <RefreshCw class="w-5 h-5" />
-                Suivant
-            </button>
+            <!-- Controls -->
+            <div class="mt-6 flex gap-4">
+                <button @click="nextCard" class="btn-3d btn-gold flex items-center gap-2 py-3 px-8 text-lg w-auto">
+                    <RefreshCw class="w-5 h-5" />
+                    Suivant
+                </button>
+            </div>
         </div>
     </div>
 </template>

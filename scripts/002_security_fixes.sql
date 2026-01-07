@@ -9,6 +9,9 @@ SECURITY DEFINER
 SET search_path = public, auth, extensions -- Explicitly set search_path
 AS $$
 BEGIN
+  -- Delete profile first to satisfy foreign key constraint
+  DELETE FROM public.profiles WHERE id = auth.uid();
+  -- Then delete user
   DELETE FROM auth.users WHERE id = auth.uid();
 END;
 $$;

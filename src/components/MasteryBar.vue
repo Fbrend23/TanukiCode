@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const props = defineProps<{
     label: string
     current: number
     total: number
 }>()
+
+const isMounted = ref(false)
+
+onMounted(() => {
+    setTimeout(() => {
+        isMounted.value = true
+    }, 100)
+})
 
 const percentage = computed(() => {
     if (props.total === 0) return 0
@@ -22,7 +30,7 @@ const percentage = computed(() => {
             </div>
             <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                 <div class="h-full bg-tanuki-gold transition-all duration-500 ease-out"
-                    :style="{ width: `${percentage}%` }"></div>
+                    :style="{ width: `${isMounted ? percentage : 0}%` }"></div>
             </div>
         </div>
     </div>

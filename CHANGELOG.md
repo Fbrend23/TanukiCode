@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.13.0] - 2026-01-07
+
+### Added
+
+- **Interface**:
+  - **Loading Screen**: New full-page loading state across all views (Home, Profile, Study, Quiz, Charts) to prevent content jumping.
+  - **Detective Tanuki**: Integrated new "Detective" variant of the Tanuki mascot for the loading spinner.
+- **Animations**:
+  - **Progress Bars**: Experience (XP) and Mastery bars now animate smoothly from 0% on page load.
+- **Profile & Gamification**:
+  - **Activity Calendar**: New feature to track your daily learning consistency. Visualize your streaks and history.
+  - **Year View**: Toggle between recent weeks and a full-year view of your activity.
+  - **Cloud Save**: Your learning history is securely saved and synced across devices.
+  - **Style**: Finalized profile layout with standardized spacing and components.
+- **Interface**:
+  - **Stability**: Implemented `scrollbar-gutter` to prevent the entire page layout from shifting when the scrollbar appears/disappears.
+
 ## [0.12.0] - 2026-01-04
 
 ### Added
@@ -13,7 +30,7 @@
   - **Quiz UI**: Improved layout with centered title and compact toolbar for better focus.
   - **Quiz Filters**: Translated categories and improved configurations (solid Green border).
 - **Progress**:
-  - **Anti-Cheat**: Quiz scores and combos are now saved immediately to the cloud and local storage upon answering, preventing refresh-based cheating.
+  - **Bug Fix**: Quiz scores and combos are now saved immediately to the cloud and local storage upon answering, preventing refresh-based cheating.
   - **Progress Bar**: Reusable `MasteryBar` component to visualize N5 mastery in Kanji grid and Kana charts.
   - **"Mastered" Filter**: Hide known items (Kanji, Flashcards) with one click to focus on what you need to learn.
 - **Style**:

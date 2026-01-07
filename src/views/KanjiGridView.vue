@@ -98,51 +98,63 @@ const toggleCategory = (cat: string) => {
     selectedCategories.value.splice(index, 1)
   }
 }
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import { onMounted } from 'vue'
+
+const isLoading = ref(true)
+
+onMounted(() => {
+  isLoading.value = false
+})
 </script>
 
 <template>
   <div class="flex flex-col items-center w-full px-4 py-0 pb-24">
-    <div class="flex flex-col items-center w-full max-w-4xl mb-6">
-      <div class="text-center mb-2">
-        <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanji N{{ selectedLevel
-        }}</h1>
-      </div>
+    <!-- Loading State -->
+    <div v-if="isLoading" class="w-full flex justify-center py-24">
+      <LoadingSpinner size="xl" text="Chargement des Kanjis..." />
+    </div>
 
-      <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
-        <!-- Search (Centered) -->
-        <div class="relative w-full max-w-md mx-auto z-10">
-          <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input v-model="searchQuery" type="text" placeholder="Rechercher (日, Soleil...)" class="search-bar" />
+    <template v-else>
+      <div class="flex flex-col items-center w-full max-w-4xl mb-6">
+        <div class="text-center mb-2">
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanji N{{ selectedLevel
+          }}</h1>
         </div>
 
-        <!-- Filter Button (Absolute Right on Desktop) -->
-        <div class="flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center">
-          <button @click="isFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md">
-            <Settings2 class="w-5 h-5" />
-            <span>Filtres</span>
-            <div v-if="hideMastered || selectedCategories.length > 0" class="w-2 h-2 rounded-full bg-tanuki-gold"></div>
-          </button>
+        <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
+          <!-- Search (Centered) -->
+          <div class="relative w-full max-w-md mx-auto z-10">
+            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input v-model="searchQuery" type="text" placeholder="Rechercher (日, Soleil...)" class="search-bar" />
+          </div>
+
+          <!-- Filter Button (Absolute Right on Desktop) -->
+          <div class="flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center">
+            <button @click="isFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md">
+              <Settings2 class="w-5 h-5" />
+              <span>Filtres</span>
+              <div v-if="hideMastered || selectedCategories.length > 0" class="w-2 h-2 rounded-full bg-tanuki-gold">
+              </div>
+            </button>
+          </div>
         </div>
+
+        <!-- Progress Bar -->
+        <MasteryBar :label="`Progression N${selectedLevel}`" :current="masteredKanji" :total="totalKanji" />
       </div>
 
-      <!-- Progress Bar -->
-      <MasteryBar :label="`Progression N${selectedLevel}`" :current="masteredKanji" :total="totalKanji" />
+      <!-- Grid -->
+      <div v-if="filteredKanji.length > 0" class="flex flex-wrap justify-center items-stretch gap-2 md:gap-4 w-full">
+        <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)"
+          class="w-[calc(50%-0.5rem)] grow md:grow-0 md:w-52 lg:w-60" />
+      </div>
 
-
-    </div>
-
-
-
-    <!-- Grid -->
-    <div v-if="filteredKanji.length > 0" class="flex flex-wrap justify-center items-stretch gap-2 md:gap-4 w-full">
-      <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)"
-        class="w-[calc(50%-0.5rem)] flex-grow md:flex-grow-0 md:w-52 lg:w-60" />
-    </div>
-
-    <!-- Empty State -->
-    <div v-else class="text-center py-12 text-gray-400">
-      <p>Aucun Kanji trouvé pour "{{ searchQuery }}" dans cette catégorie.</p>
-    </div>
+      <!-- Empty State -->
+      <div v-else class="text-center py-12 text-gray-400">
+        <p>Aucun Kanji trouvé pour "{{ searchQuery }}" dans cette catégorie.</p>
+      </div>
+    </template>
 
     <!-- Modal -->
     <KanjiModal :kanji="selectedKanji" :is-open="isModalOpen" @close="closeModal" />
@@ -162,7 +174,7 @@ const toggleCategory = (cat: string) => {
         </div>
       </div>
 
-      <div class="h-[1px] bg-gray-100 w-full"></div>
+      <div class="h-px bg-gray-100 w-full"></div>
 
       <!-- Toggle Mastered -->
       <label
@@ -171,7 +183,7 @@ const toggleCategory = (cat: string) => {
         <div class="relative">
           <input type="checkbox" v-model="hideMastered" class="peer sr-only">
           <div
-            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green">
+            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green">
           </div>
         </div>
       </label>
