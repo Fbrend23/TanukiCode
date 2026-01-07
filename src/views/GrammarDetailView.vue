@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { grammarLessons } from '../data/grammar';
 import { ArrowLeft, BookOpen, Volume2 } from 'lucide-vue-next';
@@ -41,10 +42,21 @@ const parsedContent = computed(() => {
 const goBack = () => {
     router.back();
 };
+
+const isLoading = ref(true);
+
+onMounted(() => {
+    setTimeout(() => {
+        isLoading.value = false;
+    }, 600);
+});
 </script>
 
 <template>
-    <div v-if="lesson" class="p-4 md:p-8 max-w-4xl mx-auto mb-20 md:mb-0">
+    <div v-if="isLoading" class="w-full flex justify-center py-24">
+        <LoadingSpinner size="xl" text="Préparation de la leçon..." />
+    </div>
+    <div v-else-if="lesson" class="p-4 md:p-8 max-w-4xl mx-auto mb-20 md:mb-0">
         <!-- Navigation -->
         <button @click="goBack"
             class="flex items-center text-gray-500 hover:text-tanuki-brown mb-6 transition-colors font-bold">
@@ -99,7 +111,7 @@ const goBack = () => {
                 <div v-for="(ex, index) in lesson.examples" :key="index"
                     class="card p-5 flex items-start justify-between gap-4 group">
 
-                    <div class="flex-grow">
+                    <div class="grow">
                         <p class="text-xl md:text-2xl font-bold text-gray-800 mb-1">{{ ex.japanese }}</p>
                         <p class="text-tanuki-green font-medium mb-2 opacity-90">{{ ex.romaji }}</p>
                         <p class="text-gray-500 border-t-2 border-tanuki-beige pt-2 italic">{{ ex.french }}</p>

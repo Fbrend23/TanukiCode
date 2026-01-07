@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import { Volume2, Info, Check } from 'lucide-vue-next';
 import { hiragana, katakana, type KanaChar, type KanaType } from '@/data/kana';
 import { speakJapanese, playKanaAudio } from '@/utils/audio';
@@ -64,6 +65,14 @@ function playSound(item: GridItem) {
         speakJapanese(item.char);
     }
 }
+
+const isLoading = ref(true);
+
+onMounted(() => {
+    setTimeout(() => {
+        isLoading.value = false;
+    }, 600);
+});
 </script>
 
 <template>
@@ -109,14 +118,18 @@ function playSound(item: GridItem) {
             <span>Cliquez sur un kana pour écouter sa prononciation.</span>
         </div>
 
-        <div :class="['grid w-full px-0 pb-4 pt-0 transition-all relative', gridLayoutClass]">
+        <div v-if="isLoading" class="w-full flex justify-center py-12">
+            <LoadingSpinner size="xl" text="Chargement des kanas..." />
+        </div>
+
+        <div v-else :class="['grid w-full px-0 pb-4 pt-0 transition-all relative', gridLayoutClass]">
             <template v-for="(item, index) in displayedKana" :key="index">
                 <div v-if="item.type === 'spacer'" class="hidden md:flex items-center justify-center">
                     <div class="h-full w-0.5 bg-tanuki-brown/10 rounded-full"></div>
                 </div>
 
                 <div v-else @click="playSound(item)"
-                    class="aspect-[4/5] flex flex-col items-center justify-center pt-4 bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden z-10"
+                    class="aspect-4/5 flex flex-col items-center justify-center pt-4 bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden z-10"
                     :class="[isMastered(item) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:shadow-xl hover:border-tanuki-green-light']">
                     <template v-if="item.char">
                         <span
@@ -132,7 +145,7 @@ function playSound(item: GridItem) {
                             @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
                             class="absolute top-1 left-1 p-1 rounded-full transition-colors z-20"
                             :class="[isMastered(item) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
-                            <Check class="w-3 h-3 stroke-[4]" />
+                            <Check class="w-3 h-3 stroke-4" />
                         </button>
 
                         <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
