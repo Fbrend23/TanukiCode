@@ -9,6 +9,36 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.13.0',
+    date: '2026-01-07',
+    sections: [
+      {
+        title: 'Interface & Chargement',
+        items: [
+          'CHARGEMENT : Nouvel écran de chargement "Pleine Page" pour une expérience fluide sans saut de contenu.',
+          "TANUKI DÉTECTIVE : Notre mascotte mène l'enquête pendant le chargement !",
+        ],
+      },
+      {
+        title: 'Profil & Gamification',
+        items: [
+          "NOUVEAU : Suivez votre régularité quotidienne grâce au Calendrier d'Activité.",
+          "VUE ANNUELLE : Une vue globale pour visualiser toute votre année d'apprentissage.",
+          'CLOUD : Tout votre historique est désormais sauvegardé en ligne.',
+          'STYLE : Mise en page du profil peaufinée et harmonisée.',
+        ],
+      },
+      {
+        title: 'Animations & Stabilité',
+        items: [
+          "PROGRESSION : Les barres d'XP et de Maîtrise s'animent désormais au chargement de la page.",
+          'VITESSE : Suppression des délais artificiels pour une navigation ultra-rapide.',
+          "CONFORT : Finis les 'sauts' de page grâce à la stabilisation de la barre de défilement.",
+        ],
+      },
+    ],
+  },
+  {
     version: '0.12.0',
     date: '2026-01-04',
     sections: [

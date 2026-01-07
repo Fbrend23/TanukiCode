@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.13.0] - 2026-01-07
+
+### Added
+
+- **Interface**:
+  - **Loading Screen**: New full-page loading state across all views (Home, Profile, Study, Quiz, Charts) to prevent content jumping.
+  - **Detective Tanuki**: Integrated new "Detective" variant of the Tanuki mascot for the loading spinner.
+- **Animations**:
+  - **Progress Bars**: Experience (XP) and Mastery bars now animate smoothly from 0% on page load.
+- **Profile & Gamification**:
+  - **Activity Calendar**: New feature to track your daily learning consistency. Visualize your streaks and history.
+  - **Year View**: Toggle between recent weeks and a full-year view of your activity.
+  - **Cloud Save**: Your learning history is securely saved and synced across devices.
+  - **Style**: Finalized profile layout with standardized spacing and components.
+- **Interface**:
+  - **Stability**: Implemented `scrollbar-gutter` to prevent the entire page layout from shifting when the scrollbar appears/disappears.
+
 ## [0.12.0] - 2026-01-04
 
 ### Added

@@ -1,0 +1,3 @@
+ALTER TABLE public.profiles 
+ADD COLUMN IF NOT EXISTS xp INTEGER DEFAULT 0,
+ADD COLUMN IF NOT EXISTS daily_activity JSONB DEFAULT '{}'::jsonb;
