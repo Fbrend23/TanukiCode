@@ -28,6 +28,12 @@ export const changelog: ChangelogEntry[] = [
           "BONUS XP : Gagnez jusqu'à x2.0 XP en activant plusieurs catégories simultanément !",
         ],
       },
+      {
+        title: 'Sécurité & Correctifs',
+        items: [
+          "ANTI-TRICHE : Correction d'une faille permettant de relancer une question via les filtres pour conserver sa série.",
+        ],
+      },
     ],
   },
   {

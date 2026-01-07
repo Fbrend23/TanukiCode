@@ -13,6 +13,10 @@
   - **Practice Mode**: Draw the character yourself with real-time feedback.
   - **XP Bonus**: Earn up to **x2.0 XP** (Tanuki Mode) by activating multiple categories simultaneously (Kana, Kanji, Vocab, Grammar).
 
+### Fixed
+
+- **Anti-Cheat (Quiz)**: Fixed an exploit where changing filters would reset the current question without penalty. Now, strict validation prevents skipping questions to maintain a streak.
+
 ## [0.13.0] - 2026-01-07
 
 ### Added
