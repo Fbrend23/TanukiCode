@@ -229,7 +229,7 @@ export const useUserStore = defineStore('user', () => {
     saveProgress()
   }
 
-  const recordAnswer = async (isCorrect: boolean) => {
+  const recordAnswer = async (isCorrect: boolean, multiplier: number = 1) => {
     totalQuestions.value++
 
     if (!isCorrect) {
@@ -239,8 +239,9 @@ export const useUserStore = defineStore('user', () => {
 
     score.value++
 
-    // Add XP: 10 XP per correct answer + streak bonus
-    const xpGain = 10 + Math.min(streak.value, 10)
+    // Add XP: (10 XP + streak bonus) * multiplier
+    const baseXp = 10 + Math.min(streak.value, 10)
+    const xpGain = Math.round(baseXp * multiplier)
     xp.value += xpGain
     calculateLevel()
 
