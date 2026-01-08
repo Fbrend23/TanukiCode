@@ -22,7 +22,7 @@ export const changelog: ChangelogEntry[] = [
       {
         title: 'Module Écriture',
         items: [
-          'TRACÉ INTERACTIF : Apprenez à écrire chaque Kanji trait par trait avec le nouveau module animé.',
+          'TRACÉ INTERACTIF : Apprenez à écrire chaque Kanji et Kana trait par trait avec le nouveau module animé.',
           "MODE QUIZ : Testez votre mémoire en dessinant le caractère directement sur l'écran.",
           'GUIDAGE : Ordre des traits officiel japonais inclus.',
           "BONUS XP : Gagnez jusqu'à x2.0 XP en activant plusieurs catégories simultanément !",
@@ -32,6 +32,14 @@ export const changelog: ChangelogEntry[] = [
         title: 'Sécurité & Correctifs',
         items: [
           "ANTI-TRICHE : Correction d'une faille permettant de relancer une question via les filtres pour conserver sa série.",
+        ],
+      },
+      {
+        title: 'Design & UI',
+        items: [
+          'UNIFICATION : La coche de maîtrise est maintenant Dorée partout (Kanas, Kanjis, Vocabulaire, Grammaire).',
+          'GRAMMAIRE : Alignement et mise en page améliorés pour les cartes de leçons.',
+          "MOBILE : Le module de dessin des Kanjis s'adapte parfaitement aux petits écrans.",
         ],
       },
     ],
