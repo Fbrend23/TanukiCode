@@ -81,7 +81,8 @@ onUnmounted(() => {
 
             <!-- Kana (Center) -->
             <div
-              class="text-6xl md:text-8xl font-display font-bold filter drop-shadow-md bg-white/10 rounded-3xl w-24 h-24 md:w-32 md:h-32 flex items-center justify-center border-2 border-white/20">
+              class="font-display font-bold filter drop-shadow-md bg-white/10 rounded-3xl w-24 h-24 md:w-32 md:h-32 flex items-center justify-center border-2 border-white/20"
+              :class="kana.char.length > 1 ? 'text-4xl md:text-6xl' : 'text-6xl md:text-8xl'">
               {{ kana.char }}
             </div>
 

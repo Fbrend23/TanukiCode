@@ -137,7 +137,7 @@ onMounted(() => {
                         :class="[isMastered(item) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:shadow-xl hover:border-tanuki-green-light']">
                         <template v-if="item.char">
                             <span
-                                :class="['font-bold', isMastered(item) ? 'text-tanuki-green' : 'text-tanuki-brown-dark', item.char.length > 1 ? 'text-2xl md:text-5xl' : 'text-3xl md:text-6xl']">
+                                :class="['font-bold', isMastered(item) ? 'text-tanuki-green' : 'text-tanuki-brown-dark', item.char.length > 1 ? 'text-xl md:text-4xl' : 'text-3xl md:text-6xl']">
                                 {{ item.char }}
                             </span>
                             <span
