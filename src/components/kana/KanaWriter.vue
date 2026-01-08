@@ -29,30 +29,28 @@ const initWriter = () => {
 
     // Cleanup previous instance
     if (writer.value) {
-        // HanziWriter doesn't have a specific destroy method, but we can clear the container
         writerContainer.value.innerHTML = '';
         writer.value = null;
     }
 
     try {
+        const containerWidth = writerContainer.value.clientWidth || 200;
+        const size = props.size || Math.min(containerWidth, 300); // Cap auto-size at 300px
+
         writer.value = HanziWriter.create(writerContainer.value, props.character, {
-            width: props.size || 200,
-            height: props.size || 200,
+            width: size,
+            height: size,
             padding: 20,
             showOutline: true,
             strokeAnimationSpeed: 1,
             delayBetweenStrokes: 200,
-            // Main color for the Kanji
             strokeColor: '#5D4037', // tanuki-brown-dark
-            // Color for radical/outline
             outlineColor: '#DDD',
-            // Color when drawing in quiz mode
             drawingColor: '#333',
-            // Highlight color for correct stroke
             highlightColor: '#4ADE80', // green-400
-            // Load Japanese data from GitHub raw (since npm/cdn package is missing data)
+            // Load Japanese Kana data from MadLadSquad/hanzi-writer-data-youyin
             charDataLoader: (char, onComplete) => {
-                fetch(`https://raw.githubusercontent.com/chanind/hanzi-writer-data-jp/master/data/${char}.json`)
+                fetch(`https://cdn.jsdelivr.net/gh/MadLadSquad/hanzi-writer-data-youyin@latest/data/${char}.json`)
                     .then(res => {
                         if (!res.ok) throw new Error('Character data not found');
                         return res.json();
@@ -60,7 +58,6 @@ const initWriter = () => {
                     .then(onComplete)
                     .catch(e => {
                         console.warn('Failed to load JP data', e);
-                        // No fallback to Chinese data per user request
                         isLoading.value = false;
                         error.value = "Tracé introuvable...";
                     });
@@ -78,8 +75,6 @@ const initWriter = () => {
                 error.value = "Impossible de charger le tracé.";
             }
         });
-
-        // Removed invalid listener code
     } catch (e) {
         console.error(e);
         error.value = "Erreur d'initialisation du moteur d'écriture.";
@@ -108,11 +103,11 @@ watch(() => props.character, () => {
 });
 
 onMounted(() => {
-    initWriter();
+    // Small delay to ensure container is ready
+    setTimeout(initWriter, 50);
 });
 
 onUnmounted(() => {
-    // Basic cleanup
     if (writerContainer.value) {
         writerContainer.value.innerHTML = '';
     }
@@ -135,13 +130,13 @@ onUnmounted(() => {
                     <img :src="tanukiImg" alt="Tanuki Confused" class="w-full h-full object-contain" />
                 </div>
                 <span class="text-tanuki-brown/70 font-bold text-sm">Désolé, je ne connais pas encore le tracé de ce
-                    Kanji !</span>
+                    Kana !</span>
             </div>
 
             <div ref="writerContainer" class="cursor-pointer"></div>
         </div>
 
-        <!-- Controls (Hidden if initialMode is set, e.g. in Quiz) -->
+        <!-- Controls -->
         <div v-if="!initialMode" class="flex gap-4">
             <button @click="animate"
                 class="flex items-center gap-2 px-4 py-2 rounded-xl transition-all font-bold text-sm"
@@ -158,7 +153,7 @@ onUnmounted(() => {
             </button>
         </div>
 
-        <p v-if="!initialMode || mode === 'quiz'" class="text-xs text-stone-500 italic max-w-xs text-center">
+        <p v-if="!initialMode || mode === 'quiz'" class="text-xs text-stone-500 italic max-w-xs text-center mt-2">
             <span v-if="mode === 'view'">Regardez l'animation pour apprendre l'ordre des traits.</span>
             <span v-else>Dessinez le caractère par-dessus le modèle.
                 <span class="block mt-1 text-amber-600 font-bold">Respectez l'ordre et le sens !</span>
