@@ -35,9 +35,12 @@ const initWriter = () => {
     }
 
     try {
+        const containerWidth = writerContainer.value.clientWidth || 200;
+        const size = props.size || Math.min(containerWidth, 400); // Cap auto-size
+
         writer.value = HanziWriter.create(writerContainer.value, props.character, {
-            width: props.size || 200,
-            height: props.size || 200,
+            width: size,
+            height: size,
             padding: 20,
             showOutline: true,
             strokeAnimationSpeed: 1,
@@ -108,7 +111,8 @@ watch(() => props.character, () => {
 });
 
 onMounted(() => {
-    initWriter();
+    // Small delay to ensure container is ready and measured correctly
+    setTimeout(initWriter, 50);
 });
 
 onUnmounted(() => {
