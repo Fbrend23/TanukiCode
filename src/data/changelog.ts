@@ -38,8 +38,10 @@ export const changelog: ChangelogEntry[] = [
         title: 'Design & UI',
         items: [
           'UNIFICATION : La coche de maîtrise est maintenant Dorée partout (Kanas, Kanjis, Vocabulaire, Grammaire).',
+          'QUIZ : Sauvegarde automatique de vos filtres et bouton "Passer" (Pause la série, 0 XP) en cas de souci.',
           'GRAMMAIRE : Alignement et mise en page améliorés pour les cartes de leçons.',
           "MOBILE : Le module de dessin des Kanjis s'adapte parfaitement aux petits écrans.",
+          'MASCOTTE : Nouveaux visuels Tanuki pour célébrer vos réussites et vos pauses.',
         ],
       },
     ],

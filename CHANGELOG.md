@@ -15,6 +15,11 @@
   - **Mastery System**:
     - **Unified Design**: The "Mastery Checkmark" is now **Gold** across the entire app (Kana, Kanji, Vocab, Grammar).
     - **Kanji Modal**: Added a mastery toggle button directly in the Kanji details view.
+  - **Quiz UX**:
+    - **Persistence**: Filters (Categories & Modes) are verified and saved automatically.
+    - **Manual Validation**: Added a "Passer" button to bypass writing issues (Pauses streak, 0 XP).
+  - **Grammar**:
+  - **Grammar**:
   - **Grammar**:
     - **Card Layout**: Improved layout with centered Category label and aligned Level badge.
 
@@ -24,6 +29,7 @@
   - **Mobile Kanji**: The drawing canvas now adapts its size to fit smaller screens (responsive).
   - **Kana Overflow**: Fixed font size issues where combined characters (Yoon) would overflow their containers.
   - **Scrollbar**: Fixed layout shifts caused by scrollbar appearance (`scrollbar-gutter`).
+  - **Mascot**: Added custom Tanuki illustrations for Quiz feedback (Success/Skip).
 - **Anti-Cheat (Quiz)**: Fixed an exploit where changing filters would reset the current question without penalty. Now, strict validation prevents skipping questions to maintain a streak.
 
 ## [0.13.0] - 2026-01-07

@@ -10,6 +10,7 @@ import { happyConfetti } from '@/utils/confetti';
 import { onMounted, onUnmounted } from 'vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import KanjiWriter from '@/components/kanji/KanjiWriter.vue';
+import KanaWriter from '@/components/kana/KanaWriter.vue';
 
 const isLoading = ref(true);
 
@@ -25,22 +26,34 @@ type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson) & {
 
 const userStore = useUserStore();
 
-// Categories
-const categories = ref({
+// Categories - Init from LocalStorage
+const savedCategories = localStorage.getItem('tanuki-quiz-categories');
+const categories = ref(savedCategories ? JSON.parse(savedCategories) : {
     kana: true,
     vocabulary: true,
     kanji: true,
     grammar: true
 });
 
-const modes = ref({
+// Modes - Init from LocalStorage
+const savedModes = localStorage.getItem('tanuki-quiz-modes');
+const modes = ref(savedModes ? JSON.parse(savedModes) : {
     reading: true, // QCM
     writing: false // Draw
 });
 
-// Watch Categories to disable Writing if Kanji is disabled
-watch(() => categories.value.kanji, (isKanjiEnabled) => {
-    if (!isKanjiEnabled) {
+// Persist settings
+watch(categories, (newVal) => {
+    localStorage.setItem('tanuki-quiz-categories', JSON.stringify(newVal));
+}, { deep: true });
+
+watch(modes, (newVal) => {
+    localStorage.setItem('tanuki-quiz-modes', JSON.stringify(newVal));
+}, { deep: true });
+
+// Watch Categories to disable Writing if both Kanji and Kana are disabled
+watch(() => [categories.value.kanji, categories.value.kana], ([isKanji, isKana]) => {
+    if (!isKanji && !isKana) {
         modes.value.writing = false;
     }
 });
@@ -53,9 +66,9 @@ const toggleMode = (mode: 'reading' | 'writing') => {
         if (mode === 'writing' && !modes.value.reading) return;
     }
 
-    // If enabling writing, check if Kanji is supported (should be enabled)
+    // If enabling writing, check if Kanji OR Kana is supported
     if (mode === 'writing' && !modes.value.writing) {
-        if (!categories.value.kanji) return; // Cannot enable writing without Kanji
+        if (!categories.value.kanji && !categories.value.kana) return; // Cannot enable writing without Kanji or Kana
     }
 
     modes.value[mode] = !modes.value[mode];
@@ -107,6 +120,7 @@ const currentQuestionType = ref<'reading' | 'writing'>('reading');
 const options = ref<QuizItem[]>(generateOptions(currentQuestion.value));
 const selectedOption = ref<QuizItem | null>(null);
 const isAnswered = ref(false);
+const isSkipped = ref(false);
 
 const score = computed(() => userStore.score);
 const total = computed(() => userStore.totalQuestions);
@@ -172,12 +186,13 @@ function generateOptions(correct: QuizItem): QuizItem[] {
 // Logic to determine if the next question should be Writing or Reading
 function determineQuestionType(item: QuizItem): 'reading' | 'writing' {
     const isKanji = 'character' in item && 'onyomi' in item; // Simple check for Kanji type
+    const isKana = 'char' in item && item.char;
 
     // 1. If Writing is OFF globally -> Always Reading
     if (!modes.value.writing) return 'reading';
 
-    // 2. If item is NOT a Kanji -> Always Reading (Can't write others yet)
-    if (!isKanji) return 'reading';
+    // 2. If item is NOT a Kanji AND NOT a Kana -> Always Reading (Can't write others yet)
+    if (!isKanji && !isKana) return 'reading';
 
     // 3. If Writing is ON and item IS Kanji:
     //    - If Reading is OFF -> Must be Writing
@@ -229,6 +244,26 @@ async function handleWritingSuccess() {
     // Let's wait for user to click next, but show success state
 }
 
+// Manual Validation (Anti-Frustration / Fallback)
+async function handleManualSuccess() {
+    if (isAnswered.value) return;
+    isAnswered.value = true;
+    isSkipped.value = true;
+
+    // Preserves streak but DOES NOT increment (Anti-Abuse)
+    // We do not increment newCombo++ so users can't farm streaks by skipping
+    const currentCombo = userStore.currentCombo;
+
+    // We still mark as mastered because user claims to know it (or skipped it)
+    userStore.markAsMastered(getId(currentQuestion.value));
+
+    // Ensure best combo is updated if current was already high (though it hasn't changed here)
+    userStore.updateBestCombo(currentCombo);
+
+    // 0 Multiplier = 0 XP
+    // WE DO NOT CALL recordAnswer() -> No Score change, No Total change, No XP.
+}
+
 const showSettings = ref(false);
 
 function nextQuestion() {
@@ -245,6 +280,7 @@ function nextQuestion() {
 
     selectedOption.value = null;
     isAnswered.value = false;
+    isSkipped.value = false;
 }
 
 const isCorrect = computed(() => {
@@ -392,8 +428,8 @@ onUnmounted(() => {
                             <span>Lecture (QCM)</span>
                         </button>
 
-                        <button @click="toggleMode('writing')" :disabled="!categories.kanji" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold relative',
-                            !categories.kanji ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-200 text-gray-400' :
+                        <button @click="toggleMode('writing')" :disabled="!categories.kanji && !categories.kana" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold relative',
+                            (!categories.kanji && !categories.kana) ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-200 text-gray-400' :
                                 modes.writing
                                     ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
                                     : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
@@ -401,9 +437,9 @@ onUnmounted(() => {
                             <span>Écriture (Tracé)</span>
 
                             <!-- Disabled Tooltip -->
-                            <span v-if="!categories.kanji"
+                            <span v-if="!categories.kanji && !categories.kana"
                                 class="absolute -bottom-8 bg-black/80 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
-                                Kanjis requis
+                                Kanjis ou Kanas requis
                             </span>
                         </button>
                     </div>
@@ -453,7 +489,7 @@ onUnmounted(() => {
 
                 <!-- Type Badge -->
                 <div
-                    class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded flex items-center gap-2">
+                    class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded flex items-center gap-2 z-20">
                     <span>
                         {{ 'char' in currentQuestion ? 'Kana' : 'character' in currentQuestion ? 'Kanji' : 'word' in
                             currentQuestion ? 'Vocabulaire' : 'Grammaire' }}
@@ -478,9 +514,20 @@ onUnmounted(() => {
                         <!-- Background hint or watermark if needed -->
                     </div>
 
-                    <div class="relative z-10 scale-125">
+                    <div class="relative z-10 md:scale-125 flex flex-col items-center">
                         <KanjiWriter v-if="'character' in currentQuestion" :character="currentQuestion.character!"
                             :size="200" initialMode="quiz" @quiz-success="handleWritingSuccess" />
+
+                        <KanaWriter v-else-if="'char' in currentQuestion" :character="currentQuestion.char!" :size="200"
+                            initialMode="quiz" @quiz-success="handleWritingSuccess" />
+
+                        <!-- Manual Validation Button -->
+                        <div v-if="!isAnswered" class="mt-4">
+                            <button @click="handleManualSuccess"
+                                class="text-xs text-gray-400 hover:text-tanuki-brown underline decoration-dotted transition-colors">
+                                Passer (pas de gain d'expérience)
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -490,12 +537,18 @@ onUnmounted(() => {
                 <!-- Feedback Overlay -->
                 <div v-if="isAnswered"
                     class="absolute inset-0 flex items-center justify-center bg-opacity-90 transition-all backdrop-blur-sm z-20 pointer-events-none"
-                    :class="currentQuestionType === 'writing' ? 'bg-green-100/30' : (isCorrect ? 'bg-green-100/50' : 'bg-red-100/50')">
+                    :class="isSkipped ? 'bg-gray-100/50' : (currentQuestionType === 'writing' ? 'bg-green-100/30' : (isCorrect ? 'bg-green-100/50' : 'bg-red-100/50'))">
 
-                    <div v-if="isCorrect || currentQuestionType === 'writing'"
+                    <div v-if="isSkipped" class="text-gray-500 flex flex-col items-center animate-bounce-short">
+                        <img src="/images/tanuki_skip.png" alt="Tanuki Skipped" class="w-32 h-32 object-contain" />
+                        <span class="text-2xl font-bold mt-2">Passé</span>
+                        <span class="text-sm font-normal">Série en pause</span>
+                    </div>
+
+                    <div v-else-if="isCorrect || currentQuestionType === 'writing'"
                         class="text-green-600 flex flex-col items-center animate-bounce-short">
-                        <Check class="w-20 h-20" />
-                        <span class="text-2xl font-bold">Excellent !</span>
+                        <img src="/images/tanuki_success.png" alt="Tanuki Success" class="w-32 h-32 object-contain" />
+                        <span class="text-2xl font-bold mt-2">Excellent !</span>
                     </div>
 
                     <div v-else class="text-red-500 flex flex-col items-center">
