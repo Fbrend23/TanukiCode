@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
-import { Volume2, Info, Check } from 'lucide-vue-next';
+import { Info, Check } from 'lucide-vue-next';
 import { hiragana, katakana, type KanaChar, type KanaType } from '@/data/kana';
-import { speakJapanese, playKanaAudio } from '@/utils/audio';
+
 import { useUserStore } from '@/stores/userStore';
 import { useAuthStore } from '@/stores/authStore';
 import MasteryBar from '@/components/MasteryBar.vue';
+import KanaModal from '@/components/KanaModal.vue';
 
 const mode = ref<'hiragana' | 'katakana'>('hiragana');
 const currentTab = ref<KanaType | 'modified'>('basic'); // 'modified' includes dakuten + handakuten
@@ -57,12 +58,15 @@ const isMastered = (item: { char?: string; romaji?: string }) => {
 
 type GridItem = KanaChar | { type: 'spacer'; char?: string; romaji?: string };
 
-function playSound(item: GridItem) {
-    if (item.char && 'romaji' in item && item.romaji) {
-        playKanaAudio(item.char, item.romaji);
-    } else if (item.char) {
-        // Fallback if no romaji (shouldn't happen for KanaChar)
-        speakJapanese(item.char);
+
+const selectedKana = ref<KanaChar | null>(null);
+const isModalOpen = ref(false);
+
+const openModal = (item: GridItem) => {
+    // Only open for valid KanaChar items
+    if ('type' in item && item.type !== 'spacer' && item.char) {
+        selectedKana.value = item as KanaChar;
+        isModalOpen.value = true;
     }
 }
 
@@ -119,7 +123,7 @@ onMounted(() => {
             <div
                 class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige py-2">
                 <Info class="w-4 h-4 text-tanuki-gold" />
-                <span>Cliquez sur un kana pour écouter sa prononciation.</span>
+                <span>Cliquez sur un kana pour voir les détails et vous entraîner.</span>
             </div>
 
             <div :class="['grid w-full px-0 pb-4 pt-0 transition-all relative', gridLayoutClass]">
@@ -128,7 +132,7 @@ onMounted(() => {
                         <div class="h-full w-0.5 bg-tanuki-brown/10 rounded-full"></div>
                     </div>
 
-                    <div v-else @click="playSound(item)"
+                    <div v-else @click="openModal(item)"
                         class="aspect-4/5 flex flex-col items-center justify-center pt-4 bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden z-10"
                         :class="[isMastered(item) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:shadow-xl hover:border-tanuki-green-light']">
                         <template v-if="item.char">
@@ -143,18 +147,16 @@ onMounted(() => {
 
                             <button v-if="authStore.user"
                                 @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
-                                class="absolute top-1 left-1 p-1 rounded-full transition-colors z-20"
-                                :class="[isMastered(item) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
+                                class="absolute top-1 left-1 p-1 rounded-full transition-colors z-20 hidden md:block"
+                                :class="[isMastered(item) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity']">
                                 <Check class="w-3 h-3 stroke-4" />
                             </button>
-
-                            <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Volume2 class="w-4 h-4 text-tanuki-gold/50" />
-                            </div>
                         </template>
                     </div>
                 </template>
             </div>
         </div>
     </div>
+
+    <KanaModal :kana="selectedKana" :isOpen="isModalOpen" @close="isModalOpen = false" />
 </template>
