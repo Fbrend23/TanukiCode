@@ -356,7 +356,7 @@ onUnmounted(() => {
 
                         <!-- Bonus Pill -->
                         <div v-if="xpMultiplier > 1"
-                            class="absolute -right-3 -top-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                            class="absolute -right-3 -top-3 bg-linear-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
                             XP x{{ xpMultiplier }}
                         </div>
                     </div>
