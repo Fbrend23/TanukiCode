@@ -122,7 +122,7 @@ onUnmounted(() => {
 <template>
     <div class="flex flex-col items-center">
         <!-- Canvas Container -->
-        <div class="relative bg-white rounded-xl shadow-inner border-2 border-tanuki-beige p-4 mb-4 min-h-[220px] flex items-center justify-center"
+        <div class="relative bg-white rounded-xl shadow-inner border-2 border-tanuki-beige p-4 mb-4 min-h-55 flex items-center justify-center"
             :class="{ 'opacity-50': isLoading }">
 
             <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center z-10">
