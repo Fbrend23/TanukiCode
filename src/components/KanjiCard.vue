@@ -18,9 +18,10 @@ const toggleMastery = () => userStore.toggleMastery(props.kanji.character)
     class="flex flex-col items-center bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden p-4 h-full"
     :class="[isMastered ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:shadow-xl hover:border-tanuki-green-light']">
 
-    <button v-if="authStore.user" @click.stop="toggleMastery" class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20"
-      :class="[isMastered ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity']">
-      <Check class="w-3 h-3 stroke-[4]" />
+    <button v-if="authStore.user" @click.stop="toggleMastery"
+      class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20"
+      :class="[isMastered ? 'bg-tanuki-gold text-white hover:bg-amber-400' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity']">
+      <Check class="w-3 h-3 stroke-4" />
     </button>
 
     <div class="absolute top-2 right-2 font-bold px-2 py-0.5 rounded-full text-[10px]"
