@@ -154,41 +154,42 @@ html {
           <nav aria-label="Navigation mobile" v-if="isMenuOpen"
             class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 lg:hidden overflow-y-auto overscroll-contain pb-8 text-white">
 
-            <RouterLink to="/" @click="isMenuOpen = false" class="font-bold hover:text-tanuki-gold transition-colors">
+            <RouterLink to="/" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
               Accueil
             </RouterLink>
 
             <div class="w-16 border-t border-tanuki-beige/20 my-1 lg:hidden"></div>
 
-            <RouterLink to="/charts" @click="isMenuOpen = false"
+            <RouterLink to="/charts" active-class="text-tanuki-gold" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Kanas</RouterLink>
 
-            <RouterLink to="/kanji" @click="isMenuOpen = false"
+            <RouterLink to="/kanji" active-class="text-tanuki-gold" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Kanjis</RouterLink>
-            <RouterLink to="/vocabulary" @click="isMenuOpen = false"
+            <RouterLink to="/vocabulary" active-class="text-tanuki-gold" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Vocabulaire</RouterLink>
-            <RouterLink to="/grammar" @click="isMenuOpen = false"
+            <RouterLink to="/grammar" active-class="text-tanuki-gold" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Grammaire</RouterLink>
 
             <div class="w-16 border-t border-tanuki-beige/20 my-1 lg:hidden"></div>
 
-            <RouterLink to="/study" @click="isMenuOpen = false"
+            <RouterLink to="/study" active-class="text-tanuki-gold" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Flashcards
             </RouterLink>
-            <RouterLink to="/quiz" @click="isMenuOpen = false"
+            <RouterLink to="/quiz" active-class="text-tanuki-gold" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">Quiz
             </RouterLink>
 
             <!-- Auth Section Mobile -->
             <div class="flex flex-col items-center gap-6 mt-4 border-t border-tanuki-beige/20 pt-8 w-48">
               <template v-if="auth.user">
-                <RouterLink to="/profile" @click="isMenuOpen = false"
-                  class="flex items-center gap-2 text-tanuki-gold hover:text-white transition-colors text-xl">
+                <RouterLink to="/profile" @click="isMenuOpen = false" active-class="text-tanuki-gold"
+                  class="flex items-center gap-2 text-white hover:text-tanuki-gold transition-colors text-xl">
                   <div
                     class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
                     :class="getColorClass(userStore.avatarColor)">
