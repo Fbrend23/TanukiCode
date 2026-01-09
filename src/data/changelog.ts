@@ -43,6 +43,7 @@ export const changelog: ChangelogEntry[] = [
           "MOBILE : Le module de dessin des Kanjis s'adapte parfaitement aux petits écrans.",
           'NAVIGATION : Le menu mobile met maintenant en surbrillance la page active.',
           'MASCOTTE : Nouveaux visuels Tanuki pour célébrer vos réussites et vos pauses.',
+          'TECH : Mise en place de tests automatisés (Playwright) pour garantir la qualité du site.',
         ],
       },
     ],
