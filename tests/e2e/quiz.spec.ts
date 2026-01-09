@@ -26,17 +26,13 @@ test.describe('Quiz Flow', () => {
     // We look for the overlay container which covers the screen or card
     const feedbackOverlay = page.locator('.absolute.inset-0.z-20')
     await expect(feedbackOverlay).toBeVisible()
+    await page.waitForTimeout(500) // Wait for overlay animation to be fully stable
 
-    // Click "Continuer" (or generic click on overlay to proceed if implemented)
-    // Usually there is a next button or clicking the overlay works
-    // Looking for a button inside the feedback
-    const nextButton = feedbackOverlay.getByRole('button') // Any button in overlay
-    if (await nextButton.isVisible()) {
-      await nextButton.click()
-    } else {
-      // Fallback: click the overlay itself
-      await feedbackOverlay.click()
-    }
+    // Click "Continuer" / "Question Suivante"
+    // The button is outside the card, formatted as "Question Suivante"
+    const nextButton = page.getByRole('button', { name: 'Question Suivante' })
+    await expect(nextButton).toBeVisible()
+    await nextButton.click()
 
     // Verify new question loads (feedback hidden)
     await expect(feedbackOverlay).toBeHidden()
