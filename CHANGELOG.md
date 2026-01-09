@@ -31,6 +31,10 @@
   - **Scrollbar**: Fixed layout shifts caused by scrollbar appearance (`scrollbar-gutter`).
   - **Navigation**: Mobile menu now highlights the active page given the current route.
   - **Mascot**: Added custom Tanuki illustrations for Quiz feedback (Success/Skip).
+
+### Testing
+
+- **E2E**: Integrated Playwright for automated UI and smoke testing.
 - **Anti-Cheat (Quiz)**: Fixed an exploit where changing filters would reset the current question without penalty. Now, strict validation prevents skipping questions to maintain a streak.
 
 ## [0.13.0] - 2026-01-07
