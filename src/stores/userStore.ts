@@ -102,6 +102,9 @@ export const useUserStore = defineStore('user', () => {
       if (data.daily_activity) {
         dailyActivity.value = data.daily_activity
       }
+      username.value = data.username || ''
+      xp.value = data.xp ?? 0
+      calculateLevel()
     }
     loading.value = false
   }
@@ -296,6 +299,10 @@ export const useUserStore = defineStore('user', () => {
     currentCombo.value = 0
     masteredItems.value = []
     lastStudiedAt.value = null
+    xp.value = 0
+    level.value = 1
+    dailyActivity.value = {}
+    masteredItems.value = []
     saveProgress()
   }
 
@@ -304,18 +311,13 @@ export const useUserStore = defineStore('user', () => {
     () => auth.user,
     (newUser) => {
       if (newUser) {
+        resetProgress()
         loadProgress()
       } else {
-        score.value = 0
-        totalQuestions.value = 0
-        streak.value = 0
-        highScore.value = 0
-        bestCombo.value = 0
+        resetProgress()
         username.value = ''
         avatarColor.value = 'gold'
         avatarImage.value = 'default'
-        lastStudiedAt.value = null
-        masteredItems.value = []
       }
     },
     { immediate: true },
