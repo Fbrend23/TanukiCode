@@ -121,24 +121,23 @@ onMounted(() => {
 
           <button v-if="authStore.user" @click.stop="userStore.toggleMastery(lesson.id)"
             class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20"
-            :class="[isMastered(lesson.id) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
+            :class="[isMastered(lesson.id) ? 'bg-tanuki-gold text-white hover:bg-amber-400' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
             <Check class="w-3 h-3 stroke-4" />
           </button>
 
-          <div class="flex justify-between items-start mb-2 pl-4 md:pl-0">
-            <div class="flex flex-wrap gap-1">
-              <span
-                class="bg-gray-100 text-gray-600 text-[10px] md:text-sm font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded">
-                {{ getCategoryLabel(lesson.category) }}
-              </span>
-            </div>
+          <span
+            class="absolute top-2 right-2 bg-tanuki-beige text-tanuki-brown-dark text-[10px] md:text-sm font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded z-10">
+            {{ lesson.level }}
+          </span>
+
+          <div class="absolute top-2 left-0 right-0 flex justify-center pointer-events-none">
             <span
-              class="bg-tanuki-beige text-tanuki-brown-dark text-[10px] md:text-sm font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded shrink-0">
-              {{ lesson.level }}
+              class="bg-gray-100 text-gray-600 text-[10px] md:text-sm font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded text-center truncate max-w-[60%] pointer-events-auto border border-gray-200">
+              {{ getCategoryLabel(lesson.category) }}
             </span>
           </div>
 
-          <h3 class="text-sm md:text-2xl font-bold transition-colors mb-1 md:mb-2"
+          <h3 class="text-sm md:text-2xl font-bold transition-colors mb-1 md:mb-2 mt-8 md:mt-6"
             :class="isMastered(lesson.id) ? 'text-tanuki-green' : 'text-tanuki-brown group-hover:text-tanuki-green'">
             {{ lesson.title }}
           </h3>

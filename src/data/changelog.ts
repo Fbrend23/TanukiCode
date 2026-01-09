@@ -9,6 +9,46 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.14.0',
+    date: '2026-01-07',
+    sections: [
+      {
+        title: 'Contenu Certifié N5',
+        items: [
+          'OBJECTIF 100% : Le set de Kanjis N5 est maintenant complet ! (106 caractères)',
+          'NOUVEAUX THÈMES : Temps, Couleurs, École, Nature et Verbes essentiels ajoutés.',
+        ],
+      },
+      {
+        title: 'Module Écriture',
+        items: [
+          'TRACÉ INTERACTIF : Apprenez à écrire chaque Kanji et Kana trait par trait avec le nouveau module animé.',
+          "MODE QUIZ : Testez votre mémoire en dessinant le caractère directement sur l'écran.",
+          'GUIDAGE : Ordre des traits officiel japonais inclus.',
+          "BONUS XP : Gagnez jusqu'à x2.0 XP en activant plusieurs catégories simultanément !",
+        ],
+      },
+      {
+        title: 'Sécurité & Correctifs',
+        items: [
+          "ANTI-TRICHE : Correction d'une faille permettant de relancer une question via les filtres pour conserver sa série.",
+        ],
+      },
+      {
+        title: 'Design & UI',
+        items: [
+          'UNIFICATION : La coche de maîtrise est maintenant Dorée partout (Kanas, Kanjis, Vocabulaire, Grammaire).',
+          'QUIZ : Sauvegarde automatique de vos filtres et bouton "Passer" (Pause la série, 0 XP) en cas de souci.',
+          'GRAMMAIRE : Alignement et mise en page améliorés pour les cartes de leçons.',
+          "MOBILE : Le module de dessin des Kanjis s'adapte parfaitement aux petits écrans.",
+          'NAVIGATION : Le menu mobile met maintenant en surbrillance la page active.',
+          'MASCOTTE : Nouveaux visuels Tanuki pour célébrer vos réussites et vos pauses.',
+          'TECH : Mise en place de tests automatisés (Playwright) pour garantir la qualité du site.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.13.0',
     date: '2026-01-07',
     sections: [

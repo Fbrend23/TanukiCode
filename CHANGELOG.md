@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.14.0] - 2026-01-07
+
+### Added
+
+- **Content (JLPT N5)**:
+  - **Complete N5 Set**: Added the final ~25 missing Kanjis to reach 100% coverage of the N5 curriculum (106 Kanjis total).
+  - **New Categories**: Time (Year, Week), Colors (Red, Blue, Black), School, Nature, and Essential Verbs.
+- **Features**:
+  - **Handwriting Module**: Interactive handwriting for both **Kanjis and Kanas**.
+  - **Stroke Animation**: Watch the stroke order animation trait-by-trait (Kanji & Kana).
+  - **Practice Mode**: Draw the character yourself with real-time feedback.
+  - **XP Bonus**: Earn up to **x2.0 XP** (Tanuki Mode) by activating multiple categories simultaneously (Kana, Kanji, Vocab, Grammar).
+  - **Mastery System**:
+    - **Unified Design**: The "Mastery Checkmark" is now **Gold** across the entire app (Kana, Kanji, Vocab, Grammar).
+    - **Kanji Modal**: Added a mastery toggle button directly in the Kanji details view.
+  - **Quiz UX**:
+    - **Persistence**: Filters (Categories & Modes) are verified and saved automatically.
+    - **Manual Validation**: Added a "Passer" button to bypass writing issues (Pauses streak, 0 XP).
+  - **Grammar**:
+  - **Grammar**:
+  - **Grammar**:
+    - **Card Layout**: Improved layout with centered Category label and aligned Level badge.
+
+### Fixed
+
+- **UI/Layout**:
+  - **Mobile Kanji**: The drawing canvas now adapts its size to fit smaller screens (responsive).
+  - **Kana Overflow**: Fixed font size issues where combined characters (Yoon) would overflow their containers.
+  - **Scrollbar**: Fixed layout shifts caused by scrollbar appearance (`scrollbar-gutter`).
+  - **Navigation**: Mobile menu now highlights the active page given the current route.
+  - **Mascot**: Added custom Tanuki illustrations for Quiz feedback (Success/Skip).
+
+### Testing
+
+- **E2E**: Integrated Playwright for automated UI and smoke testing.
+- **Anti-Cheat (Quiz)**: Fixed an exploit where changing filters would reset the current question without penalty. Now, strict validation prevents skipping questions to maintain a streak.
+
 ## [0.13.0] - 2026-01-07
 
 ### Added

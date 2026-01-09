@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
-import { Volume2, Info, Check } from 'lucide-vue-next';
+import { Info, Check } from 'lucide-vue-next';
 import { hiragana, katakana, type KanaChar, type KanaType } from '@/data/kana';
-import { speakJapanese, playKanaAudio } from '@/utils/audio';
+
 import { useUserStore } from '@/stores/userStore';
 import { useAuthStore } from '@/stores/authStore';
 import MasteryBar from '@/components/MasteryBar.vue';
+import KanaModal from '@/components/KanaModal.vue';
 
 const mode = ref<'hiragana' | 'katakana'>('hiragana');
 const currentTab = ref<KanaType | 'modified'>('basic'); // 'modified' includes dakuten + handakuten
@@ -57,12 +58,15 @@ const isMastered = (item: { char?: string; romaji?: string }) => {
 
 type GridItem = KanaChar | { type: 'spacer'; char?: string; romaji?: string };
 
-function playSound(item: GridItem) {
-    if (item.char && 'romaji' in item && item.romaji) {
-        playKanaAudio(item.char, item.romaji);
-    } else if (item.char) {
-        // Fallback if no romaji (shouldn't happen for KanaChar)
-        speakJapanese(item.char);
+
+const selectedKana = ref<KanaChar | null>(null);
+const isModalOpen = ref(false);
+
+const openModal = (item: GridItem) => {
+    // Only open for valid KanaChar items
+    if ('type' in item && item.type !== 'spacer' && item.char) {
+        selectedKana.value = item as KanaChar;
+        isModalOpen.value = true;
     }
 }
 
@@ -74,87 +78,87 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center w-full px-4">
-        <div v-if="isLoading" class="w-full flex justify-center py-24">
-            <LoadingSpinner size="xl" text="Chargement des kanas..." />
-        </div>
-
-        <div v-else class="flex flex-col items-center w-full">
-            <!-- Header -->
-            <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">Kanas
-            </h2>
-
-            <!-- Mode Toggles -->
-            <div class="card flex p-1 mb-4 shadow-none border-2 border-tanuki-green">
-                <button @click="mode = 'hiragana'"
-                    :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
-                    Hiragana
-                </button>
-                <button @click="mode = 'katakana'"
-                    :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
-                    Katakana
-                </button>
+    <div>
+        <div class="flex flex-col items-center w-full px-4">
+            <div v-if="isLoading" class="w-full flex justify-center py-24">
+                <LoadingSpinner size="xl" text="Chargement des kanas..." />
             </div>
 
-            <!-- Tab Navigation -->
-            <div class="flex gap-2 mb-6 overflow-x-auto max-w-full px-1 py-1 text-sm md:text-base scrollbar-hide">
-                <button @click="currentTab = 'basic'"
-                    :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'basic' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
-                    De base
-                </button>
-                <button @click="currentTab = 'modified'"
-                    :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'modified' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
-                    Dérivés (Dakuten)
-                </button>
-                <button @click="currentTab = 'yoon'"
-                    :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'yoon' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
-                    Combos (Yoon)
-                </button>
-            </div>
+            <div v-else class="flex flex-col items-center w-full">
+                <!-- Header -->
+                <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">Kanas
+                </h2>
 
-            <!-- Progress Bar -->
-            <MasteryBar :label="`Progression ${mode === 'hiragana' ? 'Hiragana' : 'Katakana'}`" :current="kanaMastered"
-                :total="kanaTotal" class="mb-4" />
+                <!-- Mode Toggles -->
+                <div class="card flex p-1 mb-4 shadow-none border-2 border-tanuki-green">
+                    <button @click="mode = 'hiragana'"
+                        :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'hiragana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                        Hiragana
+                    </button>
+                    <button @click="mode = 'katakana'"
+                        :class="['px-6 py-2 rounded-full font-bold transition-all', mode === 'katakana' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                        Katakana
+                    </button>
+                </div>
 
-            <div
-                class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige py-2">
-                <Info class="w-4 h-4 text-tanuki-gold" />
-                <span>Cliquez sur un kana pour écouter sa prononciation.</span>
-            </div>
+                <!-- Tab Navigation -->
+                <div class="flex gap-2 mb-6 overflow-x-auto max-w-full px-1 py-1 text-sm md:text-base scrollbar-hide">
+                    <button @click="currentTab = 'basic'"
+                        :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'basic' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
+                        De base
+                    </button>
+                    <button @click="currentTab = 'modified'"
+                        :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'modified' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
+                        Dérivés (Dakuten)
+                    </button>
+                    <button @click="currentTab = 'yoon'"
+                        :class="['px-4 py-1.5 rounded-lg font-bold transition-all border-2 whitespace-nowrap', currentTab === 'yoon' ? 'bg-tanuki-gold text-white border-tanuki-gold' : 'bg-transparent text-tanuki-brown border-tanuki-brown/20 hover:border-tanuki-gold']">
+                        Combos (Yoon)
+                    </button>
+                </div>
 
-            <div :class="['grid w-full px-0 pb-4 pt-0 transition-all relative', gridLayoutClass]">
-                <template v-for="(item, index) in displayedKana" :key="index">
-                    <div v-if="item.type === 'spacer'" class="hidden md:flex items-center justify-center">
-                        <div class="h-full w-0.5 bg-tanuki-brown/10 rounded-full"></div>
-                    </div>
+                <!-- Progress Bar -->
+                <MasteryBar :label="`Progression ${mode === 'hiragana' ? 'Hiragana' : 'Katakana'}`"
+                    :current="kanaMastered" :total="kanaTotal" class="mb-4" />
 
-                    <div v-else @click="playSound(item)"
-                        class="aspect-4/5 flex flex-col items-center justify-center pt-4 bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden z-10"
-                        :class="[isMastered(item) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:shadow-xl hover:border-tanuki-green-light']">
-                        <template v-if="item.char">
-                            <span
-                                :class="['font-bold', isMastered(item) ? 'text-tanuki-green' : 'text-tanuki-brown-dark', item.char.length > 1 ? 'text-2xl md:text-5xl' : 'text-3xl md:text-6xl']">
-                                {{ item.char }}
-                            </span>
-                            <span
-                                :class="['text-xs md:text-xl transition-colors mt-1', isMastered(item) ? 'text-tanuki-green/60' : 'text-gray-400 group-hover:text-tanuki-gold']">
-                                {{ item.romaji }}
-                            </span>
+                <div
+                    class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige py-2">
+                    <Info class="w-4 h-4 text-tanuki-gold" />
+                    <span>Cliquez sur un kana pour voir les détails et vous entraîner.</span>
+                </div>
 
-                            <button v-if="authStore.user"
-                                @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
-                                class="absolute top-1 left-1 p-1 rounded-full transition-colors z-20"
-                                :class="[isMastered(item) ? 'bg-tanuki-green text-white hover:bg-tanuki-green-light' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
-                                <Check class="w-3 h-3 stroke-4" />
-                            </button>
+                <div :class="['grid w-full px-0 pb-4 pt-0 transition-all relative', gridLayoutClass]">
+                    <template v-for="(item, index) in displayedKana" :key="index">
+                        <div v-if="item.type === 'spacer'" class="hidden md:flex items-center justify-center">
+                            <div class="h-full w-0.5 bg-tanuki-brown/10 rounded-full"></div>
+                        </div>
 
-                            <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Volume2 class="w-4 h-4 text-tanuki-gold/50" />
-                            </div>
-                        </template>
-                    </div>
-                </template>
+                        <div v-else @click="openModal(item)"
+                            class="aspect-4/5 flex flex-col items-center justify-center pt-4 bg-white rounded-2xl border-2 transition-all cursor-pointer group relative overflow-hidden z-10"
+                            :class="[isMastered(item) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:shadow-xl hover:border-tanuki-green-light']">
+                            <template v-if="item.char">
+                                <span
+                                    :class="['font-bold', isMastered(item) ? 'text-tanuki-green' : 'text-tanuki-brown-dark', item.char.length > 1 ? 'text-xl md:text-4xl' : 'text-3xl md:text-6xl']">
+                                    {{ item.char }}
+                                </span>
+                                <span
+                                    :class="['text-xs md:text-xl transition-colors mt-1', isMastered(item) ? 'text-tanuki-green/60' : 'text-gray-400 group-hover:text-tanuki-gold']">
+                                    {{ item.romaji }}
+                                </span>
+
+                                <button v-if="authStore.user"
+                                    @click.stop="userStore.toggleMastery(item.char || item.romaji || '')"
+                                    class="absolute top-1 left-1 p-1 rounded-full transition-colors z-20 hidden md:block"
+                                    :class="[isMastered(item) ? 'bg-tanuki-gold text-white hover:bg-amber-400' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity']">
+                                    <Check class="w-3 h-3 stroke-4" />
+                                </button>
+                            </template>
+                        </div>
+                    </template>
+                </div>
             </div>
         </div>
+
+        <KanaModal :kana="selectedKana" :isOpen="isModalOpen" @close="isModalOpen = false" />
     </div>
 </template>
