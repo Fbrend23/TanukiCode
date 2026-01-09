@@ -37,3 +37,11 @@ __screenshots__/
 .env
 TanukiCode.code-workspace
 /src/assets/avatars
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/tests/e2e/visual.spec.ts-snapshots
+/tests/e2e/navigation.spec.ts-snapshots
