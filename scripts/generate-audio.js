@@ -190,6 +190,34 @@ const main = async () => {
     }
   }
 
+  // 4. Process Sentences
+  console.log('\n--- Sentences ---')
+  const sentencesData = jiti('../src/data/sentences.ts')
+  const sentencesList = sentencesData.sentences
+  const existingSentences = await getExistingFiles('sentences')
+
+  // Check for --force flag
+  const forceMode = process.argv.includes('--force')
+
+  for (const sentence of sentencesList) {
+    const filename = `${sentence.id}.mp3`
+    const filePathInBucket = `sentences/${filename}`
+
+    if (existingSentences.has(filename) && !forceMode) {
+      process.stdout.write('.')
+      continue
+    }
+
+    console.log(`Uploading: ${filename} ("${sentence.kana}")...`)
+    try {
+      await new Promise((r) => setTimeout(r, 200))
+      // Use Kana text for TTS to ensure correct reading (e.g. Nimei vs Futari)
+      await uploadAudio(sentence.kana, filePathInBucket)
+    } catch (e) {
+      console.error(`Failed ${filename}:`, e.message)
+    }
+  }
+
   console.log('\nSupabase sync complete!')
 }
 
