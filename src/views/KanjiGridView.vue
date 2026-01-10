@@ -5,7 +5,7 @@ import KanjiCard from '@/components/KanjiCard.vue'
 import KanjiModal from '@/components/KanjiModal.vue'
 import MasteryBar from '@/components/MasteryBar.vue'
 import FilterModal from '@/components/FilterModal.vue'
-import { Search, Settings2 } from 'lucide-vue-next'
+import { Search, Settings2, Info } from 'lucide-vue-next'
 import { useUserStore } from '@/stores/userStore'
 
 const searchQuery = ref('')
@@ -116,10 +116,11 @@ onMounted(() => {
     </div>
 
     <template v-else>
-      <div class="flex flex-col items-center w-full max-w-4xl mb-6">
+      <div class="flex flex-col items-center w-full max-w-4xl mb-1">
         <div class="text-center mb-2">
-          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8">Kanji N{{ selectedLevel
-          }}</h1>
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md: mb-8">Kanji N{{
+            selectedLevel
+            }}</h1>
         </div>
 
         <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
@@ -141,7 +142,13 @@ onMounted(() => {
         </div>
 
         <!-- Progress Bar -->
-        <MasteryBar :label="`Progression N${selectedLevel}`" :current="masteredKanji" :total="totalKanji" />
+        <MasteryBar :label="`Progression N${selectedLevel}`" :current="masteredKanji" :total="totalKanji"
+          class="mb-4" />
+
+        <div class="info-banner mb-1">
+          <Info class="w-4 h-4 text-tanuki-gold" />
+          <span>Cliquez sur un kanji pour voir les détails et vous entraîner.</span>
+        </div>
       </div>
 
       <!-- Grid -->

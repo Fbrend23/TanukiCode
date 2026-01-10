@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary'
 import { sentences, type Sentence } from '@/data/sentences'
-import { Search, Volume2, Check, Settings2, Play, Hand, ShoppingBag, Utensils, TrainFront, Headphones, Info } from 'lucide-vue-next'
+import { Search, Volume2, Check, Settings2, Play, Info } from 'lucide-vue-next'
 import { speakJapanese, playSentenceAudio } from '@/utils/audio'
 import { useUserStore } from '@/stores/userStore'
 import { useAuthStore } from '@/stores/authStore'
@@ -127,15 +127,7 @@ const playSentence = (s: Sentence) => {
   }, 3000)
 }
 
-const getSentenceCategoryIcon = (cat: string) => {
-  switch (cat) {
-    case 'greetings': return Hand
-    case 'shopping': return ShoppingBag
-    case 'restaurant': return Utensils
-    case 'travel': return TrainFront
-    default: return Headphones
-  }
-}
+
 
 const getSentenceCategoryLabel = (cat: string) => {
   switch (cat) {
@@ -165,7 +157,8 @@ onMounted(() => {
     <template v-else>
       <div class="flex flex-col items-center w-full max-w-6xl mb-6">
         <div class="text-center mb-6">
-          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-4">Bibliothèque</h1>
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">
+            Vocabulaire</h1>
 
           <!-- TABS -->
           <div class="card flex p-1 shadow-none border-2 border-tanuki-green bg-white inline-flex cursor-default">
@@ -351,7 +344,6 @@ onMounted(() => {
             (cat === 'all' ? selectedSentenceCategories.length === 0 : selectedSentenceCategories.includes(cat as string))
               ? 'bg-tanuki-green text-white border-tanuki-green'
               : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50']">
-            <component :is="getSentenceCategoryIcon(cat as string)" class="w-4 h-4" v-if="cat !== 'all'" />
             {{ getSentenceCategoryLabel(cat as string) }}
           </button>
         </div>
