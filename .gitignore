@@ -45,3 +45,4 @@ TanukiCode.code-workspace
 /playwright/.cache/
 /tests/e2e/visual.spec.ts-snapshots
 /tests/e2e/navigation.spec.ts-snapshots
+public/.htaccess
