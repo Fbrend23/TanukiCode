@@ -18,6 +18,7 @@ export const changelog: ChangelogEntry[] = [
           "KANA : Correction du nombre de traits incorrect pour certains caractères (ex: 'あ', 'ぬ').",
           'ÉCRITURE : Pinceau plus fin pour une meilleure précision lors du tracé.',
           'UX : Facilité de dessin augmentée pour une expérience plus fluide.',
+          "SYNC : Correction critique empêchant l'écrasement des données Cloud lors de la connexion.",
         ],
       },
     ],
