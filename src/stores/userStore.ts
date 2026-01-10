@@ -291,7 +291,7 @@ export const useUserStore = defineStore('user', () => {
     await saveProgress()
   }
 
-  const resetProgress = () => {
+  const resetProgress = (shouldSave = true) => {
     score.value = 0
     totalQuestions.value = 0
     streak.value = 0
@@ -303,7 +303,7 @@ export const useUserStore = defineStore('user', () => {
     level.value = 1
     dailyActivity.value = {}
     masteredItems.value = []
-    saveProgress()
+    if (shouldSave) saveProgress()
   }
 
   // Sync on login
@@ -311,7 +311,7 @@ export const useUserStore = defineStore('user', () => {
     () => auth.user,
     (newUser) => {
       if (newUser) {
-        resetProgress()
+        resetProgress(false)
         loadProgress()
       } else {
         resetProgress()

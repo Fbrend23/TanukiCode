@@ -7,6 +7,7 @@
 - **Kana**: Fixed incorrect stroke decomposition for certain characters (e.g. 'あ', 'ぬ') which had too many segments.
 - **Writing**: Reduced brush size for a more precise writing experience, especially at intersections.
 - **UX**: Increased drawing ease and stroke recognition tolerance.
+- **Sync**: Fixed a critical bug where logging in could overwrite cloud data with empty local data.
 
 ## [0.14.0] - 2026-01-09
 
