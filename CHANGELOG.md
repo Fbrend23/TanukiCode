@@ -1,6 +1,14 @@
 # Changelog
 
-## [0.14.0] - 2026-01-07
+## [0.14.1] - 2026-01-10
+
+### Fixed
+
+- **Kana**: Fixed incorrect stroke decomposition for certain characters (e.g. 'あ', 'ぬ') which had too many segments.
+- **Writing**: Reduced brush size for a more precise writing experience, especially at intersections.
+- **UX**: Increased drawing ease and stroke recognition tolerance.
+
+## [0.14.0] - 2026-01-09
 
 ### Added
 

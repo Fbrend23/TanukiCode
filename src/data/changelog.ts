@@ -9,6 +9,20 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.14.1',
+    date: '2026-01-10',
+    sections: [
+      {
+        title: 'Correctifs',
+        items: [
+          "KANA : Correction du nombre de traits incorrect pour certains caractères (ex: 'あ', 'ぬ').",
+          'ÉCRITURE : Pinceau plus fin pour une meilleure précision lors du tracé.',
+          'UX : Facilité de dessin augmentée pour une expérience plus fluide.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.14.0',
     date: '2026-01-07',
     sections: [
