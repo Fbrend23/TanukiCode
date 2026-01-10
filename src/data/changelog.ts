@@ -9,6 +9,28 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.15.0',
+    date: '2026-01-10',
+    sections: [
+      {
+        title: 'Mise en Situation',
+        items: [
+          'PHRASES UTILITIES : Apprenez des phrases complètes (Commander au restaurant, Demander son chemin...).',
+          'AUDIO : Écoutez la prononciation correcte de chaque phrase (plus de TTS robotique !).',
+          "CONTEXTE : Chaque phrase est accompagnée d'une note explicative sur quand et comment l'utiliser.",
+        ],
+      },
+      {
+        title: 'Interface',
+        items: [
+          'BIBLIOTHÈQUE UNIFIÉE : Retrouvez désormais vos "Mots" et "Phrases" dans un seul endroit avec des onglets dédiés.',
+          'CLARTÉ : Interface épurée et espacée pour une lecture plus agréable.',
+          'RECHERCHE : Filtrez instantanément les phrases par mot-clé (ex: "train", "merci").',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.14.1',
     date: '2026-01-10',
     sections: [
