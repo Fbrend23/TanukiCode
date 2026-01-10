@@ -44,9 +44,9 @@ const displayedKana = computed(() => {
 
 const gridLayoutClass = computed(() => {
     if (currentTab.value === 'yoon') {
-        return 'grid-cols-3 md:grid-cols-[repeat(3,1fr)_auto_repeat(3,1fr)] max-w-5xl gap-2 md:gap-4';
+        return 'grid-cols-3 md:grid-cols-[repeat(3,1fr)_auto_repeat(3,1fr)] max-w-6xl gap-2 md:gap-4';
     }
-    return 'grid-cols-5 max-w-5xl gap-2 md:gap-4';
+    return 'grid-cols-5 max-w-6xl gap-2 md:gap-4';
 });
 
 const userStore = useUserStore();
