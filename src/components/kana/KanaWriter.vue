@@ -47,10 +47,11 @@ const initWriter = () => {
             strokeColor: '#5D4037', // tanuki-brown-dark
             outlineColor: '#DDD',
             drawingColor: '#333',
+            drawingWidth: 10,
             highlightColor: '#4ADE80', // green-400
-            // Load Japanese Kana data from MadLadSquad/hanzi-writer-data-youyin
+            // Load Japanese Kana data from ailectra/kana-json (fixes stroke counts, e.g. あ=3, ぬ=2)
             charDataLoader: (char, onComplete) => {
-                fetch(`https://cdn.jsdelivr.net/gh/MadLadSquad/hanzi-writer-data-youyin@latest/data/${char}.json`)
+                fetch(`https://cdn.jsdelivr.net/gh/ailectra/kana-json@v0.0.1/data/${char}.json`)
                     .then(res => {
                         if (!res.ok) throw new Error('Character data not found');
                         return res.json();
