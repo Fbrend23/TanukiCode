@@ -176,9 +176,9 @@ onMounted(() => {
           </div>
         </RouterLink>
 
-        <RouterLink to="/quiz"
+        <RouterLink to="/training"
           class="card p-6 flex flex-col items-center hover:scale-[1.02] transition-transform group cursor-pointer relative overflow-hidden">
-          <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">問</div>
+          <div class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown">習</div>
           <div v-if="authStore.user"
             class="absolute top-2 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded-full border border-orange-100">
             {{ userStore.masteredItems.length }} acquis
@@ -186,9 +186,9 @@ onMounted(() => {
           <div class="bg-orange-100 p-3 rounded-full mb-3 group-hover:bg-orange-200 transition-colors">
             <Gamepad2 class="w-8 h-8 text-orange-600" />
           </div>
-          <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">Quiz
+          <h3 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors">Entraînement
           </h3>
-          <p class="text-sm text-gray-400 mb-4">Testez vos connaissances</p>
+          <p class="text-sm text-gray-400 mb-4">Quiz, phrases & plus</p>
 
           <div v-if="authStore.user" class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-auto">
             <div class="h-full bg-orange-500 transition-all duration-500"
