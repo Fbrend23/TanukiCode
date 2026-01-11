@@ -55,6 +55,16 @@ watch(modes, (newVal) => {
     localStorage.setItem('tanuki-quiz-modes', JSON.stringify(newVal));
 }, { deep: true });
 
+// Display Settings - Init from LocalStorage
+const savedDisplaySettings = localStorage.getItem('tanuki-quiz-display');
+const displaySettings = ref(savedDisplaySettings ? JSON.parse(savedDisplaySettings) : {
+    answerMode: 'translation' as 'translation' | 'romaji'
+});
+
+watch(displaySettings, (newVal) => {
+    localStorage.setItem('tanuki-quiz-display', JSON.stringify(newVal));
+}, { deep: true });
+
 // Watch Categories to disable Writing if both Kanji and Kana are disabled
 watch(() => [categories.value.kanji, categories.value.kana], ([isKanji, isKana]) => {
     if (!isKanji && !isKana) {
@@ -148,7 +158,27 @@ function getId(item: QuizItem): string {
     return 'unknown';
 }
 
+
+
 function getAnswerText(item: QuizItem): string {
+    // 1. Sentences can leverage the setting
+    if ('translation' in item && 'romaji' in item) {
+        return displaySettings.value.answerMode === 'romaji' ? item.romaji! : item.translation!;
+    }
+
+    // 2. Vocabulary also has meaning/romaji
+    if ('word' in item) {
+        if (displaySettings.value.answerMode === 'romaji') return item.romaji!;
+        // Fallback to meaning logic
+    }
+
+    // 3. Kanji Logic -> Fallback to default (Meaning)
+    // User requested to remove special handling for Kanji toggle.
+
+    // 4. Kana Logic (Always Romaji)
+    if ('char' in item && item.romaji) return item.romaji;
+
+    // Default Fallbacks
     if ('translation' in item && item.translation) return item.translation; // For sentences
     if ('meaning' in item && item.meaning) {
         const m = item.meaning;
@@ -433,6 +463,30 @@ onUnmounted(() => {
             <!-- Settings Section - Redesigned (Flat/Premium) -->
             <div v-if="showSettings"
                 class="card w-full mb-6 p-6 animate-fade-in shadow-none border-2 border-tanuki-green">
+
+                <!-- Display Mode Section -->
+                <div class="mb-8 border-b border-tanuki-beige pb-6">
+                    <h3
+                        class="font-bold text-tanuki-brown-dark mb-4 flex items-center gap-2 text-md uppercase tracking-wider opacity-70">
+                        Affichage des Réponses
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button @click="displaySettings.answerMode = 'translation'" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold',
+                            displaySettings.answerMode === 'translation'
+                                ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
+                                : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
+                            <span class="text-lg">A</span>
+                            <span>Traduction</span>
+                        </button>
+                        <button @click="displaySettings.answerMode = 'romaji'" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold',
+                            displaySettings.answerMode === 'romaji'
+                                ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
+                                : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
+                            <span class="text-lg">あ</span>
+                            <span>Romaji</span>
+                        </button>
+                    </div>
+                </div>
 
                 <!-- Modes Section -->
                 <div class="mb-8 border-b border-tanuki-beige pb-6">
