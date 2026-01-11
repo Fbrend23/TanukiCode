@@ -118,9 +118,9 @@ onMounted(() => {
     <template v-else>
       <div class="flex flex-col items-center w-full max-w-4xl mb-1">
         <div class="text-center mb-2">
-          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1">Kanji N{{
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">Kanji N{{
             selectedLevel
-          }}</h1>
+            }}</h1>
         </div>
 
         <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
