@@ -109,8 +109,8 @@ html {
               class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Flashcards
             </RouterLink>
-            <RouterLink to="/quiz" active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
+            <RouterLink to="/training" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Entraînement
             </RouterLink>
 
             <!-- Auth Section Desktop -->
@@ -182,8 +182,8 @@ html {
               class="font-bold hover:text-tanuki-gold transition-colors">
               Flashcards
             </RouterLink>
-            <RouterLink to="/quiz" active-class="text-tanuki-gold" @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors">Quiz
+            <RouterLink to="/training" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">Entraînement
             </RouterLink>
 
             <!-- Auth Section Mobile -->

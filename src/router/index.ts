@@ -23,9 +23,19 @@ const router = createRouter({
       component: () => import('../views/StudyView.vue'),
     },
     {
-      path: '/quiz',
+      path: '/training',
+      name: 'training',
+      component: () => import('../views/TrainingHubView.vue'),
+    },
+    {
+      path: '/training/quiz',
       name: 'quiz',
       component: () => import('../views/QuizView.vue'),
+    },
+    {
+      path: '/training/construction',
+      name: 'construction',
+      component: () => import('../views/SentenceBuilderView.vue'),
     },
     {
       path: '/kanji',
