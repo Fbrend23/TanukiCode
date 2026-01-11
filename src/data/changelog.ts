@@ -10,7 +10,7 @@ export interface ChangelogEntry {
 export const changelog: ChangelogEntry[] = [
   {
     version: '0.15.0',
-    date: '2026-01-10',
+    date: '2026-01-11',
     sections: [
       {
         title: 'Mise en Situation',
@@ -21,11 +21,12 @@ export const changelog: ChangelogEntry[] = [
         ],
       },
       {
-        title: 'Interface',
+        title: 'Interface & Gamification',
         items: [
-          'BIBLIOTHÈQUE UNIFIÉE : Retrouvez désormais vos "Mots" et "Phrases" dans un seul endroit avec des onglets dédiés.',
-          'CLARTÉ : Interface épurée et espacée pour une lecture plus agréable.',
-          'RECHERCHE : Filtrez instantanément les phrases par mot-clé (ex: "train", "merci").',
+          'BIBLIOTHÈQUE UNIFIÉE : Retrouvez désormais vos "Mots" et "Phrases" dans un seul endroit.',
+          "INTERACTIVITÉ : Cliquez sur n'importe quelle carte phrase pour lancer l'audio.",
+          "XP BOOST : Le multiplicateur monte désormais jusqu'à x3.5 en activant tout + le mode écriture !",
+          'DEV MODE : Indicateur visuel pour les développeurs (Local).',
         ],
       },
     ],
