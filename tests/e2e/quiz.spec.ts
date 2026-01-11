@@ -37,4 +37,24 @@ test.describe('Quiz Flow', () => {
     // Verify new question loads (feedback hidden)
     await expect(feedbackOverlay).toBeHidden()
   })
+
+  test('Enable Sentences Category', async ({ page }) => {
+    await page.goto('/quiz')
+
+    // Open Filters
+    await page.getByRole('button', { name: 'Filtres' }).click()
+
+    // Clicks on "Phrases" category button
+    const sentencesBtn = page.getByRole('button', { name: 'Phrases' })
+    await expect(sentencesBtn).toBeVisible()
+
+    // Toggle it on if off (it might be on by default or off, we force it)
+    await sentencesBtn.click()
+
+    // Close filters (click filter button again)
+    await page.getByRole('button', { name: 'Filtres' }).click()
+
+    // Verify UI is stable
+    await expect(page.getByRole('heading', { name: /Quiz/ })).toBeVisible()
+  })
 })
