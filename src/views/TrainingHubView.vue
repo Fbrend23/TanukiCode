@@ -48,7 +48,7 @@ const navigateTo = (route: string, disabled?: boolean) => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center w-full px-4 py-0 pb-24 font-outfit">
+    <div class="flex flex-col items-center w-full px-4 py-0 pb-24">
         <!-- Header -->
         <div class="flex flex-col items-center w-full max-w-6xl mb-6">
             <div class="text-center mb-8">
