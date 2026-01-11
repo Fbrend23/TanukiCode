@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
 import { kanjiList, type Kanji } from '@/data/kanji';
 import { grammarLessons, type GrammarLesson } from '@/data/grammar';
 import { sentences, type Sentence } from '@/data/sentences';
-import { Check, X, Trophy, Settings2, Grid3x3, BookOpen, ScrollText, PenTool, Eye, Pencil, MessageSquare } from 'lucide-vue-next';
+import { Check, Trophy, Settings2, Grid3x3, BookOpen, ScrollText, PenTool, Eye, Pencil, MessageSquare, ArrowLeft, Flame, ArrowRight } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/userStore';
 import { happyConfetti } from '@/utils/confetti';
 import { onMounted, onUnmounted } from 'vue';
@@ -13,6 +14,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import KanjiWriter from '@/components/kanji/KanjiWriter.vue';
 import KanaWriter from '@/components/kana/KanaWriter.vue';
 
+const router = useRouter();
 const isLoading = ref(true);
 
 type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson | Sentence) & {
@@ -158,28 +160,15 @@ function getId(item: QuizItem): string {
     return 'unknown';
 }
 
-
-
 function getAnswerText(item: QuizItem): string {
-    // 1. Sentences can leverage the setting
     if ('translation' in item && 'romaji' in item) {
         return displaySettings.value.answerMode === 'romaji' ? item.romaji! : item.translation!;
     }
-
-    // 2. Vocabulary also has meaning/romaji
     if ('word' in item) {
         if (displaySettings.value.answerMode === 'romaji') return item.romaji!;
-        // Fallback to meaning logic
     }
-
-    // 3. Kanji Logic -> Fallback to default (Meaning)
-    // User requested to remove special handling for Kanji toggle.
-
-    // 4. Kana Logic (Always Romaji)
     if ('char' in item && item.romaji) return item.romaji;
-
-    // Default Fallbacks
-    if ('translation' in item && item.translation) return item.translation; // For sentences
+    if ('translation' in item && item.translation) return item.translation;
     if ('meaning' in item && item.meaning) {
         const m = item.meaning;
         if (Array.isArray(m)) return m[0] || '';
@@ -194,7 +183,6 @@ function generateOptions(correct: QuizItem): QuizItem[] {
     const opts = [correct];
     const correctId = getId(correct);
 
-    // Try to pick options from the same category first for difficulty
     const sameCategoryItems = filteredItems.value.filter(i => {
         const isCorrectType = ('char' in correct && 'char' in i) ||
             ('character' in correct && 'character' in i) ||
@@ -222,22 +210,13 @@ function generateOptions(correct: QuizItem): QuizItem[] {
     return opts.sort(() => Math.random() - 0.5);
 }
 
-// Logic to determine if the next question should be Writing or Reading
 function determineQuestionType(item: QuizItem): 'reading' | 'writing' {
-    const isKanji = 'character' in item && 'onyomi' in item; // Simple check for Kanji type
+    const isKanji = 'character' in item && 'onyomi' in item;
     const isKana = 'char' in item && item.char;
 
-    // 1. If Writing is OFF globally -> Always Reading
     if (!modes.value.writing) return 'reading';
-
-    // 2. If item is NOT a Kanji AND NOT a Kana -> Always Reading (Can't write others yet)
     if (!isKanji && !isKana) return 'reading';
-
-    // 3. If Writing is ON and item IS Kanji:
-    //    - If Reading is OFF -> Must be Writing
     if (!modes.value.reading) return 'writing';
-
-    //    - If Both are ON -> Random 50/50
     return Math.random() > 0.5 ? 'writing' : 'reading';
 }
 
@@ -264,12 +243,10 @@ async function checkAnswer(option: QuizItem) {
     await userStore.recordAnswer(isCorrectAnswer, xpMultiplier.value);
 }
 
-// Specific handler for Writing success
 async function handleWritingSuccess() {
     if (isAnswered.value) return;
     isAnswered.value = true;
 
-    // Writing is always "Correct" if the event triggers
     let newCombo = userStore.currentCombo;
     newCombo++;
     if ([10, 25, 50, 100].includes(newCombo)) {
@@ -278,29 +255,13 @@ async function handleWritingSuccess() {
     userStore.markAsMastered(getId(currentQuestion.value));
     userStore.updateBestCombo(newCombo);
     await userStore.recordAnswer(true, xpMultiplier.value);
-
-    // Auto next after short delay for writing? or wait for user?
-    // Let's wait for user to click next, but show success state
 }
 
-// Manual Validation (Anti-Frustration / Fallback)
 async function handleManualSuccess() {
     if (isAnswered.value) return;
     isAnswered.value = true;
     isSkipped.value = true;
-
-    // Preserves streak but DOES NOT increment (Anti-Abuse)
-    // We do not increment newCombo++ so users can't farm streaks by skipping
-    const currentCombo = userStore.currentCombo;
-
-    // We still mark as mastered because user claims to know it (or skipped it)
     userStore.markAsMastered(getId(currentQuestion.value));
-
-    // Ensure best combo is updated if current was already high (though it hasn't changed here)
-    userStore.updateBestCombo(currentCombo);
-
-    // 0 Multiplier = 0 XP
-    // WE DO NOT CALL recordAnswer() -> No Score change, No Total change, No XP.
 }
 
 const showSettings = ref(false);
@@ -310,11 +271,10 @@ function nextQuestion() {
     currentQuestion.value = item;
     currentQuestionType.value = determineQuestionType(item);
 
-    // Only generate options if it's a reading question
     if (currentQuestionType.value === 'reading') {
         options.value = generateOptions(currentQuestion.value);
     } else {
-        options.value = []; // No options for writing
+        options.value = [];
     }
 
     selectedOption.value = null;
@@ -325,6 +285,12 @@ function nextQuestion() {
 const isCorrect = computed(() => {
     if (!selectedOption.value) return false;
     return getId(selectedOption.value) === getId(currentQuestion.value);
+});
+
+const feedbackTitle = computed(() => {
+    if (isSkipped.value) return 'Passé';
+    if (isCorrect.value || currentQuestionType.value === 'writing') return 'Excellent !';
+    return 'Oups !';
 });
 
 function getDisplayText(item: QuizItem) {
@@ -348,14 +314,11 @@ const fontSizeClass = computed(() => {
 
 function toggleCategory(cat: keyof typeof categories.value) {
     categories.value[cat] = !categories.value[cat];
-    // Ensure at least one is active
     if (!Object.values(categories.value).some(Boolean)) {
         categories.value[cat] = true;
     }
 
-    // Only skip if the current question is no longer valid
     if (!isQuestionValid(currentQuestion.value, currentQuestionType.value)) {
-        // If unanswered, skipping resets the streak (prevents cheating)
         if (!isAnswered.value) {
             userStore.updateBestCombo(0);
         }
@@ -367,7 +330,6 @@ const xpMultiplier = computed(() => {
     let multiplier = 1.0;
     const activeCount = Object.values(categories.value).filter(Boolean).length;
 
-    // Base multiplier based on category count
     switch (activeCount) {
         case 5: multiplier = 3.0; break;
         case 4: multiplier = 2.0; break;
@@ -376,7 +338,6 @@ const xpMultiplier = computed(() => {
         default: multiplier = 1.0;
     }
 
-    // Writing Mode Bonus (Harder)
     if (modes.value.writing) {
         multiplier += 0.5;
     }
@@ -385,7 +346,6 @@ const xpMultiplier = computed(() => {
 });
 
 const handleKeydown = (e: KeyboardEvent) => {
-    // Ignore if typing in an input (if any exist, like search bar in filter)
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
     if (isAnswered.value) {
@@ -414,251 +374,265 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="w-full h-full min-h-[60vh]">
+    <div class="flex flex-col items-center w-full px-4">
         <!-- Loading State -->
         <div v-if="isLoading" class="w-full flex justify-center py-32">
             <LoadingSpinner size="xl" text="Préparation du Quiz..." />
         </div>
 
-        <div v-else class="w-full flex flex-col items-center max-w-3xl mx-auto px-4 md:px-0">
-            <!-- Center Title -->
-            <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-6 text-center">Quiz</h2>
-
-            <!-- Toolbar: Score + Filter -->
-            <div class="relative w-full max-w-2xl flex flex-col md:block mb-6">
-
-                <!-- Score & Streak (Centered) -->
-                <div class="relative w-full max-w-md mx-auto z-10">
-                    <div
-                        class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full">
-                        <div class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown">
-                            <Trophy class="w-4 h-4 text-tanuki-gold" />
-                            <span>{{ score }}/{{ total }}</span>
-                        </div>
-                        <div class="h-4 w-0.5 bg-tanuki-brown rounded-full"></div>
-                        <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
-                            <span>{{ combo }}</span>
-                            <span class="text-xs">🔥</span>
-                        </div>
-
-                        <!-- Bonus Pill -->
-                        <div v-if="xpMultiplier > 1"
-                            class="absolute -right-3 -top-3 bg-linear-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                            XP x{{ xpMultiplier }}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filter Button (Absolute Right Desktop) -->
-                <div
-                    class="mt-3 md:mt-0 flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center z-0">
-                    <button @click="showSettings = !showSettings"
-                        class="btn-filter py-2! px-3! shadow-sm md:w-auto w-full max-w-md">
-                        <Settings2 class="w-5 h-5" />
-                        <span class="inline">Filtres</span>
-                    </button>
-                </div>
+        <template v-else>
+            <div class="w-full relative flex items-center justify-center mb-0 md:mb-4">
+                <!-- Header -->
+                <button @click="router.push('/training')"
+                    class="absolute left-0 text-tanuki-brown/60 hover:text-tanuki-brown transition-colors p-2 rounded-full hover:bg-stone-100">
+                    <ArrowLeft class="w-6 h-6" />
+                </button>
+                <h2 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green text-center">
+                    Quiz
+                </h2>
             </div>
 
-            <!-- Settings Section - Redesigned (Flat/Premium) -->
-            <div v-if="showSettings"
-                class="card w-full mb-6 p-6 animate-fade-in shadow-none border-2 border-tanuki-green">
+            <div class="w-full flex flex-col items-center max-w-3xl mx-auto">
+                <div class="relative w-full max-w-2xl flex flex-col md:block mb-2">
 
-                <!-- Display Mode Section -->
-                <div class="mb-8 border-b border-tanuki-beige pb-6">
-                    <h3
-                        class="font-bold text-tanuki-brown-dark mb-4 flex items-center gap-2 text-md uppercase tracking-wider opacity-70">
-                        Affichage des Réponses
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button @click="displaySettings.answerMode = 'translation'" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold',
-                            displaySettings.answerMode === 'translation'
-                                ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
-                                : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
-                            <span class="text-lg">A</span>
-                            <span>Traduction</span>
-                        </button>
-                        <button @click="displaySettings.answerMode = 'romaji'" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold',
-                            displaySettings.answerMode === 'romaji'
-                                ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
-                                : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
-                            <span class="text-lg">あ</span>
-                            <span>Romaji</span>
+                    <!-- Score & Streak (Centered) -->
+                    <div class="relative w-full max-w-md mx-auto z-10">
+                        <div
+                            class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full bg-white">
+                            <div class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown">
+                                <Trophy class="w-4 h-4 text-tanuki-gold" />
+                                <span>{{ score }}/{{ total }}</span>
+                            </div>
+                            <div class="h-4 w-0.5 bg-tanuki-brown rounded-full"></div>
+                            <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
+                                <span>{{ combo }}</span>
+                                <Flame class="w-4 h-4 fill-orange-500 text-orange-600" />
+                            </div>
+
+                            <!-- Bonus Pill -->
+                            <div v-if="xpMultiplier > 1"
+                                class="absolute -right-3 -top-3 bg-linear-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                                XP x{{ xpMultiplier }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter Button (Absolute Right Desktop) -->
+                    <div
+                        class="mt-3 md:mt-0 flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center z-0">
+                        <button @click="showSettings = !showSettings"
+                            class="btn-filter py-2! px-3! shadow-sm md:w-auto w-full max-w-md">
+                            <Settings2 class="w-5 h-5" />
+                            <span class="inline">Filtres</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Modes Section -->
-                <div class="mb-8 border-b border-tanuki-beige pb-6">
-                    <h3
-                        class="font-bold text-tanuki-brown-dark mb-4 flex items-center gap-2 text-md uppercase tracking-wider opacity-70">
-                        Modes de Jeu
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button @click="toggleMode('reading')" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold',
-                            modes.reading
-                                ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
-                                : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
-                            <Eye class="w-5 h-5" />
-                            <span>Lecture (QCM)</span>
-                        </button>
+                <!-- Settings Section -->
+                <div v-if="showSettings"
+                    class="card w-full mb-6 p-6 animate-fade-in shadow-none border-2 border-tanuki-green">
 
-                        <button @click="toggleMode('writing')" :disabled="!categories.kanji && !categories.kana" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold relative',
-                            (!categories.kanji && !categories.kana) ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-200 text-gray-400' :
-                                modes.writing
+                    <!-- Display Mode Section -->
+                    <div class="mb-8 border-b border-tanuki-beige pb-6">
+                        <h3
+                            class="font-bold text-tanuki-brown-dark mb-4 flex items-center gap-2 text-md uppercase tracking-wider opacity-70">
+                            Affichage des Réponses
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button @click="displaySettings.answerMode = 'translation'" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold',
+                                displaySettings.answerMode === 'translation'
                                     ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
                                     : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
-                            <Pencil class="w-5 h-5" />
-                            <span>Écriture (Tracé)</span>
-
-                            <!-- Disabled Tooltip -->
-                            <span v-if="!categories.kanji && !categories.kana"
-                                class="absolute -bottom-8 bg-black/80 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
-                                Kanjis ou Kanas requis
-                            </span>
-                        </button>
-                    </div>
-                </div>
-
-                <h3 class="font-bold text-tanuki-brown-dark mb-6 flex items-center gap-2 text-lg">
-                    <Settings2 class="w-5 h-5 text-tanuki-green" />
-                    <span>Catégories</span>
-                </h3>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <button v-for="(val, key) in categories" :key="key" @click="toggleCategory(key as any)" :class="['flex flex-col items-center gap-3 p-4 rounded-2xl transition-all border-2 relative group',
-                        val
-                            ? 'bg-tanuki-green/5 border-tanuki-green text-tanuki-green'
-                            : 'bg-white border-tanuki-beige text-gray-400 hover:border-tanuki-green/20']">
-
-                        <div :class="['p-3 rounded-full transition-colors',
-                            val ? 'bg-tanuki-green/20' : 'bg-tanuki-beige/50 group-hover:bg-tanuki-beige']">
-                            <Grid3x3 v-if="key === 'kana'" class="w-6 h-6" />
-                            <BookOpen v-else-if="key === 'vocabulary'" class="w-6 h-6" />
-                            <ScrollText v-else-if="key === 'kanji'" class="w-6 h-6" />
-                            <PenTool v-else-if="key === 'grammar'" class="w-6 h-6" />
-                            <MessageSquare v-else-if="key === 'sentences'" class="w-6 h-6" />
-                        </div>
-
-                        <span class="font-bold capitalize text-sm">
-                            {{ key === 'kana' ? 'Kanas' : key === 'vocabulary' ? 'Vocabulaire' : key === 'kanji' ?
-                                'Kanjis'
-                                : key === 'sentences' ? 'Phrases' : 'Grammaire' }}
-                        </span>
-
-                        <!-- Check Indicator -->
-                        <div v-if="val"
-                            class="absolute -top-2 -right-2 bg-tanuki-green text-white p-1 rounded-full border-2 border-white">
-                            <Check class="w-3 h-3 stroke-3" />
-                        </div>
-                    </button>
-                </div>
-
-                <p class="text-xs text-gray-400 mt-6 text-center italic">
-                    Activez les catégories pour les inclure dans votre session d'entraînement.
-                </p>
-            </div>
-
-            <!-- Quiz Card -->
-            <div
-                class="card w-full text-center mb-4 relative overflow-hidden group p-8 md:p-12 min-h-[30vh] flex flex-col items-center justify-center">
-
-                <!-- Type Badge -->
-                <div
-                    class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded flex items-center gap-2 z-20">
-                    <span>
-                        {{ 'char' in currentQuestion ? 'Kana' : 'character' in currentQuestion ? 'Kanji' : 'word' in
-                            currentQuestion ? 'Vocabulaire' : 'japanese' in currentQuestion ? 'Phrase' : 'Grammaire' }}
-                    </span>
-                    <span v-if="currentQuestionType === 'writing'" class="bg-tanuki-green text-white px-1.5 rounded-sm">
-                        ÉCRITURE
-                    </span>
-                </div>
-
-                <!-- Fixed height container for question text to prevent layout shift -->
-                <div v-if="currentQuestionType === 'reading'"
-                    class="h-32 md:h-40 w-full flex items-center justify-center mb-4 pt-4">
-                    <div :class="['font-bold text-tanuki-brown-dark text-wrap text-center', fontSizeClass]">
-                        {{ getDisplayText(currentQuestion) }}
-                    </div>
-                </div>
-
-                <div v-else-if="currentQuestionType === 'writing'"
-                    class="w-full h-full flex items-center justify-center">
-                    <div v-if="!isAnswered"
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-5">
-                        <!-- Background hint or watermark if needed -->
-                    </div>
-
-                    <div class="relative z-10 md:scale-125 flex flex-col items-center">
-                        <KanjiWriter v-if="'character' in currentQuestion" :character="currentQuestion.character!"
-                            :size="200" initialMode="quiz" @quiz-success="handleWritingSuccess" />
-
-                        <KanaWriter v-else-if="'char' in currentQuestion" :character="currentQuestion.char!" :size="200"
-                            initialMode="quiz" @quiz-success="handleWritingSuccess" />
-
-                        <!-- Manual Validation Button -->
-                        <div v-if="!isAnswered" class="mt-4">
-                            <button @click="handleManualSuccess"
-                                class="text-xs text-gray-400 hover:text-tanuki-brown underline decoration-dotted transition-colors">
-                                Passer (pas de gain d'expérience)
+                                <span class="text-lg">A</span>
+                                <span>Traduction</span>
+                            </button>
+                            <button @click="displaySettings.answerMode = 'romaji'" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold',
+                                displaySettings.answerMode === 'romaji'
+                                    ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
+                                    : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
+                                <span class="text-lg">あ</span>
+                                <span>Romaji</span>
                             </button>
                         </div>
                     </div>
+
+                    <!-- Modes Section -->
+                    <div class="mb-8 border-b border-tanuki-beige pb-6">
+                        <h3
+                            class="font-bold text-tanuki-brown-dark mb-4 flex items-center gap-2 text-md uppercase tracking-wider opacity-70">
+                            Modes de Jeu
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button @click="toggleMode('reading')" :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold',
+                                modes.reading
+                                    ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
+                                    : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
+                                <Eye class="w-5 h-5" />
+                                <span>Lecture (QCM)</span>
+                            </button>
+
+                            <button @click="toggleMode('writing')" :disabled="!categories.kanji && !categories.kana"
+                                :class="['flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all font-bold relative',
+                                    (!categories.kanji && !categories.kana) ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-200 text-gray-400' :
+                                        modes.writing
+                                            ? 'bg-tanuki-green text-white border-tanuki-green shadow-md'
+                                            : 'bg-white text-gray-400 border-gray-200 hover:border-tanuki-green/30']">
+                                <Pencil class="w-5 h-5" />
+                                <span>Écriture (Tracé)</span>
+
+                                <!-- Disabled Tooltip -->
+                                <span v-if="!categories.kanji && !categories.kana"
+                                    class="absolute -bottom-8 bg-black/80 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
+                                    Kanjis ou Kanas requis
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <h3 class="font-bold text-tanuki-brown-dark mb-6 flex items-center gap-2 text-lg">
+                        <Settings2 class="w-5 h-5 text-tanuki-green" />
+                        <span>Catégories</span>
+                    </h3>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button v-for="(val, key) in categories" :key="key" @click="toggleCategory(key as any)" :class="['flex flex-col items-center gap-3 p-4 rounded-2xl transition-all border-2 relative group',
+                            val
+                                ? 'bg-tanuki-green/5 border-tanuki-green text-tanuki-green'
+                                : 'bg-white border-tanuki-beige text-gray-400 hover:border-tanuki-green/20']">
+
+                            <div :class="['p-3 rounded-full transition-colors',
+                                val ? 'bg-tanuki-green/20' : 'bg-tanuki-beige/50 group-hover:bg-tanuki-beige']">
+                                <Grid3x3 v-if="key === 'kana'" class="w-6 h-6" />
+                                <BookOpen v-else-if="key === 'vocabulary'" class="w-6 h-6" />
+                                <ScrollText v-else-if="key === 'kanji'" class="w-6 h-6" />
+                                <PenTool v-else-if="key === 'grammar'" class="w-6 h-6" />
+                                <MessageSquare v-else-if="key === 'sentences'" class="w-6 h-6" />
+                            </div>
+
+                            <span class="font-bold capitalize text-sm">
+                                {{ key === 'kana' ? 'Kanas' : key === 'vocabulary' ? 'Vocabulaire' : key === 'kanji' ?
+                                    'Kanjis' : key === 'sentences' ? 'Phrases' : 'Grammaire' }}
+                            </span>
+
+                            <!-- Check Indicator -->
+                            <div v-if="val"
+                                class="absolute -top-2 -right-2 bg-tanuki-green text-white p-1 rounded-full border-2 border-white">
+                                <Check class="w-3 h-3 stroke-3" />
+                            </div>
+                        </button>
+                    </div>
+
+                    <p class="text-xs text-gray-400 mt-6 text-center italic">
+                        Activez les catégories pour les inclure dans votre session d'entraînement.
+                    </p>
                 </div>
 
-                <p v-if="currentQuestionType === 'reading'" class="text-gray-400">Choisir la bonne Signification /
-                    Romaji</p>
+                <!-- Quiz Card -->
+                <div
+                    class="card w-full text-center mb-4 relative overflow-hidden group p-4 md:p-8 pt-8! min-h-[250px] md:min-h-[unset] flex flex-col items-center justify-center bg-white border-2 border-tanuki-green">
 
-                <!-- Feedback Overlay -->
-                <div v-if="isAnswered"
-                    class="absolute inset-0 flex items-center justify-center bg-opacity-90 transition-all backdrop-blur-sm z-20 pointer-events-none"
-                    :class="isSkipped ? 'bg-gray-100/50' : (currentQuestionType === 'writing' ? 'bg-green-100/30' : (isCorrect ? 'bg-green-100/50' : 'bg-red-100/50'))">
-
-                    <div v-if="isSkipped" class="text-gray-500 flex flex-col items-center animate-bounce-short">
-                        <img src="/images/tanuki_skip.png" alt="Tanuki Skipped" class="w-32 h-32 object-contain" />
-                        <span class="text-2xl font-bold mt-2">Passé</span>
-                        <span class="text-sm font-normal">Série en pause</span>
+                    <!-- Type Badge -->
+                    <div
+                        class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded flex items-center gap-2 z-20">
+                        <span>
+                            {{ 'char' in currentQuestion ? 'Kana' : 'character' in currentQuestion ? 'Kanji' :
+                                'word' in currentQuestion ? 'Vocabulaire' : 'japanese' in currentQuestion ? 'Phrase' :
+                                    'Grammaire' }}
+                        </span>
+                        <span v-if="currentQuestionType === 'writing'"
+                            class="bg-tanuki-green text-white px-1.5 rounded-sm">
+                            ÉCRITURE
+                        </span>
                     </div>
 
-                    <div v-else-if="isCorrect || currentQuestionType === 'writing'"
-                        class="text-green-600 flex flex-col items-center animate-bounce-short">
-                        <img src="/images/tanuki_success.png" alt="Tanuki Success" class="w-32 h-32 object-contain" />
-                        <span class="text-2xl font-bold mt-2">Excellent !</span>
+                    <!-- Fixed height container for question text to prevent layout shift -->
+                    <div v-if="currentQuestionType === 'reading'"
+                        class="h-32 md:h-40 w-full flex items-center justify-center mb-4 pt-4">
+                        <div :class="['font-bold text-tanuki-brown-dark text-wrap text-center', fontSizeClass]">
+                            {{ getDisplayText(currentQuestion) }}
+                        </div>
                     </div>
 
-                    <div v-else class="text-red-500 flex flex-col items-center">
-                        <X class="w-20 h-20" />
-                        <span class="text-2xl font-bold">Oups !</span>
-                        <span class="text-lg text-gray-600 mt-2">C'était "{{ getAnswerText(currentQuestion) }}"</span>
+                    <div v-else-if="currentQuestionType === 'writing'"
+                        class="w-full h-full flex items-center justify-center">
+                        <div class="relative z-10 md:scale-125 flex flex-col items-center">
+                            <KanjiWriter v-if="'character' in currentQuestion" :character="currentQuestion.character!"
+                                :size="200" initialMode="quiz" @quiz-success="handleWritingSuccess" />
+
+                            <KanaWriter v-else-if="'char' in currentQuestion" :character="currentQuestion.char!"
+                                :size="200" initialMode="quiz" @quiz-success="handleWritingSuccess" />
+
+                            <!-- Manual Validation Button -->
+                            <div v-if="!isAnswered" class="mt-4">
+                                <button @click="handleManualSuccess"
+                                    class="text-xs text-gray-400 hover:text-tanuki-brown underline decoration-dotted transition-colors">
+                                    Passer (pas de gain d'expérience)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p v-if="currentQuestionType === 'reading'" class="text-gray-400">Choisir la bonne Signification /
+                        Romaji</p>
+
+                </div>
+
+                <!-- Options -->
+                <div v-if="currentQuestionType === 'reading'" class="grid grid-cols-2 gap-3 md:gap-4 w-full">
+                    <button v-for="(option, idx) in options" :key="idx" @click="checkAnswer(option)"
+                        :disabled="isAnswered" class="btn-3d w-full z-10 relative group" :class="[
+                            isAnswered && getId(option) === getId(currentQuestion) ? 'bg-green-500 text-white border-green-700' :
+                                isAnswered && selectedOption === option && getId(option) !== getId(currentQuestion) ? 'bg-red-500 text-white border-red-700' :
+                                    'btn-secondary'
+                        ]">
+                        <span
+                            class="absolute top-2 left-3 text-[10px] font-bold opacity-30 group-hover:opacity-100 transition-opacity hidden md:block border border-current px-1 rounded">{{
+                                idx + 1 }}</span>
+                        <span class="text-sm md:text-base leading-tight">{{ getAnswerText(option) }}</span>
+                    </button>
+                </div>
+
+            </div>
+        </template>
+
+        <!-- Bottom Feedback Drawer (Unified Style) -->
+        <Transition name="drawer">
+            <div v-if="isAnswered"
+                class="fixed bottom-0 left-0 right-0 z-50 p-3 md:p-6 md:pb-8! border-t-2 animate-drawer-in"
+                :class="isSkipped ? 'bg-gray-50 border-gray-200' : (isCorrect || currentQuestionType === 'writing' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200')">
+                <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-4 md:gap-6 flex-1">
+                        <img :src="isSkipped ? '/images/tanuki_skip.png' : (isCorrect || currentQuestionType === 'writing' ? '/images/tanuki_success.png' : '/images/tanuki_failure.png')"
+                            :alt="isCorrect ? 'Succès' : 'Échec'"
+                            class="w-16 h-16 md:w-24 md:h-24 object-contain animate-bounce-short" />
+
+                        <div class="flex-1">
+                            <h3 class="text-xl md:text-2xl font-bold"
+                                :class="isSkipped ? 'text-gray-700' : (isCorrect || currentQuestionType === 'writing' ? 'text-green-700' : 'text-red-700')">
+                                {{ feedbackTitle }}
+                            </h3>
+                            <div v-if="!isCorrect && !isSkipped && currentQuestionType !== 'writing'" class="mt-1">
+                                <p class="text-xs font-bold text-red-400 uppercase tracking-widest">Réponse correcte :
+                                </p>
+                                <p class="text-base md:text-lg font-bold text-gray-800 leading-tight">
+                                    {{ getAnswerText(currentQuestion) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center w-full md:w-auto">
+                        <button @click="nextQuestion"
+                            class="btn-3d w-full md:w-48 flex items-center justify-center gap-2 group py-3!"
+                            :class="isSkipped ? 'btn-secondary' : (isCorrect || currentQuestionType === 'writing' ? 'btn-primary' : 'btn-danger')">
+                            <span class="font-bold">Continuer</span>
+                            <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Options -->
-            <div v-if="currentQuestionType === 'reading'" class="grid grid-cols-2 gap-3 md:gap-4 w-full">
-                <button v-for="(option, idx) in options" :key="idx" @click="checkAnswer(option)" :disabled="isAnswered"
-                    class="btn-3d w-full z-10 relative group" :class="[
-                        isAnswered && getId(option) === getId(currentQuestion) ? 'bg-green-500 text-white border-green-700' :
-                            isAnswered && selectedOption === option && getId(option) !== getId(currentQuestion) ? 'bg-red-500 text-white border-red-700' :
-                                'btn-secondary'
-                    ]">
-                    <span
-                        class="absolute top-2 left-3 text-[10px] font-bold opacity-30 group-hover:opacity-100 transition-opacity hidden md:block border border-current px-1 rounded">{{
-                            idx + 1 }}</span>
-                    <span class="text-sm md:text-base leading-tight">{{ getAnswerText(option) }}</span>
-                </button>
-            </div>
-
-            <!-- Next Button -->
-            <button @click="nextQuestion"
-                class="mt-8 btn-3d btn-gold w-full flex items-center justify-center gap-2 group"
-                :class="isAnswered ? 'animate-fade-in' : 'invisible'">
-                <span>Question Suivante</span>
-                <span
-                    class="text-[10px] font-bold bg-white/20 px-1.5 py-0.5 rounded text-white/80 hidden md:block group-hover:bg-white/30 transition-colors">ENTER</span>
-            </button>
-        </div>
+        </Transition>
     </div>
 </template>
 
@@ -693,5 +667,42 @@ onUnmounted(() => {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Drawer Transitions */
+.drawer-enter-active,
+.drawer-leave-active {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.drawer-enter-from,
+.drawer-leave-to {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+@keyframes drawer-in {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.animate-drawer-in {
+    animation: drawer-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+    border-bottom: 4px solid #b91c1c;
+}
+
+.btn-danger:active {
+    border-bottom-width: 0;
+    transform: translateY(4px);
 }
 </style>

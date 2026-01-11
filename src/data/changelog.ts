@@ -13,20 +13,34 @@ export const changelog: ChangelogEntry[] = [
     date: '2026-01-11',
     sections: [
       {
-        title: 'Mise en Situation',
+        title: 'Nouveau Jeu : Construction',
         items: [
-          'PHRASES UTILITIES : Apprenez des phrases complètes (Commander au restaurant, Demander son chemin...).',
-          'AUDIO : Écoutez la prononciation correcte de chaque phrase (plus de TTS robotique !).',
-          "CONTEXTE : Chaque phrase est accompagnée d'une note explicative sur quand et comment l'utiliser.",
+          'JEU DE PHRASES : Reconstruisez des phrases japonaises à partir de mots mélangés (Drag & Drop).',
+          'RÈGLE DES 3 ERREURS : Vous avez 3 vies (coeurs) par phrase. Perdre les 3 réinitialise votre série (Combo).',
+          'PIÈGES : Ajout de mots distracteurs pour pimenter le challenge !',
+          'BONUS XP : Gagnez x1.5 XP dans ce mode pour récompenser la difficulté.',
         ],
       },
       {
-        title: 'Interface & Gamification',
+        title: 'Mises à jour Majeures',
         items: [
-          'BIBLIOTHÈQUE UNIFIÉE : Retrouvez désormais vos "Mots" et "Phrases" dans un seul endroit.',
-          "INTERACTIVITÉ : Cliquez sur n'importe quelle carte phrase pour lancer l'audio.",
-          "XP BOOST : Le multiplicateur monte désormais jusqu'à x3.5 en activant tout + le mode écriture !",
-          'DEV MODE : Indicateur visuel pour les développeurs (Local).',
+          'BARRE DE VALIDATION : Nouveau système de retour "tiroir" (style Duolingo) en bas de l\'écran pour une meilleure ergonomie mobile.',
+          'TYPOGRAPHIE PREMIUM : Nouvelles polices Fredoka (Titres), Outfit (Corps) et Noto Sans JP (Japonais) pour un rendu professionnel.',
+          'LISIBILITÉ : Taille des jetons fortement augmentée en mode Kana pour distinguer chaque trait.',
+          'BIBLIOTHÈQUE : Mise à jour massive des données (360 phrases) pour supporter le mode de construction Kana.',
+          'UNIFORMISATION : Interface parfaitement alignée entre tous les modes de jeu.',
+        ],
+      },
+      {
+        title: 'Interface & Design',
+        items: [
+          'TYPOGRAPHIE PREMIUM : Nouvelles polices Fredoka (Titres) et Outfit (Corps) pour un look moderne.',
+          'JAPONAIS NET : Intégration de Noto Sans JP pour une lecture parfaite des Kanas et Kanjis.',
+          'LISIBILITÉ : Taille des jetons de mots fortement augmentée en mode Japonais.',
+          'UNIFORMISATION : Alignement parfait des titres et boutons sur toutes les vues de jeu.',
+          'ICÔNES : Remplacement des emojis par des icônes Lucide plus professionnelles.',
+          'BIBLIOTHÈQUE : Les mots et phrases sont maintenant regroupés dans un seul onglet.',
+          'FIX : Correction du bouton "Filtres" qui chevauchait le score sur ordinateur.',
         ],
       },
     ],

@@ -109,8 +109,8 @@ html {
               class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Flashcards
             </RouterLink>
-            <RouterLink to="/quiz" active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Quiz
+            <RouterLink to="/training" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Entraînement
             </RouterLink>
 
             <!-- Auth Section Desktop -->
@@ -182,8 +182,8 @@ html {
               class="font-bold hover:text-tanuki-gold transition-colors">
               Flashcards
             </RouterLink>
-            <RouterLink to="/quiz" active-class="text-tanuki-gold" @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors">Quiz
+            <RouterLink to="/training" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">Entraînement
             </RouterLink>
 
             <!-- Auth Section Mobile -->
@@ -220,7 +220,7 @@ html {
     </header>
 
     <!-- Main Content -->
-    <main class="grow container mx-auto py-1 md:py-8 flex flex-col">
+    <main class="grow container mx-auto py-1 md:py-4 flex flex-col">
       <RouterView v-slot="{ Component }">
         <Transition name="page" mode="out-in">
           <component :is="Component" />
@@ -229,7 +229,7 @@ html {
     </main>
 
     <!-- Footer -->
-    <footer class="bg-tanuki-brown-dark text-tanuki-beige py-2 md:py-4 mt-8 md:mt-12">
+    <footer class="bg-tanuki-brown-dark text-tanuki-beige py-2 md:py-4 mt-4 md:mt-6">
       <div class="container mx-auto px-4 flex flex-col items-center gap-2 md:gap-4">
         <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
         <div class="flex gap-4 text-xs opacity-60">

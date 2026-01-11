@@ -8,18 +8,36 @@
   - **Contextual Learning**: Moved beyond single words to full sentences (Greetings, Restaurant, Shopping, Travel).
   - **Audio**: High-quality audio generation for all new sentences.
   - **Data**: Added ~30 practical N5 sentences with usage context.
+- **New Game: Construction**:
+  - **Mechanics**: Rebuild Japanese sentences from mixed tokens (Drag & Drop or Click).
+  - **Rules**: 3-strikes rule (3 lives) with global streak (Combo) reset on failure.
+  - **Distractors**: Added random words to increase challenge.
+  - **Manual Validation**: Self-correction mode for better memorization with a **new fixed feedback drawer** (Duolingo-style).
+  - **Legibility**: Substantially increased font size for Japanese tokens (`text-base` on mobile, `text-xl` on desktop).
+  - **Massive Data Update**: Manually segmented ~360 sentences with spaces to support 100% of the library in Kana construction mode.
+  - **Toggle**: Added a Romaji/Kana display toggle for game tokens.
 - **Interface**:
+  - **Header Standardization**: Aligned titles and back buttons across Quiz, Construction, and Kana charts for a pixel-perfect layout.
+  - **Icons**: Replaced emojis with professional Lucide icons (Heart, Flame) for a cleaner aesthetic.
   - **Unified Vocabulary**: Merged "Listening" feature into the Vocabulary view as a dedicated tab.
   - **Tabs**: Smooth switching between "Words" and "Sentences".
   - **Search**: Integrated search and category filtering for sentences.
   - **Interactivity**: Sentence cards are now fully clickable to play audio.
+  - **Typography Overhaul**:
+    - **Fredoka**: Premium rounded font for branding and titles.
+    - **Outfit**: Modern geometric font for body text and game tokens.
+    - **Noto Sans JP**: Professional Gothic-style font for crisp Japanese character rendering.
+  - **UX**: Unified the feedback system with a fixed bottom drawer in both Quiz and Construction modes.
 - **Gamification**:
+  - **XP System**: Implemented a **1.5x XP Bonus** for the Construction mode due to its higher difficulty.
   - **XP System**: Adjusted multiplier logic. Max bonus is now **x3.0** (5 categories) plus a **+0.5** bonus for Writing Mode.
 - **Development**:
   - **Dev Mode**: Added a popup indicator when running in development environment.
 - **Improvements**:
   - **Spacing**: Optimized layout spacing and removed visual clutter (icons in tabs).
   - **Consistency**: Standardized "Pill" design to match Kana charts.
+- **Fixed**:
+  - **QuizView**: Fixed a syntax error and improved header layout stability.
 
 ## [0.14.1] - 2026-01-10
 
