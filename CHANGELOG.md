@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.15.0] - 2026-01-11
+
+### Added
+
+- **Real-Life Sentences**:
+  - **Contextual Learning**: Moved beyond single words to full sentences (Greetings, Restaurant, Shopping, Travel).
+  - **Audio**: High-quality audio generation for all new sentences.
+  - **Data**: Added ~30 practical N5 sentences with usage context.
+- **Interface**:
+  - **Unified Vocabulary**: Merged "Listening" feature into the Vocabulary view as a dedicated tab.
+  - **Tabs**: Smooth switching between "Words" and "Sentences".
+  - **Search**: Integrated search and category filtering for sentences.
+  - **Interactivity**: Sentence cards are now fully clickable to play audio.
+- **Gamification**:
+  - **XP System**: Adjusted multiplier logic. Max bonus is now **x3.0** (5 categories) plus a **+0.5** bonus for Writing Mode.
+- **Development**:
+  - **Dev Mode**: Added a popup indicator when running in development environment.
+- **Improvements**:
+  - **Spacing**: Optimized layout spacing and removed visual clutter (icons in tabs).
+  - **Consistency**: Standardized "Pill" design to match Kana charts.
+
 ## [0.14.1] - 2026-01-10
 
 ### Fixed

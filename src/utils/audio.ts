@@ -155,3 +155,23 @@ export const playKanjiAudio = (character: string, index: number, text: string) =
     speakJapanese(text)
   })
 }
+
+/**
+ * Attempts to play a sentence audio file.
+ * URL: {AUDIO_BASE_URL}/sentences/{id}.mp3
+ *
+ * @param id - The sentence ID (e.g. 'aisatsu_01')
+ * @param text - Fallback text to speak via TTS if file missing
+ */
+export const playSentenceAudio = (id: string, text: string) => {
+  // Add timestamp to bust browser cache since files might update
+  const audioPath = `${AUDIO_BASE_URL}/sentences/${id}.mp3?t=${Date.now()}`
+  const audio = new Audio(audioPath)
+
+  audio.play().catch(() => {
+    console.warn(`Missing audio file for sentence: ${id}`)
+    // Fallback to TTS or just log warning depending on preference.
+    // For now, let's fallback to TTS so it works even if files aren't uploaded yet.
+    speakJapanese(text)
+  })
+}

@@ -4,7 +4,8 @@ import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
 import { kanjiList, type Kanji } from '@/data/kanji';
 import { grammarLessons, type GrammarLesson } from '@/data/grammar';
-import { Check, X, Trophy, Settings2, Grid3x3, BookOpen, ScrollText, PenTool, Eye, Pencil } from 'lucide-vue-next';
+import { sentences, type Sentence } from '@/data/sentences';
+import { Check, X, Trophy, Settings2, Grid3x3, BookOpen, ScrollText, PenTool, Eye, Pencil, MessageSquare } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/userStore';
 import { happyConfetti } from '@/utils/confetti';
 import { onMounted, onUnmounted } from 'vue';
@@ -14,7 +15,7 @@ import KanaWriter from '@/components/kana/KanaWriter.vue';
 
 const isLoading = ref(true);
 
-type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson) & {
+type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson | Sentence) & {
     romaji?: string;
     meaning?: string | string[];
     title?: string;
@@ -22,6 +23,8 @@ type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson) & {
     char?: string;
     character?: string;
     word?: string;
+    japanese?: string;
+    translation?: string;
 };
 
 const userStore = useUserStore();
@@ -32,7 +35,8 @@ const categories = ref(savedCategories ? JSON.parse(savedCategories) : {
     kana: true,
     vocabulary: true,
     kanji: true,
-    grammar: true
+    grammar: true,
+    sentences: true
 });
 
 // Modes - Init from LocalStorage
@@ -92,8 +96,9 @@ function isQuestionValid(item: QuizItem, type: 'reading' | 'writing'): boolean {
     if ('char' in item && !categories.value.kana) return false;
     if ('character' in item && !categories.value.kanji) return false;
     if ('word' in item && !categories.value.vocabulary) return false;
-    // Fallback for Grammar (assuming it's the remaining case)
-    if (!('char' in item) && !('character' in item) && !('word' in item) && !categories.value.grammar) return false;
+    if ('japanese' in item && !categories.value.sentences) return false;
+    // Fallback for Grammar
+    if (!('char' in item) && !('character' in item) && !('word' in item) && !('japanese' in item) && !categories.value.grammar) return false;
 
     return true;
 }
@@ -111,6 +116,9 @@ const filteredItems = computed(() => {
     }
     if (categories.value.grammar) {
         items = [...items, ...grammarLessons] as QuizItem[];
+    }
+    if (categories.value.sentences) {
+        items = [...items, ...sentences] as QuizItem[];
     }
     return items;
 });
@@ -141,6 +149,7 @@ function getId(item: QuizItem): string {
 }
 
 function getAnswerText(item: QuizItem): string {
+    if ('translation' in item && item.translation) return item.translation; // For sentences
     if ('meaning' in item && item.meaning) {
         const m = item.meaning;
         if (Array.isArray(m)) return m[0] || '';
@@ -292,6 +301,7 @@ function getDisplayText(item: QuizItem) {
     if ('char' in item && item.char) return item.char;
     if ('character' in item && item.character) return item.character;
     if ('word' in item && item.word) return item.word;
+    if ('japanese' in item && item.japanese) return item.japanese;
     if ('title' in item && item.title) return item.title;
     return '';
 }
@@ -324,13 +334,24 @@ function toggleCategory(cat: keyof typeof categories.value) {
 }
 
 const xpMultiplier = computed(() => {
+    let multiplier = 1.0;
     const activeCount = Object.values(categories.value).filter(Boolean).length;
+
+    // Base multiplier based on category count
     switch (activeCount) {
-        case 4: return 2.0;
-        case 3: return 1.5;
-        case 2: return 1.2;
-        default: return 1.0;
+        case 5: multiplier = 3.0; break;
+        case 4: multiplier = 2.0; break;
+        case 3: multiplier = 1.5; break;
+        case 2: multiplier = 1.2; break;
+        default: multiplier = 1.0;
     }
+
+    // Writing Mode Bonus (Harder)
+    if (modes.value.writing) {
+        multiplier += 0.5;
+    }
+
+    return multiplier;
 });
 
 const handleKeydown = (e: KeyboardEvent) => {
@@ -462,12 +483,13 @@ onUnmounted(() => {
                             <BookOpen v-else-if="key === 'vocabulary'" class="w-6 h-6" />
                             <ScrollText v-else-if="key === 'kanji'" class="w-6 h-6" />
                             <PenTool v-else-if="key === 'grammar'" class="w-6 h-6" />
+                            <MessageSquare v-else-if="key === 'sentences'" class="w-6 h-6" />
                         </div>
 
                         <span class="font-bold capitalize text-sm">
                             {{ key === 'kana' ? 'Kanas' : key === 'vocabulary' ? 'Vocabulaire' : key === 'kanji' ?
                                 'Kanjis'
-                                : 'Grammaire' }}
+                                : key === 'sentences' ? 'Phrases' : 'Grammaire' }}
                         </span>
 
                         <!-- Check Indicator -->
@@ -492,7 +514,7 @@ onUnmounted(() => {
                     class="absolute top-4 left-4 text-[10px] uppercase font-bold tracking-widest text-tanuki-brown/40 border border-tanuki-brown/20 px-2 py-1 rounded flex items-center gap-2 z-20">
                     <span>
                         {{ 'char' in currentQuestion ? 'Kana' : 'character' in currentQuestion ? 'Kanji' : 'word' in
-                            currentQuestion ? 'Vocabulaire' : 'Grammaire' }}
+                            currentQuestion ? 'Vocabulaire' : 'japanese' in currentQuestion ? 'Phrase' : 'Grammaire' }}
                     </span>
                     <span v-if="currentQuestionType === 'writing'" class="bg-tanuki-green text-white px-1.5 rounded-sm">
                         ÉCRITURE
