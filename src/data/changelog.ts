@@ -13,16 +13,19 @@ export const changelog: ChangelogEntry[] = [
     date: '2026-01-11',
     sections: [
       {
-        title: 'Mise en Situation',
+        title: 'Nouveau Jeu : Construction',
         items: [
-          'PHRASES UTILITIES : Apprenez des phrases complètes (Commander au restaurant, Demander son chemin...).',
-          'AUDIO : Écoutez la prononciation correcte de chaque phrase (plus de TTS robotique !).',
-          "CONTEXTE : Chaque phrase est accompagnée d'une note explicative sur quand et comment l'utiliser.",
+          'JEU DE PHRASES : Reconstruisez des phrases japonaises à partir de mots mélangés (Drag & Drop).',
+          'RÈGLE DES 3 ERREURS : Vous avez 3 vies (coeurs) par phrase. Perdre les 3 réinitialise votre série (Combo).',
+          'PIÈGES : Ajout de mots distracteurs pour pimenter le challenge !',
+          'BONUS XP : Gagnez x1.5 XP dans ce mode pour récompenser la difficulté.',
         ],
       },
       {
         title: 'Interface & Gamification',
         items: [
+          'UNIFORMISATION : Alignement parfait des titres et boutons "Retour" sur toutes les vues de jeu.',
+          'ICÔNES : Remplacement des emojis par des icônes Lucide (Coeurs, Flammes) plus professionnelles.',
           'BIBLIOTHÈQUE UNIFIÉE : Retrouvez désormais vos "Mots" et "Phrases" dans un seul endroit.',
           "INTERACTIVITÉ : Cliquez sur n'importe quelle carte phrase pour lancer l'audio.",
           "XP BOOST : Le multiplicateur monte désormais jusqu'à x3.5 en activant tout + le mode écriture !",
