@@ -178,16 +178,17 @@ onMounted(() => {
         <!-- === TAB: WORDS === -->
         <div v-if="activeTab === 'words'"
           class="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <div class="w-full max-w-4xl flex flex-col md:flex-row justify-center items-center gap-2 mb-6">
+          <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6 mx-auto">
             <!-- Search (Centered) -->
-            <div class="relative w-full max-w-md">
+            <div class="relative w-full max-w-md mx-auto z-10">
               <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input v-model="searchQuery" type="text" placeholder="Rechercher (Chat, Inu...)" class="search-bar" />
             </div>
 
             <!-- Filter Button -->
-            <div>
-              <button @click="isFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md h-[46px]">
+            <div
+              class="flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center w-full md:w-auto mt-2 md:mt-0">
+              <button @click="isFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md">
                 <Settings2 class="w-5 h-5" />
                 <span>Filtres</span>
                 <div v-if="selectedCategories.length > 0" class="w-2 h-2 rounded-full bg-tanuki-gold"></div>
@@ -241,18 +242,18 @@ onMounted(() => {
         <div v-if="activeTab === 'sentences'"
           class="w-full max-w-6xl animate-in fade-in slide-in-from-bottom-2 duration-300">
 
-          <div
-            class="w-full max-w-4xl flex flex-col md:flex-row justify-center items-center gap-2 mb-6 ml-auto mr-auto">
+          <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6 mx-auto">
             <!-- Search (Centered) -->
-            <div class="relative w-full max-w-md">
+            <div class="relative w-full max-w-md mx-auto z-10">
               <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input v-model="searchSentenceQuery" type="text" placeholder="Rechercher une phrase..."
                 class="search-bar" />
             </div>
 
             <!-- Filter Button -->
-            <div>
-              <button @click="isSentenceFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md h-[46px]">
+            <div
+              class="flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center w-full md:w-auto mt-2 md:mt-0">
+              <button @click="isSentenceFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md">
                 <Settings2 class="w-5 h-5" />
                 <span>Filtres</span>
                 <div v-if="selectedSentenceCategories.length > 0" class="w-2 h-2 rounded-full bg-tanuki-gold"></div>
