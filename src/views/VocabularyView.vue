@@ -271,13 +271,13 @@ onMounted(() => {
 
             <!-- Grid of Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div v-for="s in filteredSentences" :key="s.id"
-                class="card p-4 hover:shadow-xl transition-all border-2 group flex flex-col relative"
+              <div v-for="s in filteredSentences" :key="s.id" @click="playSentence(s)"
+                class="card p-4 hover:shadow-xl transition-all border-2 group flex flex-col relative cursor-pointer"
                 :class="playingId === s.id ? 'bg-tanuki-green/5 border-tanuki-green' : 'hover:border-tanuki-green-light'">
 
                 <div class="flex items-start gap-4 mb-2">
                   <!-- Audio Button -->
-                  <button @click="playSentence(s)"
+                  <button @click.stop="playSentence(s)"
                     class="w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center transition-all shadow-sm border-2"
                     :class="playingId === s.id
                       ? 'bg-tanuki-green text-white border-tanuki-green scale-110'
@@ -286,11 +286,10 @@ onMounted(() => {
                   </button>
 
                   <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span
-                        class="text-[10px] font-bold px-2 py-0.5 rounded bg-tanuki-beige text-tanuki-brown-dark uppercase tracking-wide border border-tanuki-gold/20">
+                    <div class="mb-1">
+                      <p class="text-xs text-tanuki-brown/60 font-bold tracking-wide uppercase">
                         {{ getSentenceCategoryLabel(s.category) }}
-                      </span>
+                      </p>
                     </div>
                     <p class="text-sm text-stone-400 font-mono truncate">{{ s.romaji }}</p>
                   </div>
