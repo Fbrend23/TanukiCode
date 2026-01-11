@@ -9,8 +9,9 @@
   --color-tanuki-beige: #fefae0;
   --color-tanuki-white: #fdfdfd;
 
-  --font-display: 'Fredoka', sans-serif;
-  --font-body: 'Varela Round', sans-serif;
+  --font-display: 'Fredoka', 'Noto Sans JP', sans-serif;
+  --font-body: 'Outfit', 'Noto Sans JP', sans-serif;
+  --font-japanese: 'Noto Sans JP', sans-serif;
 }
 
 @layer components {
