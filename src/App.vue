@@ -7,6 +7,7 @@ import { ref } from 'vue'
 import { supabase } from '@/lib/supabase'
 import ToastContainer from '@/components/ToastContainer.vue'
 import ChangelogModal from '@/components/ChangelogModal.vue'
+import DevModePopup from '@/components/common/DevModePopup.vue'
 import pkg from '../package.json'
 import defaultTanuki from '@/assets/tanuki-head.png'
 
@@ -252,6 +253,7 @@ html {
     </footer>
     <ToastContainer />
     <ChangelogModal :is-open="isChangelogOpen" @close="isChangelogOpen = false" />
+    <DevModePopup />
   </div>
 </template>
 
