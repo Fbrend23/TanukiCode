@@ -194,12 +194,18 @@ const checkAnswer = () => {
 
 const handleSuccess = () => {
     isCorrect.value = true;
-    happyConfetti();
+
+    // Check for streak milestones (5, 10, 25, 50, 100)
+    const newCombo = userStore.currentCombo + 1;
+    if ([5, 10, 25, 50, 100].includes(newCombo)) {
+        happyConfetti();
+    }
+
     // Play Audio
     if (currentSentence.value) {
         // playSentenceAudio(currentSentence.value.id, currentSentence.value.japanese);
         userStore.recordAnswer(true, xpMultiplier); // Handles score++, XP, totalQuestions++
-        userStore.updateBestCombo(userStore.currentCombo + 1); // Internal combo++
+        userStore.updateBestCombo(newCombo); // Internal combo++
     }
 };
 
