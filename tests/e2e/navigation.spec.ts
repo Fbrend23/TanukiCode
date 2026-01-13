@@ -41,8 +41,8 @@ test.describe('Navigation', () => {
     await navigateTo('Vocabulaire', /.*vocabulary/)
     await expect(page.getByRole('heading', { name: /Vocabulaire/ })).toBeVisible()
 
-    // 5. Quiz
-    await navigateTo('Quiz', /.*quiz/)
-    await expect(page.getByRole('heading', { name: /Quiz/ })).toBeVisible()
+    // 5. Entraînement
+    await navigateTo('Entraînement', /.*training/)
+    await expect(page.getByRole('heading', { name: /Entraînement/ })).toBeVisible()
   })
 })

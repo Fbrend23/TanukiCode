@@ -44,9 +44,9 @@ const displayedKana = computed(() => {
 
 const gridLayoutClass = computed(() => {
     if (currentTab.value === 'yoon') {
-        return 'grid-cols-3 md:grid-cols-[repeat(3,1fr)_auto_repeat(3,1fr)] max-w-5xl gap-2 md:gap-4';
+        return 'grid-cols-3 md:grid-cols-[repeat(3,1fr)_auto_repeat(3,1fr)] max-w-6xl gap-2 md:gap-4';
     }
-    return 'grid-cols-5 max-w-5xl gap-2 md:gap-4';
+    return 'grid-cols-5 max-w-6xl gap-2 md:gap-4';
 });
 
 const userStore = useUserStore();
@@ -121,8 +121,7 @@ onMounted(() => {
                 <MasteryBar :label="`Progression ${mode === 'hiragana' ? 'Hiragana' : 'Katakana'}`"
                     :current="kanaMastered" :total="kanaTotal" class="mb-4" />
 
-                <div
-                    class="flex items-center gap-2 text-tanuki-brown/80 bg-tanuki-beige/30 px-4 rounded-lg mb-1 text-sm animate-fade-in border border-tanuki-beige py-2">
+                <div class="info-banner mb-1">
                     <Info class="w-4 h-4 text-tanuki-gold" />
                     <span>Cliquez sur un kana pour voir les détails et vous entraîner.</span>
                 </div>

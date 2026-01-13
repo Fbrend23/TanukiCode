@@ -6,7 +6,8 @@ const pages = [
   { name: 'kanjis', url: '/kanji' },
   { name: 'vocabulary', url: '/vocabulary' },
   { name: 'grammar', url: '/grammar' },
-  { name: 'quiz', url: '/quiz' },
+  { name: 'quiz', url: '/training/quiz' },
+  { name: 'construction', url: '/training/construction' },
   { name: 'study', url: '/study' },
   { name: 'auth', url: '/auth' },
   { name: 'legal', url: '/legal' },
@@ -26,9 +27,13 @@ test.describe('Visual Regression', () => {
 
       // Define masks for dynamic pages
       const masks = []
-      if (pageInfo.url === '/quiz') {
+      if (pageInfo.url === '/training/quiz') {
         masks.push(page.locator('.card')) // Mask the question card area
         masks.push(page.locator('.grid')) // Mask answer buttons
+      }
+      if (pageInfo.url === '/training/construction') {
+        masks.push(page.locator('.card h2')) // Mask the translation text
+        masks.push(page.locator('.card .min-h-\\[80px\\]')) // Mask the answer zone
       }
       if (pageInfo.url === '/study') {
         masks.push(page.locator('.scene')) // Mask the flashcard content

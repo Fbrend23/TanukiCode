@@ -3,8 +3,9 @@ import { ref, computed, watch } from 'vue';
 import { hiragana, katakana, type KanaChar } from '@/data/kana';
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary';
 import { kanjiList, type Kanji } from '@/data/kanji';
+import { sentences, type Sentence } from '@/data/sentences';
 import { RefreshCw, Volume2 } from 'lucide-vue-next';
-import { speakJapanese, playKanaAudio } from '@/utils/audio';
+import { speakJapanese, playKanaAudio, playSentenceAudio } from '@/utils/audio';
 
 import { useUserStore } from '@/stores/userStore';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
@@ -16,24 +17,34 @@ onMounted(() => {
     isLoading.value = false;
 });
 
-type CardData = (KanaChar | VocabularyWord | Kanji) & { romaji?: string; meaning?: string[] | string };
+type CardData = (KanaChar | VocabularyWord | Kanji | Sentence) & {
+    romaji?: string;
+    meaning?: string[] | string;
+    translation?: string;
+    japanese?: string;
+    character?: string;
+    char?: string;
+    word?: string;
+    id?: string;
+};
 
 const userStore = useUserStore();
-const mode = ref<'hiragana' | 'katakana' | 'vocabulary' | 'kanji'>('hiragana');
+const mode = ref<'hiragana' | 'katakana' | 'vocabulary' | 'kanji' | 'sentences'>('hiragana');
 const isFlipped = ref(false);
 const hideMastered = ref(false);
 
 const currentList = computed(() => {
-    let list: (KanaChar | VocabularyWord | Kanji)[] = [];
+    let list: (KanaChar | VocabularyWord | Kanji | Sentence)[] = [];
     if (mode.value === 'hiragana') list = hiragana.filter(k => k.char);
     else if (mode.value === 'katakana') list = katakana.filter(k => k.char);
     else if (mode.value === 'kanji') list = kanjiList;
+    else if (mode.value === 'sentences') list = sentences;
     else list = vocabulary;
 
     if (hideMastered.value) {
         return list.filter(item => {
-            const id = 'char' in item ? item.char : ('word' in item ? item.word : item.character);
-            return !userStore.masteredItems.includes(id);
+            const id = 'char' in item ? item.char : ('word' in item ? item.word : ('japanese' in item ? item.id : item.character));
+            return !userStore.masteredItems.includes(id!);
         });
     }
     return list;
@@ -63,6 +74,9 @@ const frontText = computed(() => {
     if ('word' in card) {
         return (card as VocabularyWord).word;
     }
+    if ('japanese' in card) {
+        return (card as Sentence).japanese;
+    }
     return '';
 });
 
@@ -85,7 +99,11 @@ function flipCard() {
 function playSound(e?: Event) {
     if (e) e.stopPropagation();
 
-    if (mode.value === 'hiragana' || mode.value === 'katakana') {
+    if ('japanese' in currentCard.value && currentCard.value.id) {
+        // Sentences
+        playSentenceAudio(currentCard.value.id, currentCard.value.japanese || '');
+    }
+    else if (mode.value === 'hiragana' || mode.value === 'katakana') {
         const card = currentCard.value as KanaChar;
         // Uses static mp3 from Supabase
         playKanaAudio(card.char, card.romaji);
@@ -96,7 +114,7 @@ function playSound(e?: Event) {
 }
 
 const fontSizeClass = computed(() => {
-    const len = frontText.value.length;
+    const len = frontText.value?.length || 0;
     if (len === 1) return 'text-8xl md:text-9xl';
     if (len <= 3) return 'text-6xl md:text-8xl';
     if (len <= 5) return 'text-5xl md:text-7xl';
@@ -133,6 +151,10 @@ const fontSizeClass = computed(() => {
                     :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'vocabulary' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
                     Vocabulaire
                 </button>
+                <button @click="mode = 'sentences'"
+                    :class="['px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold transition-all capitalize text-xs md:text-base', mode === 'sentences' ? 'bg-tanuki-green text-white shadow-sm' : 'text-gray-500 hover:text-tanuki-green']">
+                    Phrases
+                </button>
             </div>
 
             <!-- Filter Toggle -->
@@ -152,7 +174,7 @@ const fontSizeClass = computed(() => {
                         class="face front absolute w-full h-full bg-white flex items-center justify-center rounded-2xl backface-hidden border-2 border-tanuki-green">
                         <div class="text-center px-4">
                             <span
-                                :class="['block font-bold text-tanuki-brown-dark mb-2 break-all transition-all', fontSizeClass]">{{
+                                :class="['block font-bold text-tanuki-brown-dark mb-2 break-word transition-all', fontSizeClass]">{{
                                     frontText }}</span>
                             <!-- Show reading for vocab on front if needed, or keeping it hidden -->
                         </div>
@@ -170,14 +192,16 @@ const fontSizeClass = computed(() => {
                     <div
                         class="face back absolute w-full h-full bg-tanuki-green text-white flex flex-col items-center justify-center rounded-2xl backface-hidden rotate-y-180 border-2 border-tanuki-green">
                         <span class="text-4xl md:text-6xl font-bold mb-4 px-4 text-center">
-                            {{ Array.isArray(currentCard.meaning) ? currentCard.meaning.join(', ') :
-                                (currentCard.meaning ||
-                                    currentCard.romaji) }}
+                            {{ 'translation' in currentCard ? currentCard.translation :
+                                (Array.isArray(currentCard.meaning) ? currentCard.meaning.join(', ') : (currentCard.meaning
+                            || currentCard.romaji)) }}
                         </span>
-                        <span v-if="mode !== 'kanji'" class="text-xl opacity-80">{{ currentCard.meaning ?
+                        <span v-if="mode !== 'kanji'" class="text-xl opacity-80">{{ ('translation' in currentCard ||
+                            currentCard.meaning) ?
                             'Signification' :
                             'Romaji' }}</span>
-                        <span v-if="currentCard.meaning && !Array.isArray(currentCard.meaning)"
+                        <span
+                            v-if="('translation' in currentCard || (currentCard.meaning && !Array.isArray(currentCard.meaning)))"
                             class="text-sm mt-2 opacity-60">({{ currentCard.romaji
                             }})</span>
                     </div>

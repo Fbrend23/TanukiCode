@@ -38,5 +38,9 @@ test.describe('Study / Flashcards', () => {
     await page.getByRole('button', { name: 'Katakana' }).click()
     await expect(page.getByRole('button', { name: 'Katakana' })).toHaveClass(/bg-tanuki-green/)
     await expect(page.getByRole('button', { name: 'Hiragana' })).not.toHaveClass(/bg-tanuki-green/)
+
+    // Switch to Phrases
+    await page.getByRole('button', { name: 'Phrases' }).click()
+    await expect(page.getByRole('button', { name: 'Phrases' })).toHaveClass(/bg-tanuki-green/)
   })
 })

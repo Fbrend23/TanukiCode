@@ -9,6 +9,43 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.15.0',
+    date: '2026-01-11',
+    sections: [
+      {
+        title: 'Nouveau Jeu : Construction',
+        items: [
+          'JEU DE PHRASES : Reconstruisez des phrases japonaises à partir de mots mélangés (Drag & Drop).',
+          'RÈGLE DES 3 ERREURS : Vous avez 3 vies (coeurs) par phrase. Perdre les 3 réinitialise votre série (Combo).',
+          'PIÈGES : Ajout de mots distracteurs pour pimenter le challenge !',
+          'BONUS XP : Gagnez x1.5 XP dans ce mode pour récompenser la difficulté.',
+        ],
+      },
+      {
+        title: 'Mises à jour Majeures',
+        items: [
+          'BARRE DE VALIDATION : Nouveau système de retour "tiroir" (style Duolingo) en bas de l\'écran pour une meilleure ergonomie mobile.',
+          'TYPOGRAPHIE PREMIUM : Nouvelles polices Fredoka (Titres), Outfit (Corps) et Noto Sans JP (Japonais) pour un rendu professionnel.',
+          'LISIBILITÉ : Taille des jetons fortement augmentée en mode Kana pour distinguer chaque trait.',
+          'BIBLIOTHÈQUE : Mise à jour massive des données (360 phrases) pour supporter le mode de construction Kana.',
+          'UNIFORMISATION : Interface parfaitement alignée entre tous les modes de jeu.',
+        ],
+      },
+      {
+        title: 'Interface & Design',
+        items: [
+          'TYPOGRAPHIE PREMIUM : Nouvelles polices Fredoka (Titres) et Outfit (Corps) pour un look moderne.',
+          'JAPONAIS NET : Intégration de Noto Sans JP pour une lecture parfaite des Kanas et Kanjis.',
+          'LISIBILITÉ : Taille des jetons de mots fortement augmentée en mode Japonais.',
+          'UNIFORMISATION : Alignement parfait des titres et boutons sur toutes les vues de jeu.',
+          'ICÔNES : Remplacement des emojis par des icônes Lucide plus professionnelles.',
+          'BIBLIOTHÈQUE : Les mots et phrases sont maintenant regroupés dans un seul onglet.',
+          'FIX : Correction du bouton "Filtres" qui chevauchait le score sur ordinateur.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.14.1',
     date: '2026-01-10',
     sections: [
