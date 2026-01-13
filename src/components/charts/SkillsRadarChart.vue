@@ -28,18 +28,22 @@ const chartData = computed(() => {
 
   const masteredIds = userStore.masteredItems
 
-  const countMastered = <T,>(list: T[], idKey: keyof T) => {
+  const countMastered = <T extends object>(list: T[], idKey: keyof T) => {
     return list.filter((item) => {
       const id = item[idKey]
-      return (
-        typeof id === 'string' &&
-        masteredIds.includes(
-          id ||
-            ((item as any).char as string) ||
-            ((item as any).character as string) ||
-            ((item as any).word as string),
-        )
-      )
+      let targetId: string | undefined
+
+      if (typeof id === 'string') {
+        targetId = id
+      } else if ('char' in item && typeof item.char === 'string') {
+        targetId = item.char
+      } else if ('character' in item && typeof item.character === 'string') {
+        targetId = item.character
+      } else if ('word' in item && typeof item.word === 'string') {
+        targetId = item.word
+      }
+
+      return targetId && masteredIds.includes(targetId)
     }).length
   }
 
