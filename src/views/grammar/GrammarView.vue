@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { grammarLessons } from '../data/grammar';
-import { Search, ChevronRight, Check, Settings2 } from 'lucide-vue-next';
-import { useUserStore } from '@/stores/userStore';
-import { useAuthStore } from '@/stores/authStore';
-import MasteryBar from '@/components/MasteryBar.vue';
-import FilterModal from '@/components/FilterModal.vue';
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { grammarLessons } from '@/data/grammar'
+import { Search, ChevronRight, Check, Settings2 } from 'lucide-vue-next'
+import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
+import MasteryBar from '@/components/common/MasteryBar.vue'
+import FilterModal from '@/components/modals/FilterModal.vue'
 
-const router = useRouter();
-const searchQuery = ref('');
-const selectedCategories = ref<string[]>([]);
-const isFilterModalOpen = ref(false);
-const userStore = useUserStore();
-const authStore = useAuthStore();
+const router = useRouter()
+const searchQuery = ref('')
+const selectedCategories = ref<string[]>([])
+const isFilterModalOpen = ref(false)
+const userStore = useUserStore()
+const authStore = useAuthStore()
 
-const isMastered = (id: string) => userStore.masteredItems.includes(id);
+const isMastered = (id: string) => userStore.masteredItems.includes(id)
 
 // Mastery Stats
-const totalLessons = computed(() => grammarLessons.length);
+const totalLessons = computed(() => grammarLessons.length)
 const masteredLessons = computed(() => {
-  return grammarLessons.filter(l => userStore.masteredItems.includes(l.id)).length;
-});
+  return grammarLessons.filter((l) => userStore.masteredItems.includes(l.id)).length
+})
 
 const categories = [
   { value: 'all', label: 'Tout' },
   { value: 'particles', label: 'Particules' },
   { value: 'basics', label: 'Bases' },
   { value: 'conjugation', label: 'Conjugaison' },
-];
+]
 
 const toggleCategory = (cat: string) => {
   if (cat === 'all') {
@@ -46,35 +46,37 @@ const toggleCategory = (cat: string) => {
 
 const filteredLessons = computed(() => {
   return grammarLessons.filter((lesson) => {
-    const matchesSearch = lesson.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      lesson.summary.toLowerCase().includes(searchQuery.value.toLowerCase());
-    const matchesCategory = selectedCategories.value.length === 0 || selectedCategories.value.includes(lesson.category);
-    return matchesSearch && matchesCategory;
-  });
-});
+    const matchesSearch =
+      lesson.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      lesson.summary.toLowerCase().includes(searchQuery.value.toLowerCase())
+    const matchesCategory =
+      selectedCategories.value.length === 0 || selectedCategories.value.includes(lesson.category)
+    return matchesSearch && matchesCategory
+  })
+})
 
 const navigateToLesson = (id: string) => {
-  router.push(`/grammar/${id}`);
-};
+  router.push(`/grammar/${id}`)
+}
 
 const getCategoryLabel = (cat: string) => {
-  return categories.find(c => c.value === cat)?.label || cat;
-};
+  return categories.find((c) => c.value === cat)?.label || cat
+}
 
 const emptyStateMessage = computed(() => {
-  if (searchQuery.value) return "Aucune leçon ne correspond à votre recherche.";
-  if (selectedCategories.value.length > 0) return "Aucune leçon dans cette catégorie.";
-  return "Aucune leçon disponible.";
-});
+  if (searchQuery.value) return 'Aucune leçon ne correspond à votre recherche.'
+  if (selectedCategories.value.length > 0) return 'Aucune leçon dans cette catégorie.'
+  return 'Aucune leçon disponible.'
+})
 
-import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
-import { onMounted } from 'vue';
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import { onMounted } from 'vue'
 
-const isLoading = ref(true);
+const isLoading = ref(true)
 
 onMounted(() => {
-  isLoading.value = false;
-});
+  isLoading.value = false
+})
 </script>
 
 <template>
@@ -114,14 +116,19 @@ onMounted(() => {
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 w-full max-w-6xl px-0 md:px-4">
-
         <div v-for="lesson in filteredLessons" :key="lesson.id" @click="navigateToLesson(lesson.id)"
           class="card p-3 md:p-6 group cursor-pointer hover:shadow-md transition-all flex flex-col h-full border-2 relative"
-          :class="[isMastered(lesson.id) ? 'border-tanuki-green bg-tanuki-green/5' : 'hover:border-tanuki-green-light']">
-
+          :class="[
+            isMastered(lesson.id)
+              ? 'border-tanuki-green bg-tanuki-green/5'
+              : 'hover:border-tanuki-green-light',
+          ]">
           <button v-if="authStore.user" @click.stop="userStore.toggleMastery(lesson.id)"
-            class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20"
-            :class="[isMastered(lesson.id) ? 'bg-tanuki-gold text-white hover:bg-amber-400' : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity']">
+            class="absolute top-2 left-2 p-1 rounded-full transition-colors z-20" :class="[
+              isMastered(lesson.id)
+                ? 'bg-tanuki-gold text-white hover:bg-amber-400'
+                : 'bg-gray-100 text-gray-300 hover:bg-gray-200 hover:text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity',
+            ]">
             <Check class="w-3 h-3 stroke-4" />
           </button>
 
@@ -137,8 +144,10 @@ onMounted(() => {
             </span>
           </div>
 
-          <h3 class="text-sm md:text-2xl font-bold transition-colors mb-1 md:mb-2 mt-8 md:mt-6"
-            :class="isMastered(lesson.id) ? 'text-tanuki-green' : 'text-tanuki-brown group-hover:text-tanuki-green'">
+          <h3 class="text-sm md:text-2xl font-bold transition-colors mb-1 md:mb-2 mt-8 md:mt-6" :class="isMastered(lesson.id)
+            ? 'text-tanuki-green'
+            : 'text-tanuki-brown group-hover:text-tanuki-green'
+            ">
             {{ lesson.title }}
           </h3>
 
@@ -165,10 +174,16 @@ onMounted(() => {
       <div class="flex flex-col gap-3">
         <h3 class="font-bold text-tanuki-brown">Catégorie</h3>
         <div class="flex flex-wrap gap-2">
-          <button v-for="cat in categories" :key="cat.value" @click="toggleCategory(cat.value)" :class="['px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
-            (cat.value === 'all' ? selectedCategories.length === 0 : selectedCategories.includes(cat.value))
+          <button v-for="cat in categories" :key="cat.value" @click="toggleCategory(cat.value)" :class="[
+            'px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
+            (
+              cat.value === 'all'
+                ? selectedCategories.length === 0
+                : selectedCategories.includes(cat.value)
+            )
               ? 'bg-tanuki-green text-white border-tanuki-green'
-              : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50']">
+              : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50',
+          ]">
             {{ cat.label }}
           </button>
         </div>

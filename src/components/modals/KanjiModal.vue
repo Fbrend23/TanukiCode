@@ -1,40 +1,37 @@
 <script setup lang="ts">
-import { X, BookOpen, PenTool, Check } from 'lucide-vue-next';
-import { type Kanji } from '@/data/kanji';
-import { onMounted, onUnmounted, ref, watch, computed } from 'vue';
-import KanjiWriter from './kanji/KanjiWriter.vue';
+import { X, BookOpen, PenTool, Check } from 'lucide-vue-next'
+import { type Kanji } from '@/data/kanji'
+import { onMounted, onUnmounted, ref, watch, computed } from 'vue'
+import KanjiWriter from '@/components/kanji/KanjiWriter.vue'
 import { playKanjiAudio } from '@/utils/audio'
 import { Info, Volume2 } from 'lucide-vue-next'
-import { useUserStore } from '@/stores/userStore';
-import { useAuthStore } from '@/stores/authStore';
-
+import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
 
 const props = defineProps<{
-  kanji: Kanji | null;
-  isOpen: boolean;
-}>();
+  kanji: Kanji | null
+  isOpen: boolean
+}>()
 
 const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+  (e: 'close'): void
+}>()
 
-const userStore = useUserStore();
-const authStore = useAuthStore();
+const userStore = useUserStore()
+const authStore = useAuthStore()
 
 const isMastered = computed(() => {
-  if (!props.kanji) return false;
-  return userStore.masteredItems.includes(props.kanji.character);
-});
+  if (!props.kanji) return false
+  return userStore.masteredItems.includes(props.kanji.character)
+})
 
 const toggleMastery = () => {
   if (props.kanji) {
-    userStore.toggleMastery(props.kanji.character);
+    userStore.toggleMastery(props.kanji.character)
   }
-};
+}
 
-const activeTab = ref<'details' | 'write'>('details');
-
-
+const activeTab = ref<'details' | 'write'>('details')
 
 const showInfo = ref(false)
 
@@ -45,21 +42,24 @@ const playExample = (reading: string, index: number) => {
 
 // Reset tab when modal opens
 onMounted(() => {
-  activeTab.value = 'details';
-});
+  activeTab.value = 'details'
+})
 
 // Empêcher le scroll du body quand la modale est ouverte
-watch(() => props.isOpen, (isOpen) => {
-  if (isOpen) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = 'auto';
-  }
-});
+watch(
+  () => props.isOpen,
+  (isOpen) => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  },
+)
 
 onUnmounted(() => {
-  document.body.style.overflow = 'auto';
-});
+  document.body.style.overflow = 'auto'
+})
 </script>
 
 <template>
@@ -71,7 +71,6 @@ onUnmounted(() => {
       <!-- Modal Content -->
       <div
         class="relative w-full max-w-lg bg-tanuki-beige-light rounded-3xl shadow-2xl overflow-hidden transform transition-all border-4 border-tanuki-beige flex flex-col max-h-[90vh]">
-
         <!-- Header with Kanji -->
         <div class="relative bg-tanuki-green text-white p-8 pb-12 flex flex-col items-center shrink-0">
           <button @click="emit('close')"
@@ -88,7 +87,10 @@ onUnmounted(() => {
             <!-- Check (Right - Absolute to keep Kanji centered) -->
             <button v-if="authStore.user" @click="toggleMastery"
               class="absolute left-full ml-4 md:ml-6 p-3 rounded-full transition-all duration-300 whitespace-nowrap"
-              :class="isMastered ? 'bg-tanuki-gold text-white shadow-lg scale-110 ring-2 ring-white/50' : 'bg-black/20 text-white/40 hover:bg-black/30 hover:text-white'">
+              :class="isMastered
+                  ? 'bg-tanuki-gold text-white shadow-lg scale-110 ring-2 ring-white/50'
+                  : 'bg-black/20 text-white/40 hover:bg-black/30 hover:text-white'
+                ">
               <Check class="w-8 h-8" :class="{ 'stroke-4': isMastered }" />
             </button>
           </div>
@@ -104,14 +106,18 @@ onUnmounted(() => {
           <div class="absolute bottom-0 left-0 right-0 flex justify-center translate-y-1/2 px-6 z-10">
             <div class="flex bg-white rounded-full shadow-lg p-1.5 border border-tanuki-beige">
               <button @click="activeTab = 'details'"
-                class="flex items-center gap-2 px-6 py-2.5 rounded-full transition-all text-sm font-bold"
-                :class="activeTab === 'details' ? 'bg-tanuki-green text-white shadow-md' : 'text-stone-500 hover:bg-stone-100'">
+                class="flex items-center gap-2 px-6 py-2.5 rounded-full transition-all text-sm font-bold" :class="activeTab === 'details'
+                    ? 'bg-tanuki-green text-white shadow-md'
+                    : 'text-stone-500 hover:bg-stone-100'
+                  ">
                 <BookOpen class="w-4 h-4" />
                 Détails
               </button>
               <button @click="activeTab = 'write'"
-                class="flex items-center gap-2 px-6 py-2.5 rounded-full transition-all text-sm font-bold"
-                :class="activeTab === 'write' ? 'bg-tanuki-green text-white shadow-md' : 'text-stone-500 hover:bg-stone-100'">
+                class="flex items-center gap-2 px-6 py-2.5 rounded-full transition-all text-sm font-bold" :class="activeTab === 'write'
+                    ? 'bg-tanuki-green text-white shadow-md'
+                    : 'text-stone-500 hover:bg-stone-100'
+                  ">
                 <PenTool class="w-4 h-4" />
                 Écriture
               </button>
@@ -121,7 +127,6 @@ onUnmounted(() => {
 
         <!-- Scrollable Content -->
         <div class="p-8 pt-12 overflow-y-auto bg-white flex-1">
-
           <!-- Writer Tab -->
           <div v-if="activeTab === 'write'" class="flex flex-col items-center animate-fadeIn min-h-75">
             <div class="w-60 h-60 md:w-70 md:h-70">
@@ -131,13 +136,12 @@ onUnmounted(() => {
 
           <!-- Details Tab -->
           <div v-else class="space-y-8 animate-fadeIn">
-
             <!-- Header Info -->
             <div class="flex justify-center gap-4">
-              <span class="bg-tanuki-beige px-3 py-1 rounded-full text-tanuki-brown text-sm font-bold">JLPT
-                N{{ kanji.jlpt }}</span>
-              <span class="bg-tanuki-beige px-3 py-1 rounded-full text-tanuki-brown text-sm font-bold">{{
-                kanji.strokes }} Traits</span>
+              <span class="bg-tanuki-beige px-3 py-1 rounded-full text-tanuki-brown text-sm font-bold">JLPT N{{
+                kanji.jlpt }}</span>
+              <span class="bg-tanuki-beige px-3 py-1 rounded-full text-tanuki-brown text-sm font-bold">{{ kanji.strokes
+                }} Traits</span>
             </div>
 
             <!-- Info Toggle -->
@@ -151,17 +155,23 @@ onUnmounted(() => {
 
             <div v-if="showInfo"
               class="bg-blue-50 p-4 rounded-xl text-sm text-gray-700 space-y-2 border border-blue-100 animate-fade-in">
-              <p><span class="font-bold text-blue-600">Onyomi (Lecture Chinoise)</span> : Utilisée quand
-                le kanji est combiné (ex: 日本).</p>
-              <p><span class="font-bold text-tanuki-green">Kunyomi (Lecture Japonaise)</span> : Utilisée
-                quand le kanji est seul (ex: 日).</p>
+              <p>
+                <span class="font-bold text-blue-600">Onyomi (Lecture Chinoise)</span> : Utilisée
+                quand le kanji est combiné (ex: 日本).
+              </p>
+              <p>
+                <span class="font-bold text-tanuki-green">Kunyomi (Lecture Japonaise)</span> :
+                Utilisée quand le kanji est seul (ex: 日).
+              </p>
             </div>
 
             <!-- Readings Grid -->
             <div class="grid grid-cols-2 gap-4">
               <!-- Onyomi Card -->
               <div class="bg-blue-50/50 border-2 border-blue-100 p-4 rounded-2xl text-center">
-                <div class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">Onyomi</div>
+                <div class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">
+                  Onyomi
+                </div>
                 <div class="text-xl font-bold text-blue-900 font-body wrap-break-word">
                   {{ kanji.onyomi.length ? kanji.onyomi.join('・') : '-' }}
                 </div>
@@ -169,7 +179,8 @@ onUnmounted(() => {
               <!-- Kunyomi Card -->
               <div class="bg-tanuki-beige/50 border-2 border-tanuki-green-light/30 p-4 rounded-2xl text-center">
                 <div class="text-xs font-bold text-tanuki-green-light uppercase tracking-widest mb-2">
-                  Kunyomi</div>
+                  Kunyomi
+                </div>
                 <div class="text-xl font-bold text-tanuki-brown-dark font-body wrap-break-word">
                   {{ kanji.kunyomi.length ? kanji.kunyomi.join('・') : '-' }}
                 </div>
@@ -186,13 +197,15 @@ onUnmounted(() => {
                   <div class="flex flex-col">
                     <div class="flex flex-wrap items-baseline gap-x-2 md:gap-x-3 gap-y-1">
                       <span class="font-bold text-tanuki-brown-dark text-xl md:text-2xl">{{
-                        ex.word }}</span>
+                        ex.word
+                        }}</span>
                       <span
                         class="text-lg md:text-xl text-tanuki-brown-dark/80 font-bold bg-tanuki-beige/50 px-2 rounded-md">{{
-                          ex.reading }}</span>
+                        ex.reading }}</span>
                     </div>
                     <span class="text-sm md:text-base text-tanuki-green font-bold mt-1">{{
-                      ex.meaning }}</span>
+                      ex.meaning
+                      }}</span>
                   </div>
                   <button @click="playExample(ex.reading, idx)"
                     class="bg-tanuki-gold/10 hover:bg-tanuki-gold/20 active:bg-tanuki-gold/30 text-tanuki-brown p-3 rounded-full transition-colors shrink-0 ml-2">

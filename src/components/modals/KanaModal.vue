@@ -1,57 +1,60 @@
 <script setup lang="ts">
-import { X, PenTool, Volume2, Check } from 'lucide-vue-next';
-import { type KanaChar } from '@/data/kana';
-import { onUnmounted, watch, computed } from 'vue';
-import KanaWriter from './kana/KanaWriter.vue';
-import { playKanaAudio, speakJapanese } from '@/utils/audio';
-import { useUserStore } from '@/stores/userStore';
-import { useAuthStore } from '@/stores/authStore';
+import { X, PenTool, Volume2, Check } from 'lucide-vue-next'
+import { type KanaChar } from '@/data/kana'
+import { onUnmounted, watch, computed } from 'vue'
+import KanaWriter from '@/components/kana/KanaWriter.vue'
+import { playKanaAudio, speakJapanese } from '@/utils/audio'
+import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
 
 const props = defineProps<{
-  kana: KanaChar | null;
-  isOpen: boolean;
-}>();
+  kana: KanaChar | null
+  isOpen: boolean
+}>()
 
 const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+  (e: 'close'): void
+}>()
 
-const userStore = useUserStore();
-const authStore = useAuthStore();
+const userStore = useUserStore()
+const authStore = useAuthStore()
 
 const isMastered = computed(() => {
-  if (!props.kana) return false;
-  const key = props.kana.char || props.kana.romaji || '';
-  return userStore.masteredItems.includes(key);
-});
+  if (!props.kana) return false
+  const key = props.kana.char || props.kana.romaji || ''
+  return userStore.masteredItems.includes(key)
+})
 
 const toggleMastery = () => {
   if (props.kana) {
-    userStore.toggleMastery(props.kana.char || props.kana.romaji || '');
+    userStore.toggleMastery(props.kana.char || props.kana.romaji || '')
   }
-};
+}
 
 const playSound = () => {
-  if (!props.kana) return;
+  if (!props.kana) return
   if (props.kana.romaji) {
-    playKanaAudio(props.kana.char, props.kana.romaji);
+    playKanaAudio(props.kana.char, props.kana.romaji)
   } else {
-    speakJapanese(props.kana.char);
+    speakJapanese(props.kana.char)
   }
 }
 
 // Empêcher le scroll du body quand la modale est ouverte
-watch(() => props.isOpen, (isOpen) => {
-  if (isOpen) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = 'auto';
-  }
-});
+watch(
+  () => props.isOpen,
+  (isOpen) => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  },
+)
 
 onUnmounted(() => {
-  document.body.style.overflow = 'auto';
-});
+  document.body.style.overflow = 'auto'
+})
 </script>
 
 <template>
@@ -63,15 +66,12 @@ onUnmounted(() => {
       <!-- Modal Content -->
       <div
         class="relative w-full max-w-lg min-h-[85vh] md:min-h-0 bg-tanuki-beige-light rounded-3xl shadow-2xl overflow-hidden transform transition-all border-4 border-tanuki-beige flex flex-col">
-
         <!-- Header with Kana -->
         <div class="relative bg-tanuki-green text-white p-4 md:p-6 flex flex-col items-center shrink-0">
           <button @click="emit('close')"
             class="absolute top-2 right-2 md:top-4 md:right-4 p-2 rounded-full hover:bg-white/20 transition-colors">
             <X class="w-5 h-5 md:w-6 md:h-6" />
           </button>
-
-
 
           <div class="flex items-center gap-4 md:gap-8 mb-1">
             <!-- Speaker (Left) -->
@@ -88,10 +88,14 @@ onUnmounted(() => {
 
             <!-- Check (Right) -->
             <button v-if="authStore.user" @click="toggleMastery" class="p-3 rounded-full transition-all duration-300"
-              :class="isMastered ? 'bg-tanuki-gold text-white shadow-lg scale-110 ring-2 ring-white/50' : 'bg-black/20 text-white/40 hover:bg-black/30 hover:text-white'">
+              :class="isMastered
+                  ? 'bg-tanuki-gold text-white shadow-lg scale-110 ring-2 ring-white/50'
+                  : 'bg-black/20 text-white/40 hover:bg-black/30 hover:text-white'
+                ">
               <Check class="w-6 h-6 md:w-8 md:h-8" :class="{ 'stroke-4': isMastered }" />
             </button>
-            <div v-else class="w-12 md:w-14"></div> <!-- Spacer for balance if no user -->
+            <div v-else class="w-12 md:w-14"></div>
+            <!-- Spacer for balance if no user -->
           </div>
 
           <div class="text-xl md:text-2xl font-bold opacity-90 mb-1">{{ kana.romaji }}</div>

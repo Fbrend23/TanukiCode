@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
   Filler,
-  type ScriptableContext
+  type ScriptableContext,
 } from 'chart.js'
 import { Line } from 'vue-chartjs'
 import { computed } from 'vue'
@@ -24,7 +24,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 )
 
 const userStore = useUserStore()
@@ -48,11 +48,11 @@ const chartData = computed(() => {
       {
         label: 'Activité',
         backgroundColor: (context: ScriptableContext<'line'>) => {
-          const ctx = context.chart.ctx;
-          const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-          gradient.addColorStop(0, 'rgba(76, 175, 80, 0.4)');
-          gradient.addColorStop(1, 'rgba(76, 175, 80, 0.0)');
-          return gradient;
+          const ctx = context.chart.ctx
+          const gradient = ctx.createLinearGradient(0, 0, 0, 200)
+          gradient.addColorStop(0, 'rgba(76, 175, 80, 0.4)')
+          gradient.addColorStop(1, 'rgba(76, 175, 80, 0.0)')
+          return gradient
         },
         borderColor: '#4CAF50',
         pointBackgroundColor: '#fff',
@@ -61,9 +61,9 @@ const chartData = computed(() => {
         pointHoverBorderColor: '#fff',
         data: dataPoints,
         fill: true,
-        tension: 0.4
-      }
-    ]
+        tension: 0.4,
+      },
+    ],
   }
 })
 
@@ -72,7 +72,7 @@ const chartOptions = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     tooltip: {
       backgroundColor: '#5D4037',
@@ -80,28 +80,28 @@ const chartOptions = {
       bodyColor: '#fff',
       padding: 10,
       cornerRadius: 8,
-      displayColors: false
-    }
+      displayColors: false,
+    },
   },
   scales: {
     x: {
       grid: {
-        display: false
+        display: false,
       },
       ticks: {
-        color: '#795548'
-      }
+        color: '#795548',
+      },
     },
     y: {
       beginAtZero: true,
       grid: {
-        color: 'rgba(0,0,0,0.05)'
+        color: 'rgba(0,0,0,0.05)',
       },
       ticks: {
-        display: false
-      }
-    }
-  }
+        display: false,
+      },
+    },
+  },
 }
 </script>
 

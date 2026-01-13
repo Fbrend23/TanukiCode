@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { kanjiList, type Kanji } from '@/data/kanji'
-import KanjiCard from '@/components/KanjiCard.vue'
-import KanjiModal from '@/components/KanjiModal.vue'
-import MasteryBar from '@/components/MasteryBar.vue'
-import FilterModal from '@/components/FilterModal.vue'
+import KanjiCard from '@/components/kanji/KanjiCard.vue'
+import KanjiModal from '@/components/modals/KanjiModal.vue'
+import MasteryBar from '@/components/common/MasteryBar.vue'
+import FilterModal from '@/components/modals/FilterModal.vue'
 import { Search, Settings2, Info } from 'lucide-vue-next'
 import { useUserStore } from '@/stores/userStore'
 
@@ -18,11 +18,10 @@ const userStore = useUserStore()
 const hideMastered = ref(false)
 
 // Mastery Stats
-const totalKanji = computed(() => kanjiList.filter(k => k.jlpt === selectedLevel.value).length)
+const totalKanji = computed(() => kanjiList.filter((k) => k.jlpt === selectedLevel.value).length)
 const masteredKanji = computed(() => {
-  return kanjiList.filter(k =>
-    k.jlpt === selectedLevel.value &&
-    userStore.masteredItems.includes(k.character)
+  return kanjiList.filter(
+    (k) => k.jlpt === selectedLevel.value && userStore.masteredItems.includes(k.character),
   ).length
 })
 
@@ -35,29 +34,30 @@ const categories = [
   'Directions',
   'Verbs',
   'Adjectives',
-  'Life'
+  'Life',
 ]
 
 const categoryTranslations: Record<string, string> = {
-  'All': 'Tous',
-  'Numbers': 'Chiffres',
-  'Time': 'Temps',
-  'People': 'Personnes',
-  'Nature': 'Nature',
-  'Directions': 'Directions',
-  'Verbs': 'Verbes',
-  'Adjectives': 'Adjectifs',
-  'Life': 'Quotidien'
+  All: 'Tous',
+  Numbers: 'Chiffres',
+  Time: 'Temps',
+  People: 'Personnes',
+  Nature: 'Nature',
+  Directions: 'Directions',
+  Verbs: 'Verbes',
+  Adjectives: 'Adjectifs',
+  Life: 'Quotidien',
 }
 
 const filteredKanji = computed(() => {
   const query = searchQuery.value.toLowerCase()
-  return kanjiList.filter(k => {
+  return kanjiList.filter((k) => {
     // Filter by JLPT level
     if (k.jlpt !== selectedLevel.value) return false
 
     // Filter by Category
-    if (selectedCategories.value.length > 0 && !selectedCategories.value.includes(k.category)) return false
+    if (selectedCategories.value.length > 0 && !selectedCategories.value.includes(k.category))
+      return false
 
     // Filter by Mastery
     if (hideMastered.value && userStore.masteredItems.includes(k.character)) return false
@@ -67,9 +67,9 @@ const filteredKanji = computed(() => {
 
     return (
       k.character.includes(query) ||
-      k.meaning.some(m => m.toLowerCase().includes(query)) ||
-      k.onyomi.some(r => r.toLowerCase().includes(query)) ||
-      k.kunyomi.some(r => r.toLowerCase().includes(query))
+      k.meaning.some((m) => m.toLowerCase().includes(query)) ||
+      k.onyomi.some((r) => r.toLowerCase().includes(query)) ||
+      k.kunyomi.some((r) => r.toLowerCase().includes(query))
     )
   })
 })
@@ -118,9 +118,9 @@ onMounted(() => {
     <template v-else>
       <div class="flex flex-col items-center w-full max-w-4xl mb-1">
         <div class="text-center mb-2">
-          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">Kanji N{{
-            selectedLevel
-            }}</h1>
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">
+            Kanji N{{ selectedLevel }}
+          </h1>
         </div>
 
         <div class="relative w-full max-w-2xl flex flex-col md:block gap-2 mb-6">
@@ -172,10 +172,12 @@ onMounted(() => {
       <div class="flex flex-col gap-3">
         <h3 class="font-bold text-tanuki-brown">Catégorie</h3>
         <div class="flex flex-wrap gap-2">
-          <button v-for="cat in categories" :key="cat" @click="toggleCategory(cat)" :class="['px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
+          <button v-for="cat in categories" :key="cat" @click="toggleCategory(cat)" :class="[
+            'px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
             (cat === 'All' ? selectedCategories.length === 0 : selectedCategories.includes(cat))
               ? 'bg-tanuki-green text-white border-tanuki-green'
-              : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50']">
+              : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50',
+          ]">
             {{ categoryTranslations[cat] }}
           </button>
         </div>
@@ -188,7 +190,7 @@ onMounted(() => {
         class="flex items-center justify-between p-4 bg-white border-2 border-tanuki-brown rounded-xl cursor-pointer select-none">
         <span class="font-bold text-tanuki-brown">Masquer maîtrisés</span>
         <div class="relative">
-          <input type="checkbox" v-model="hideMastered" class="peer sr-only">
+          <input type="checkbox" v-model="hideMastered" class="peer sr-only" />
           <div
             class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green">
           </div>

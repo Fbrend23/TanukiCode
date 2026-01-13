@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
-import { LogOut, Menu, X } from 'lucide-vue-next';
+import { LogOut, Menu, X } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/authStore'
 import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
 import { supabase } from '@/lib/supabase'
-import ToastContainer from '@/components/ToastContainer.vue'
-import ChangelogModal from '@/components/ChangelogModal.vue'
+import ToastContainer from '@/components/common/ToastContainer.vue'
+import ChangelogModal from '@/components/modals/ChangelogModal.vue'
 import DevModePopup from '@/components/common/DevModePopup.vue'
 import pkg from '../package.json'
 import defaultTanuki from '@/assets/tanuki-head.png'
@@ -14,7 +14,7 @@ import defaultTanuki from '@/assets/tanuki-head.png'
 const auth = useAuthStore()
 const userStore = useUserStore()
 const router = useRouter()
-const appVersion = pkg.version;
+const appVersion = pkg.version
 const isMenuOpen = ref(false)
 const isChangelogOpen = ref(false)
 
@@ -36,7 +36,7 @@ const colors = [
 
 const getColorClass = (colorName: string) => {
   if (colorName && colorName.includes('.')) return 'bg-white'
-  const c = colors.find(c => c.value === colorName)
+  const c = colors.find((c) => c.value === colorName)
   return c ? c.bg : 'bg-tanuki-gold'
 }
 
@@ -154,7 +154,6 @@ html {
         <Transition name="slide">
           <nav aria-label="Navigation mobile" v-if="isMenuOpen"
             class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 lg:hidden overflow-y-auto overscroll-contain pb-8 text-white">
-
             <RouterLink to="/" active-class="text-tanuki-gold" @click="isMenuOpen = false"
               class="font-bold hover:text-tanuki-gold transition-colors">
               Accueil
@@ -201,7 +200,7 @@ html {
                   </div>
                   Mon Profil
                 </RouterLink>
-                <button @click="handleLogout(); isMenuOpen = false"
+                <button @click="handleLogout"
                   class="text-red-300 hover:text-red-100 transition-colors flex items-center gap-2 font-bold text-xl">
                   <LogOut class="w-5 h-5" />
                   Déconnexion
@@ -256,8 +255,6 @@ html {
     <DevModePopup />
   </div>
 </template>
-
-
 
 <style>
 /* Global resets if needed, but Tailwind handles most */
