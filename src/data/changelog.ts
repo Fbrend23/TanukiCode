@@ -10,7 +10,7 @@ export interface ChangelogEntry {
 export const changelog: ChangelogEntry[] = [
   {
     version: '0.15.0',
-    date: '2026-01-11',
+    date: '2026-01-13',
     sections: [
       {
         title: 'Nouveau Jeu : Construction',
