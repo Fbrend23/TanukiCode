@@ -8,6 +8,7 @@ const props = defineProps<{
     character: string;
     size?: number;
     initialMode?: 'view' | 'quiz';
+    showGrid?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -95,7 +96,8 @@ const startQuiz = () => {
     writer.value.quiz({
         onComplete: () => {
             emit('quiz-success');
-        }
+        },
+        showHintAfterMisses: 3
     });
 };
 
@@ -118,8 +120,20 @@ onUnmounted(() => {
 <template>
     <div class="flex flex-col items-center">
         <!-- Canvas Container -->
-        <div class="relative bg-white rounded-xl shadow-inner border-2 border-tanuki-beige p-4 mb-4 min-h-55 flex items-center justify-center"
+        <div class="relative bg-white rounded-xl shadow-inner border-2 border-tanuki-beige p-4 mb-4 min-h-55 flex items-center justify-center overflow-hidden"
             :class="{ 'opacity-50': isLoading }">
+
+            <!-- Tian Grid Background (Reuse same SVG) -->
+            <div v-if="props.showGrid !== false" class="absolute inset-0 pointer-events-none opacity-20">
+                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#5D4037" stroke-width="1" stroke-dasharray="5,5" />
+                    <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#5D4037" stroke-width="1" stroke-dasharray="5,5" />
+                    <line x1="0" y1="0" x2="100%" y2="100%" stroke="#5D4037" stroke-width="0.5" stroke-dasharray="2,2"
+                        opacity="0.5" />
+                    <line x1="100%" y1="0" x2="0" y2="100%" stroke="#5D4037" stroke-width="0.5" stroke-dasharray="2,2"
+                        opacity="0.5" />
+                </svg>
+            </div>
 
             <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center z-10">
                 <Loader2 class="w-8 h-8 text-tanuki-green animate-spin" />
@@ -134,7 +148,7 @@ onUnmounted(() => {
                     Kana !</span>
             </div>
 
-            <div ref="writerContainer" class="cursor-pointer"></div>
+            <div ref="writerContainer" class="cursor-pointer relative z-10"></div>
         </div>
 
         <!-- Controls -->

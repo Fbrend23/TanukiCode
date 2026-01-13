@@ -43,28 +43,28 @@ const showSettings = ref(false);
 const score = computed(() => userStore.score);
 
 // Initialize a new round
-const initRound = () => {
+const pickRandomSentence = () => {
+    return sentences[Math.floor(Math.random() * sentences.length)];
+};
+
+const setupRound = (sentence: Sentence) => {
     isCorrect.value = false;
     showHint.value = false;
     hasChecked.value = false;
     mistakeCount.value = 0;
     answerTokens.value = [];
-
-    // Pick random sentence
-    const random = sentences[Math.floor(Math.random() * sentences.length)];
-    if (!random) return;
-    currentSentence.value = random;
+    currentSentence.value = sentence;
 
     // Create tokens from Romaji (Space separated)
-    const romajiWords = random.romaji.split(' ');
+    const romajiWords = sentence.romaji.split(' ');
 
     let tokensToUse = romajiWords;
     roundTokenMode.value = 'romaji';
 
     // If Kana mode, try to segment the kana string
-    if (displaySettings.value.tokenMode === 'kana' && random.kana) {
-        if (random.kana.includes(' ')) {
-            tokensToUse = random.kana.split(' ');
+    if (displaySettings.value.tokenMode === 'kana' && sentence.kana) {
+        if (sentence.kana.includes(' ')) {
+            tokensToUse = sentence.kana.split(' ');
             roundTokenMode.value = 'kana';
         } else {
             // Fallback to romaji but notify logic
@@ -101,6 +101,20 @@ const initRound = () => {
         text,
         used: false
     })).sort(() => Math.random() - 0.5); // Shuffle initially
+};
+
+const initRound = () => {
+    const random = pickRandomSentence();
+    if (random) setupRound(random);
+};
+
+const switchMode = (mode: 'romaji' | 'kana') => {
+    displaySettings.value.tokenMode = mode;
+    if (currentSentence.value) {
+        setupRound(currentSentence.value);
+    } else {
+        initRound();
+    }
 };
 
 // Interaction: Add to Answer
@@ -321,7 +335,7 @@ onMounted(() => {
                                 mots</p>
                             <div class="grid grid-cols-2 gap-3">
                                 <button v-for="mode in ['romaji', 'kana']" :key="mode"
-                                    @click="displaySettings.tokenMode = mode as 'romaji' | 'kana'; initRound()"
+                                    @click="switchMode(mode as 'romaji' | 'kana')"
                                     class="flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all font-bold"
                                     :class="displaySettings.tokenMode === mode
                                         ? 'border-tanuki-green bg-green-50 text-tanuki-green'
