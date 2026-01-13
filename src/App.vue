@@ -5,8 +5,8 @@ import { useAuthStore } from '@/stores/authStore'
 import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
 import { supabase } from '@/lib/supabase'
-import ToastContainer from '@/components/ToastContainer.vue'
-import ChangelogModal from '@/components/ChangelogModal.vue'
+import ToastContainer from '@/components/common/ToastContainer.vue'
+import ChangelogModal from '@/components/modals/ChangelogModal.vue'
 import DevModePopup from '@/components/common/DevModePopup.vue'
 import pkg from '../package.json'
 import defaultTanuki from '@/assets/tanuki-head.png'
@@ -65,9 +65,7 @@ html {
 <template>
   <div class="min-h-screen flex flex-col font-body bg-tanuki-beige/10">
     <!-- Warning Banner -->
-    <div
-      class="bg-orange-100 text-orange-800 px-4 py-2 text-center text-sm font-bold border-b border-orange-200"
-    >
+    <div class="bg-orange-100 text-orange-800 px-4 py-2 text-center text-sm font-bold border-b border-orange-200">
       Site en développement : des pertes de données ou des maintenances peuvent avoir lieu.
     </div>
 
@@ -76,113 +74,68 @@ html {
       <div class="container mx-auto">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3 cursor-pointer group" @click="router.push('/')">
-            <img
-              src="@/assets/tanuki-head.png"
-              alt="Tanuki Logo"
-              class="w-10 h-10 object-contain group-hover:scale-110 transition-transform drop-shadow-md"
-            />
+            <img src="@/assets/tanuki-head.png" alt="Tanuki Logo"
+              class="w-10 h-10 object-contain group-hover:scale-110 transition-transform drop-shadow-md" />
             <span class="text-2xl font-display font-bold">TanukiCode</span>
           </div>
 
           <!-- Desktop Nav -->
-          <nav
-            aria-label="Navigation principale"
-            class="hidden lg:flex items-center gap-6 text-base"
-          >
-            <RouterLink
-              to="/"
-              active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap"
-              >Accueil
+          <nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-6 text-base">
+            <RouterLink to="/" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Accueil
             </RouterLink>
 
             <!-- Separator -->
             <div class="h-4 w-px bg-tanuki-beige/30 lg:block"></div>
 
-            <RouterLink
-              to="/charts"
-              active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap"
-            >
-              Kanas</RouterLink
-            >
+            <RouterLink to="/charts" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+              Kanas</RouterLink>
 
-            <RouterLink
-              to="/kanji"
-              active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap"
-              >Kanjis
+            <RouterLink to="/kanji" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Kanjis
             </RouterLink>
-            <RouterLink
-              to="/vocabulary"
-              active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap"
-            >
-              Vocabulaire</RouterLink
-            >
-            <RouterLink
-              to="/grammar"
-              active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap"
-            >
-              Grammaire</RouterLink
-            >
+            <RouterLink to="/vocabulary" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+              Vocabulaire</RouterLink>
+            <RouterLink to="/grammar" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
+              Grammaire</RouterLink>
 
             <!-- Separator -->
             <div class="h-4 w-px bg-tanuki-beige/30 lg:block"></div>
 
-            <RouterLink
-              to="/study"
-              active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap"
-            >
+            <RouterLink to="/study" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">
               Flashcards
             </RouterLink>
-            <RouterLink
-              to="/training"
-              active-class="text-tanuki-brown"
-              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap"
-              >Entraînement
+            <RouterLink to="/training" active-class="text-tanuki-brown"
+              class="font-bold hover:text-tanuki-brown transition-colors whitespace-nowrap">Entraînement
             </RouterLink>
 
             <!-- Auth Section Desktop -->
             <div class="flex items-center gap-4 border-l border-tanuki-beige/30 pl-4">
               <template v-if="auth.user">
-                <RouterLink
-                  to="/profile"
+                <RouterLink to="/profile"
                   class="flex items-center gap-2 text-tanuki-gold group hover:text-tanuki-brown transition-colors"
-                  title="Mon Profil"
-                >
+                  title="Mon Profil">
                   <div
                     class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
-                    :class="getColorClass(userStore.avatarColor)"
-                  >
-                    <img
-                      v-if="(userStore.avatarImage || 'default') !== 'default'"
-                      :src="getAvatarSrc(userStore.avatarImage) || ''"
-                      alt="Avatar"
-                      class="w-full h-full object-cover p-0.5"
-                    />
-                    <img
-                      v-else
-                      :src="defaultTanuki"
-                      alt="Tanuki"
-                      class="w-full h-full object-cover p-0.5"
-                    />
+                    :class="getColorClass(userStore.avatarColor)">
+                    <img v-if="(userStore.avatarImage || 'default') !== 'default'"
+                      :src="getAvatarSrc(userStore.avatarImage) || ''" alt="Avatar"
+                      class="w-full h-full object-cover p-0.5" />
+                    <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-0.5" />
                   </div>
                 </RouterLink>
-                <button
-                  @click="handleLogout"
-                  class="hover:text-red-400 text-tanuki-beige/80 transition-colors flex items-center gap-1 font-bold ml-2"
-                >
+                <button @click="handleLogout"
+                  class="hover:text-red-400 text-tanuki-beige/80 transition-colors flex items-center gap-1 font-bold ml-2">
                   <LogOut class="w-4 h-4 cursor-pointer" />
                 </button>
               </template>
               <template v-else>
-                <RouterLink
-                  to="/auth"
-                  class="bg-tanuki-gold hover:bg-yellow-500 text-white px-4 py-1 rounded-full font-bold transition-all shadow-sm"
-                >
+                <RouterLink to="/auth"
+                  class="bg-tanuki-gold hover:bg-yellow-500 text-white px-4 py-1 rounded-full font-bold transition-all shadow-sm">
                   Connexion
                 </RouterLink>
               </template>
@@ -190,10 +143,8 @@ html {
           </nav>
 
           <!-- Mobile Menu Button -->
-          <button
-            @click="isMenuOpen = !isMenuOpen"
-            class="lg:hidden p-2 text-tanuki-beige hover:text-white transition-colors z-50 relative"
-          >
+          <button @click="isMenuOpen = !isMenuOpen"
+            class="lg:hidden p-2 text-tanuki-beige hover:text-white transition-colors z-50 relative">
             <Menu v-if="!isMenuOpen" class="w-8 h-8" />
             <X v-else class="w-8 h-8" />
           </button>
@@ -201,118 +152,63 @@ html {
 
         <!-- Mobile Menu Overlay -->
         <Transition name="slide">
-          <nav
-            aria-label="Navigation mobile"
-            v-if="isMenuOpen"
-            class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 lg:hidden overflow-y-auto overscroll-contain pb-8 text-white"
-          >
-            <RouterLink
-              to="/"
-              active-class="text-tanuki-gold"
-              @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors"
-            >
+          <nav aria-label="Navigation mobile" v-if="isMenuOpen"
+            class="fixed inset-0 bg-tanuki-green/95 backdrop-blur-md z-40 flex flex-col items-center justify-start gap-6 text-xl pt-20 lg:hidden overflow-y-auto overscroll-contain pb-8 text-white">
+            <RouterLink to="/" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
               Accueil
             </RouterLink>
 
             <div class="w-16 border-t border-tanuki-beige/20 my-1 lg:hidden"></div>
 
-            <RouterLink
-              to="/charts"
-              active-class="text-tanuki-gold"
-              @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors"
-            >
-              Kanas</RouterLink
-            >
+            <RouterLink to="/charts" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Kanas</RouterLink>
 
-            <RouterLink
-              to="/kanji"
-              active-class="text-tanuki-gold"
-              @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors"
-            >
-              Kanjis</RouterLink
-            >
-            <RouterLink
-              to="/vocabulary"
-              active-class="text-tanuki-gold"
-              @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors"
-            >
-              Vocabulaire</RouterLink
-            >
-            <RouterLink
-              to="/grammar"
-              active-class="text-tanuki-gold"
-              @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors"
-            >
-              Grammaire</RouterLink
-            >
+            <RouterLink to="/kanji" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Kanjis</RouterLink>
+            <RouterLink to="/vocabulary" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Vocabulaire</RouterLink>
+            <RouterLink to="/grammar" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
+              Grammaire</RouterLink>
 
             <div class="w-16 border-t border-tanuki-beige/20 my-1 lg:hidden"></div>
 
-            <RouterLink
-              to="/study"
-              active-class="text-tanuki-gold"
-              @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors"
-            >
+            <RouterLink to="/study" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">
               Flashcards
             </RouterLink>
-            <RouterLink
-              to="/training"
-              active-class="text-tanuki-gold"
-              @click="isMenuOpen = false"
-              class="font-bold hover:text-tanuki-gold transition-colors"
-              >Entraînement
+            <RouterLink to="/training" active-class="text-tanuki-gold" @click="isMenuOpen = false"
+              class="font-bold hover:text-tanuki-gold transition-colors">Entraînement
             </RouterLink>
 
             <!-- Auth Section Mobile -->
-            <div
-              class="flex flex-col items-center gap-6 mt-4 border-t border-tanuki-beige/20 pt-8 w-48"
-            >
+            <div class="flex flex-col items-center gap-6 mt-4 border-t border-tanuki-beige/20 pt-8 w-48">
               <template v-if="auth.user">
-                <RouterLink
-                  to="/profile"
-                  @click="isMenuOpen = false"
-                  active-class="text-tanuki-gold"
-                  class="flex items-center gap-2 text-white hover:text-tanuki-gold transition-colors text-xl"
-                >
+                <RouterLink to="/profile" @click="isMenuOpen = false" active-class="text-tanuki-gold"
+                  class="flex items-center gap-2 text-white hover:text-tanuki-gold transition-colors text-xl">
                   <div
                     class="relative w-8 h-8 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-2 border-white ring-2 ring-tanuki-green/20 overflow-hidden"
-                    :class="getColorClass(userStore.avatarColor)"
-                  >
-                    <img
-                      v-if="(userStore.avatarImage || 'default') !== 'default'"
-                      :src="getAvatarSrc(userStore.avatarImage) || ''"
-                      alt="Avatar"
-                      class="w-full h-full object-cover p-0.5"
-                    />
-                    <img
-                      v-else
-                      :src="defaultTanuki"
-                      alt="Tanuki"
-                      class="w-full h-full object-cover p-0.5"
-                    />
+                    :class="getColorClass(userStore.avatarColor)">
+                    <img v-if="(userStore.avatarImage || 'default') !== 'default'"
+                      :src="getAvatarSrc(userStore.avatarImage) || ''" alt="Avatar"
+                      class="w-full h-full object-cover p-0.5" />
+                    <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-0.5" />
                   </div>
                   Mon Profil
                 </RouterLink>
-                <button
-                  @click="handleLogout"
-                  class="text-red-300 hover:text-red-100 transition-colors flex items-center gap-2 font-bold text-xl"
-                >
+                <button @click="handleLogout"
+                  class="text-red-300 hover:text-red-100 transition-colors flex items-center gap-2 font-bold text-xl">
                   <LogOut class="w-5 h-5" />
                   Déconnexion
                 </button>
               </template>
               <template v-else>
-                <RouterLink
-                  to="/auth"
-                  @click="isMenuOpen = false"
-                  class="bg-tanuki-gold hover:bg-yellow-500 text-white px-8 py-3 rounded-full font-bold transition-all shadow-lg text-lg"
-                >
+                <RouterLink to="/auth" @click="isMenuOpen = false"
+                  class="bg-tanuki-gold hover:bg-yellow-500 text-white px-8 py-3 rounded-full font-bold transition-all shadow-lg text-lg">
                   Connexion
                 </RouterLink>
               </template>
@@ -336,34 +232,19 @@ html {
       <div class="container mx-auto px-4 flex flex-col items-center gap-2 md:gap-4">
         <p>&copy; 2025 TanukiCode. Apprendre en s'amusant.</p>
         <div class="flex gap-4 text-xs opacity-60">
-          <RouterLink to="/legal" class="hover:underline hover:text-tanuki-gold transition-colors"
-            >Mentions Légales & Confidentialité</RouterLink
-          >
+          <RouterLink to="/legal" class="hover:underline hover:text-tanuki-gold transition-colors">Mentions Légales &
+            Confidentialité</RouterLink>
           <span>•</span>
-          <a
-            :href="`https://github.com/Fbrend23/TanukiCode/releases/tag/v${appVersion}`"
-            target="_blank"
-            class="hover:text-tanuki-gold transition-colors"
-            title="Voir sur GitHub"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              viewBox="0 0 16 16"
-              class="w-4 h-4"
-            >
+          <a :href="`https://github.com/Fbrend23/TanukiCode/releases/tag/v${appVersion}`" target="_blank"
+            class="hover:text-tanuki-gold transition-colors" title="Voir sur GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+              class="w-4 h-4">
               <path
-                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-              />
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
             </svg>
           </a>
           <span>•</span>
-          <button
-            @click="isChangelogOpen = true"
-            class="hover:underline hover:text-tanuki-gold transition-colors"
-          >
+          <button @click="isChangelogOpen = true" class="hover:underline hover:text-tanuki-gold transition-colors">
             v{{ appVersion }}
           </button>
         </div>
