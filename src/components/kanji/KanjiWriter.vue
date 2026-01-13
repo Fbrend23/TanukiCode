@@ -8,6 +8,7 @@ const props = defineProps<{
     character: string;
     size?: number;
     initialMode?: 'view' | 'quiz';
+    showGrid?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -25,7 +26,7 @@ const initWriter = () => {
 
     isLoading.value = true;
     error.value = null;
-    mode.value = 'view';
+    mode.value = 'view'; // Reset to view mode initially unless overridden (logic below)
 
     // Cleanup previous instance
     if (writer.value) {
@@ -81,8 +82,6 @@ const initWriter = () => {
                 error.value = "Impossible de charger le tracé.";
             }
         });
-
-        // Removed invalid listener code
     } catch (e) {
         console.error(e);
         error.value = "Erreur d'initialisation du moteur d'écriture.";
@@ -102,7 +101,8 @@ const startQuiz = () => {
     writer.value.quiz({
         onComplete: () => {
             emit('quiz-success');
-        }
+        },
+        showHintAfterMisses: 3
     });
 };
 
@@ -126,8 +126,21 @@ onUnmounted(() => {
 <template>
     <div class="flex flex-col items-center">
         <!-- Canvas Container -->
-        <div class="relative bg-white rounded-xl shadow-inner border-2 border-tanuki-beige p-4 mb-4 min-h-55 flex items-center justify-center"
+        <div class="relative bg-white rounded-xl shadow-inner border-2 border-tanuki-beige p-4 mb-4 min-h-55 flex items-center justify-center overflow-hidden"
             :class="{ 'opacity-50': isLoading }">
+
+            <!-- Tian Grid Background -->
+            <div v-if="props.showGrid !== false" class="absolute inset-0 pointer-events-none opacity-20">
+                <!-- Simple SVG Grid -->
+                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#5D4037" stroke-width="1" stroke-dasharray="5,5" />
+                    <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#5D4037" stroke-width="1" stroke-dasharray="5,5" />
+                    <line x1="0" y1="0" x2="100%" y2="100%" stroke="#5D4037" stroke-width="0.5" stroke-dasharray="2,2"
+                        opacity="0.5" />
+                    <line x1="100%" y1="0" x2="0" y2="100%" stroke="#5D4037" stroke-width="0.5" stroke-dasharray="2,2"
+                        opacity="0.5" />
+                </svg>
+            </div>
 
             <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center z-10">
                 <Loader2 class="w-8 h-8 text-tanuki-green animate-spin" />
@@ -142,7 +155,7 @@ onUnmounted(() => {
                     Kanji !</span>
             </div>
 
-            <div ref="writerContainer" class="cursor-pointer"></div>
+            <div ref="writerContainer" class="cursor-pointer relative z-10"></div>
         </div>
 
         <!-- Controls (Hidden if initialMode is set, e.g. in Quiz) -->
@@ -162,7 +175,7 @@ onUnmounted(() => {
             </button>
         </div>
 
-        <p v-if="!initialMode || mode === 'quiz'" class="text-xs text-stone-500 italic max-w-xs text-center">
+        <p v-if="!initialMode || mode === 'quiz'" class="text-xs text-stone-500 italic max-w-xs text-center mt-2">
             <span v-if="mode === 'view'">Regardez l'animation pour apprendre l'ordre des traits.</span>
             <span v-else>Dessinez le caractère par-dessus le modèle.
                 <span class="block mt-1 text-amber-600 font-bold">Respectez l'ordre et le sens !</span>
