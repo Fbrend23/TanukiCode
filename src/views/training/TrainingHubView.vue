@@ -1,10 +1,24 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { Brain, Ear, Hammer } from 'lucide-vue-next'
+import type { Component } from 'vue'
 
 const router = useRouter()
 
-const games = [
+type Game = {
+  id: string
+  title: string
+  description: string
+  icon: Component
+  color: string
+  iconBg: string
+  iconColor: string
+  text: string
+  route: string
+  disabled?: boolean
+}
+
+const games: Game[] = [
   {
     id: 'quiz',
     title: 'Quiz Classique',
@@ -26,7 +40,6 @@ const games = [
     iconColor: 'text-blue-600',
     text: 'text-white',
     route: '/training/audio',
-    disabled: true, // Coming soon
   },
   {
     id: 'construction',
