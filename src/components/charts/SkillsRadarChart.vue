@@ -7,7 +7,7 @@ import {
   Filler,
   Tooltip,
   Legend,
-  type TooltipItem
+  type TooltipItem,
 } from 'chart.js'
 import { Radar } from 'vue-chartjs'
 import { computed } from 'vue'
@@ -18,40 +18,42 @@ import { kanjiList } from '@/data/kanji'
 import { grammarLessons } from '@/data/grammar'
 import { Hexagon } from 'lucide-vue-next'
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-)
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
 
 const userStore = useUserStore()
 
 const chartData = computed(() => {
-  const availableKana = [...hiragana.filter(k => k.char), ...katakana.filter(k => k.char)].length;
+  const availableKana = [...hiragana.filter((k) => k.char), ...katakana.filter((k) => k.char)]
+    .length
 
-  const masteredIds = userStore.masteredItems;
+  const masteredIds = userStore.masteredItems
 
-  // Using any for the data lists because their structures vary slightly but all have an ID/Char field we check
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const countMastered = (list: any[], idKey: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return list.filter((item: any) => masteredIds.includes(item[idKey] || item.char || item.character || item.word)).length;
+  const countMastered = <T,>(list: T[], idKey: keyof T) => {
+    return list.filter((item) => {
+      const id = item[idKey]
+      return (
+        typeof id === 'string' &&
+        masteredIds.includes(
+          id ||
+            ((item as any).char as string) ||
+            ((item as any).character as string) ||
+            ((item as any).word as string),
+        )
+      )
+    }).length
   }
 
-  const mKana = countMastered([...hiragana, ...katakana], 'char');
-  const mKanji = countMastered(kanjiList, 'character');
-  const mVocab = countMastered(vocabulary, 'word');
-  const mGrammar = countMastered(grammarLessons, 'id');
+  const mKana = countMastered([...hiragana, ...katakana], 'char')
+  const mKanji = countMastered(kanjiList, 'character')
+  const mVocab = countMastered(vocabulary, 'word')
+  const mGrammar = countMastered(grammarLessons, 'id')
 
-  const sKana = availableKana ? (mKana / availableKana) * 100 : 0;
-  const sKanji = kanjiList.length ? (mKanji / kanjiList.length) * 100 : 0;
-  const sVocab = vocabulary.length ? (mVocab / vocabulary.length) * 100 : 0;
-  const sGrammar = grammarLessons.length ? (mGrammar / grammarLessons.length) * 100 : 0;
+  const sKana = availableKana ? (mKana / availableKana) * 100 : 0
+  const sKanji = kanjiList.length ? (mKanji / kanjiList.length) * 100 : 0
+  const sVocab = vocabulary.length ? (mVocab / vocabulary.length) * 100 : 0
+  const sGrammar = grammarLessons.length ? (mGrammar / grammarLessons.length) * 100 : 0
 
-  const sStreak = Math.min((userStore.streak / 30) * 100, 100);
+  const sStreak = Math.min((userStore.streak / 30) * 100, 100)
 
   return {
     labels: ['Kanas', 'Kanjis', 'Vocabulaire', 'Grammaire', 'Série'],
@@ -64,21 +66,21 @@ const chartData = computed(() => {
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
         pointHoverBorderColor: '#FFC107',
-        data: [sKana, sKanji, sVocab, sGrammar, sStreak]
-      }
-    ]
+        data: [sKana, sKanji, sVocab, sGrammar, sStreak],
+      },
+    ],
   }
 })
 
 const chartOptions = {
   layout: {
-    padding: -10
+    padding: -10,
   },
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     tooltip: {
       backgroundColor: '#5D4037',
@@ -86,34 +88,34 @@ const chartOptions = {
       bodyColor: '#fff',
       callbacks: {
         label: function (context: TooltipItem<'radar'>) {
-          return (context.raw as number).toFixed(0) + '%';
-        }
-      }
-    }
+          return (context.raw as number).toFixed(0) + '%'
+        },
+      },
+    },
   },
   scales: {
     r: {
       angleLines: {
-        color: 'rgba(0,0,0,0.1)'
+        color: 'rgba(0,0,0,0.1)',
       },
       grid: {
-        color: 'rgba(0,0,0,0.1)'
+        color: 'rgba(0,0,0,0.1)',
       },
       pointLabels: {
         font: {
           family: "'Fredoka', sans-serif",
-          size: 12
+          size: 12,
         },
-        color: '#795548'
+        color: '#795548',
       },
       ticks: {
         display: false,
-        stepSize: 20
+        stepSize: 20,
       },
       suggestedMin: 0,
-      suggestedMax: 100
-    }
-  }
+      suggestedMax: 100,
+    },
+  },
 }
 </script>
 
