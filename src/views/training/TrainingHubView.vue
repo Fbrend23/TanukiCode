@@ -32,8 +32,8 @@ const games: Game[] = [
   },
   {
     id: 'audio',
-    title: 'Quiz Rapide',
-    description: 'Écoutez et trouvez la bonne réponse le plus vite possible.',
+    title: 'Quiz Audio',
+    description: 'Testez votre compréhension orale.',
     icon: Ear,
     color: 'bg-blue-500',
     iconBg: 'bg-blue-100',
@@ -74,56 +74,39 @@ const navigateTo = (route: string, disabled?: boolean) => {
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-        <button
-          v-for="game in games"
-          :key="game.id"
-          @click="navigateTo(game.route, game.disabled)"
+        <button v-for="game in games" :key="game.id" @click="navigateTo(game.route, game.disabled)"
           class="card p-6 flex flex-col items-center text-center gap-2 transition-all border-2 relative group overflow-hidden h-full bg-white hover:shadow-xl"
           :class="[
             game.disabled
               ? 'opacity-60 cursor-not-allowed border-gray-200 bg-gray-50'
               : 'cursor-pointer border-tanuki-brown hover:border-tanuki-green',
-          ]"
-        >
+          ]">
           <!-- Watermark Character -->
           <div
-            class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown select-none pointer-events-none"
-          >
+            class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown select-none pointer-events-none">
             {{ game.id === 'quiz' ? '問' : game.id === 'construction' ? '建' : '聴' }}
           </div>
 
           <!-- Coming Soon Badge -->
-          <div
-            v-if="game.disabled"
-            class="absolute top-2 right-2 bg-gray-100 text-gray-400 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider z-10"
-          >
+          <div v-if="game.disabled"
+            class="absolute top-2 right-2 bg-gray-100 text-gray-400 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider z-10">
             Bientôt
           </div>
 
           <!-- Decorator Circle -->
-          <div
-            class="w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-colors shadow-sm"
-            :class="game.disabled ? 'bg-gray-100' : game.iconBg"
-          >
-            <component
-              :is="game.icon"
-              class="w-8 h-8"
-              :class="game.disabled ? 'text-gray-400' : game.iconColor"
-            />
+          <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-colors shadow-sm"
+            :class="game.disabled ? 'bg-gray-100' : game.iconBg">
+            <component :is="game.icon" class="w-8 h-8" :class="game.disabled ? 'text-gray-400' : game.iconColor" />
           </div>
 
-          <h2
-            class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors z-10"
-          >
+          <h2 class="text-xl font-bold text-tanuki-brown group-hover:text-tanuki-green transition-colors z-10">
             {{ game.title }}
           </h2>
           <p class="text-sm text-gray-400 leading-relaxed z-10">{{ game.description }}</p>
 
           <!-- Play Button Visual -->
-          <div
-            v-if="!game.disabled"
-            class="mt-auto pt-4 text-tanuki-green font-bold flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 text-sm"
-          >
+          <div v-if="!game.disabled"
+            class="mt-auto pt-4 text-tanuki-green font-bold flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 text-sm">
             <span>COMMENCER</span>
           </div>
         </button>
