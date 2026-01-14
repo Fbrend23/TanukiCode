@@ -36,6 +36,10 @@
     @apply bg-white text-red-500 border-red-200 hover:bg-red-50;
   }
 
+  .btn-danger-filled {
+    @apply bg-red-500 text-white border-red-700 active:border-b-0 active:translate-y-1;
+  }
+
   .btn-gold {
     @apply bg-tanuki-gold text-white border-yellow-600 hover:bg-yellow-500;
   }

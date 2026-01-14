@@ -33,6 +33,11 @@ const router = createRouter({
       component: () => import('../views/training/QuizView.vue'),
     },
     {
+      path: '/training/audio',
+      name: 'audio-quiz',
+      component: () => import('../views/training/AudioQuizView.vue'),
+    },
+    {
       path: '/training/construction',
       name: 'construction',
       component: () => import('../views/training/SentenceBuilderView.vue'),

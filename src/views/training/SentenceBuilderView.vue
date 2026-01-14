@@ -1,23 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { sentences, type Sentence } from '@/data/sentences'
-import {
-  ArrowLeft,
-  Volume2,
-  HelpCircle,
-  Trophy,
-  Heart,
-  Flame,
-  ArrowRight,
-  Settings2,
-  Check,
-} from 'lucide-vue-next'
+import { Volume2, Trophy, Heart, Flame, Settings2, Check, HelpCircle } from 'lucide-vue-next'
 import { playSentenceAudio } from '@/utils/audio'
 import { useUserStore } from '@/stores/userStore'
 import { happyConfetti } from '@/utils/confetti'
+import TrainingHeader from '@/components/training/TrainingHeader.vue'
+import FeedbackDrawer from '@/components/training/FeedbackDrawer.vue'
 
-const router = useRouter()
 const userStore = useUserStore()
 
 // Types for Token Management
@@ -198,6 +188,23 @@ const revealSolution = () => {
   answerTokens.value = solution
 }
 
+const handleSuccess = () => {
+  isCorrect.value = true
+
+  // Check for streak milestones (5, 10, 25, 50, 100)
+  const newCombo = userStore.currentCombo + 1
+  if ([5, 10, 25, 50, 100].includes(newCombo)) {
+    happyConfetti()
+  }
+
+  // Play Audio
+  if (currentSentence.value) {
+    // playSentenceAudio(currentSentence.value.id, currentSentence.value.japanese);
+    userStore.recordAnswer(true, xpMultiplier) // Handles score++, XP, totalQuestions++
+    userStore.updateBestCombo(newCombo) // Internal combo++
+  }
+}
+
 // Manual Validation
 const checkAnswer = () => {
   if (!currentSentence.value || mistakeCount.value >= 3) return
@@ -223,23 +230,6 @@ const checkAnswer = () => {
       userStore.recordAnswer(false) // Global record (increments totalQuestions)
       revealSolution()
     }
-  }
-}
-
-const handleSuccess = () => {
-  isCorrect.value = true
-
-  // Check for streak milestones (5, 10, 25, 50, 100)
-  const newCombo = userStore.currentCombo + 1
-  if ([5, 10, 25, 50, 100].includes(newCombo)) {
-    happyConfetti()
-  }
-
-  // Play Audio
-  if (currentSentence.value) {
-    // playSentenceAudio(currentSentence.value.id, currentSentence.value.japanese);
-    userStore.recordAnswer(true, xpMultiplier) // Handles score++, XP, totalQuestions++
-    userStore.updateBestCombo(newCombo) // Internal combo++
   }
 }
 
@@ -279,18 +269,12 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col items-center w-full px-2 md:px-4">
-    <div class="w-full relative flex items-center justify-center mb-0 md:mb-4">
-      <!-- Header Section (Top of Page) -->
-      <button
-        @click="router.push('/training')"
-        class="absolute left-0 text-tanuki-brown/60 hover:text-tanuki-brown transition-colors p-2 rounded-full hover:bg-stone-100"
-      >
-        <ArrowLeft class="w-6 h-6" />
-      </button>
-      <h2 class="text-2xl md:text-4xl font-display font-bold text-tanuki-green text-center">
-        Construction
-      </h2>
-    </div>
+    <!-- Uses Common Training Header -->
+    <TrainingHeader title="Construction">
+      <template #actions>
+        <!-- Nothing for now on right side -->
+      </template>
+    </TrainingHeader>
 
     <div class="w-full flex flex-col items-center max-w-4xl mx-auto">
       <div class="relative w-full max-w-2xl flex flex-col md:block mb-2">
@@ -521,66 +505,31 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Bottom Feedback Drawer (Duolingo Style) -->
-    <Transition name="drawer">
-      <div
-        v-if="isCorrect || mistakeCount >= 3"
-        class="fixed bottom-0 left-0 right-0 z-50 p-3 md:p-6 md:pb-8! border-t-2 animate-drawer-in"
-        :class="isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'"
-      >
-        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div class="flex items-center gap-4 md:gap-6 flex-1">
-            <img
-              :src="isCorrect ? '/images/tanuki_success.png' : '/images/tanuki_failure.png'"
-              :alt="isCorrect ? 'Succès' : 'Échec'"
-              class="w-16 h-16 md:w-24 md:h-24 object-contain animate-bounce-short"
-            />
-
-            <div class="flex-1">
-              <h3
-                class="text-xl md:text-2xl font-bold"
-                :class="isCorrect ? 'text-green-700' : 'text-red-700'"
-              >
-                {{ isCorrect ? 'Excellent !' : 'Oups !' }}
-              </h3>
-              <div v-if="!isCorrect" class="mt-1">
-                <p class="text-xs font-bold text-red-400 uppercase tracking-widest">
-                  Réponse correcte :
-                </p>
-                <p class="text-base md:text-lg font-bold text-gray-800 leading-tight">
-                  {{ currentSentence?.romaji }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex flex-col sm:flex-row gap-3 items-center w-full md:w-auto">
-            <button
-              v-if="currentSentence"
-              @click="playSentenceAudio(currentSentence.id, currentSentence.japanese)"
-              class="flex items-center justify-center gap-2 font-bold px-6 py-3 rounded-2xl transition-all w-full sm:w-auto overflow-hidden whitespace-nowrap"
-              :class="
-                isCorrect
-                  ? 'text-green-700 bg-green-200/50 hover:bg-green-200'
-                  : 'text-red-700 bg-red-200/50 hover:bg-red-200'
-              "
-            >
-              <Volume2 class="w-5 h-5" />
-              <span>Écouter</span>
-            </button>
-
-            <button
-              @click="initRound"
-              class="btn-3d w-full sm:w-48 flex items-center justify-center gap-2 group py-3!"
-              :class="isCorrect ? 'btn-primary' : 'btn-danger'"
-            >
-              <span class="font-bold">Continuer</span>
-              <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
+    <!-- Feedback Drawer -->
+    <FeedbackDrawer
+      :isOpen="isCorrect || mistakeCount >= 3"
+      :isCorrect="isCorrect"
+      :correctAnswer="currentSentence?.romaji"
+      @next="initRound"
+    >
+      <template #details>
+        <div class="flex flex-col sm:flex-row gap-3 items-center w-full md:w-auto mt-4 md:mt-0">
+          <button
+            v-if="currentSentence"
+            @click="playSentenceAudio(currentSentence.id, currentSentence.japanese)"
+            class="flex items-center justify-center gap-2 font-bold px-6 py-3 rounded-2xl transition-all w-full sm:w-auto overflow-hidden whitespace-nowrap"
+            :class="
+              isCorrect
+                ? 'text-green-700 bg-green-200/50 hover:bg-green-200'
+                : 'text-red-700 bg-red-200/50 hover:bg-red-200'
+            "
+          >
+            <Volume2 class="w-5 h-5" />
+            <span>Écouter</span>
+          </button>
         </div>
-      </div>
-    </Transition>
+      </template>
+    </FeedbackDrawer>
   </div>
 </template>
 
@@ -630,34 +579,6 @@ onMounted(() => {
   50% {
     transform: translateY(-10px);
   }
-}
-
-/* Drawer Transitions */
-.drawer-enter-active,
-.drawer-leave-active {
-  transition:
-    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.4s ease;
-}
-
-.drawer-enter-from,
-.drawer-leave-to {
-  transform: translateY(100%);
-  opacity: 0;
-}
-
-@keyframes drawer-in {
-  from {
-    transform: translateY(100%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-}
-
-.animate-drawer-in {
-  animation: drawer-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-danger {
