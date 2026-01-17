@@ -5,7 +5,6 @@
 ### Added
 
 - **Training Hub**:
-  - **Centralized Hub**: New main view (`/training`) acting as a gateway to all training modes (Quiz, Audio, Construction).
   - **Game Cards**: Visual cards with icons and descriptions for each game mode.
 - **Audio Quiz**:
   - **New Mode**: dedicated `AudioQuizView` for listening comprehension practice.
