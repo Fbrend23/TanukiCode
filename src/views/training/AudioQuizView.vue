@@ -181,9 +181,7 @@ onMounted(() => {
       <TrainingHeader title="Quiz Audio" />
 
       <!-- Stats -->
-      <div
-        class="card p-2 px-4 shadow-sm border-2 border-tanuki-green bg-white flex items-center gap-4 mb-6"
-      >
+      <div class="card p-2 px-4 shadow-sm border-2 border-tanuki-green bg-white flex items-center gap-4 mb-6">
         <div class="flex items-center gap-2 font-bold text-tanuki-brown">
           <Trophy class="w-4 h-4 text-tanuki-gold" />
           <span>{{ score }}</span>
@@ -199,42 +197,29 @@ onMounted(() => {
       <div class="w-full max-w-2xl flex flex-col items-center">
         <!-- Audio Player (Question) -->
         <div class="mb-8 w-full flex justify-center">
-          <button
-            @click="playAudio"
-            class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-linear-to-b from-tanuki-green to-green-700 shadow-xl border-4 border-white ring-4 ring-tanuki-green/20 flex items-center justify-center text-white transition-all active:scale-95 group relative overflow-hidden"
-          >
+          <button @click="playAudio" aria-label="Réécouter"
+            class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-linear-to-b from-tanuki-green to-green-700 shadow-xl border-4 border-white ring-4 ring-tanuki-green/20 flex items-center justify-center text-white transition-all active:scale-95 group relative overflow-hidden">
             <!-- Ping Animation -->
-            <span
-              v-if="isPlaying"
-              class="absolute inset-0 rounded-full bg-white opacity-20 animate-ping"
-            ></span>
+            <span v-if="isPlaying" class="absolute inset-0 rounded-full bg-white opacity-20 animate-ping"></span>
 
             <Volume2 v-if="isPlaying" class="w-12 h-12 md:w-16 md:h-16 animate-pulse" />
             <Play v-else class="w-12 h-12 md:w-16 md:h-16 fill-current ml-2" />
 
             <span
-              class="absolute -bottom-8 text-xs font-bold text-tanuki-brown/50 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity"
-              >Réécouter</span
-            >
+              class="absolute -bottom-8 text-xs font-bold text-tanuki-brown/50 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Réécouter</span>
           </button>
         </div>
 
         <!-- Options Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full mb-24">
-          <button
-            v-for="(opt, idx) in options"
-            :key="idx"
-            @click="checkAnswer(opt)"
-            :disabled="isAnswered"
-            class="btn-3d w-full z-10 relative group py-4 md:py-6 text-lg md:text-xl"
-            :class="[
+          <button v-for="(opt, idx) in options" :key="idx" @click="checkAnswer(opt)" :disabled="isAnswered"
+            class="btn-3d w-full z-10 relative group py-4 md:py-6 text-lg md:text-xl" :class="[
               isAnswered && getId(opt) === getId(currentQuestion!)
                 ? 'bg-green-500 text-white border-green-700'
                 : isAnswered && selectedOption === opt && getId(opt) !== getId(currentQuestion!)
                   ? 'bg-red-500 text-white border-red-700'
                   : 'btn-secondary',
-            ]"
-          >
+            ]">
             <span class="relative z-10">{{ getOptionText(opt) }}</span>
           </button>
         </div>
@@ -242,10 +227,7 @@ onMounted(() => {
 
       <FeedbackDrawer :isOpen="isAnswered" :isCorrect="isCorrect" @next="nextQuestion">
         <template #details>
-          <div
-            v-if="!isCorrect && currentQuestion"
-            class="flex gap-2 text-lg font-bold text-gray-800"
-          >
+          <div v-if="!isCorrect && currentQuestion" class="flex gap-2 text-lg font-bold text-gray-800">
             <span>
               {{
                 'word' in currentQuestion
