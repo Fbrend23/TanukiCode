@@ -34,6 +34,7 @@ test.describe('Visual Regression', () => {
       if (pageInfo.url === '/training/construction') {
         masks.push(page.locator('.card h2')) // Mask the translation text
         masks.push(page.locator('.card .min-h-\\[80px\\]')) // Mask the answer zone
+        masks.push(page.locator('.rounded-3xl.border-tanuki-green')) // Mask the propositions pool
       }
       if (pageInfo.url === '/study') {
         masks.push(page.locator('.scene')) // Mask the flashcard content
