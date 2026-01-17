@@ -19,8 +19,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: "22"
-          cache: "npm"
+          node-version: '22'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -45,6 +45,8 @@ jobs:
     name: E2E Tests
     needs: verify
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.57.0-jammy
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -52,14 +54,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: "22"
-          cache: "npm"
+          node-version: '22'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-preview
+          path: dist/
 
       - name: Run E2E Tests (Functional Only)
         # Exclude visual tests because snapshots are OS-dependent (Windows vs Linux)
@@ -68,6 +73,7 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           CI: true
+          HOME: /root # Playwright container expects HOME to be /root
 
       - name: Upload Report
         if: failure()
