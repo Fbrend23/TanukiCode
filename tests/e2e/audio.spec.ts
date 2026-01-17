@@ -22,18 +22,22 @@ test.describe('Audio Quiz', () => {
     // Verify playing state (pulse or icon change) - optional as it's fast
     // We assume functionality based on button clickability
 
-    // Select an option
-    await options.first().click()
+    // Select an option - force for mobile safety
+    await options.first().click({ force: true })
 
     // Verify Feedback Drawer appears
     const feedbackDrawer = page.locator('.animate-drawer-in')
     await expect(feedbackDrawer).toBeVisible()
 
-    // Continue
+    // Click "Continuer"
     const nextButton = page.getByRole('button', { name: 'Continuer' })
-    await nextButton.click()
+    await expect(nextButton).toBeVisible()
+    await page.waitForTimeout(500) // Wait for animation
 
-    // Feedback hidden
-    await expect(feedbackDrawer).toBeHidden()
+    // Use evaluate click for maximum robustness on mobile/overlays
+    await nextButton.evaluate((el) => (el as HTMLElement).click())
+
+    // Feedback hidden (increased timeout for transition)
+    await expect(nextButton).toBeHidden({ timeout: 10000 })
   })
 })

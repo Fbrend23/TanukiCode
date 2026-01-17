@@ -27,8 +27,8 @@ test.describe('Features', () => {
 
     // Check for Modal presence
     // Check for Modal presence by looking for specific modal content
-    // We look for the "Entraînement" header which is present in the modal
-    const modalContent = page.getByText('Entraînement', { exact: true })
+    // Check for Modal presence by looking for the drawing canvas area (unique to modal)
+    const modalContent = page.locator('.border-tanuki-beige').first()
     await expect(modalContent).toBeVisible()
 
     // Close modal (X button usually top-right)

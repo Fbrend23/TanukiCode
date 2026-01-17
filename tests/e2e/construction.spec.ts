@@ -22,7 +22,7 @@ test.describe('Construction Game', () => {
 
     // 3. Verify it moved to the Answer Zone
     // Tokens in the answer zone have the 'btn-primary' class and 'animate-pop-in'
-    const answerTokens = page.locator('.btn-primary.animate-pop-in')
+    const answerTokens = page.locator('div.btn-primary.animate-pop-in')
     await expect(answerTokens).toBeVisible()
     await expect(answerTokens).toHaveCount(1)
 
