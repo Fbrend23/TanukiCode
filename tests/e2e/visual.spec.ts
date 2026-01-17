@@ -69,7 +69,8 @@ test.describe('Visual Regression', () => {
     // Click 'a' (first kana usually)
     await page.locator('.grid > div').first().click()
 
-    await expect(page.getByText('Entraînement')).toBeVisible()
+    // Wait for modal unique element (canvas border) instead of ambiguous text
+    await expect(page.locator('.border-tanuki-beige').first()).toBeVisible()
     await page.waitForTimeout(3000) // Wait for open animation
 
     // Reset scroll to top to ensure consistent snapshot
