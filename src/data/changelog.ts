@@ -9,6 +9,32 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.16.0',
+    date: '2026-01-17',
+    sections: [
+      {
+        title: 'Training Hub & Audio',
+        items: [
+          'HUB CENTRALISÉ : Nouvelle vue principale regroupant tous les modes (Quiz, Audio, Construction).',
+          "QUIZ AUDIO : Nouveau mode d'entraînement dédié à la compréhension orale.",
+          "ACCESSIBILITÉ : Amélioration du support pour les lecteurs d'écran sur le lecteur audio.",
+        ],
+      },
+      {
+        title: 'Interface & Composants',
+        items: [
+          'FEEDBACK DRAWER : Système de feedback unifié (Succès/Échec) pour tous les jeux.',
+          'CARTE DE JEU : Visuels standardisés avec icônes et descriptions pour chaque activité.',
+          "NAVIGATION : L'onglet 'Entraînement' mène désormais au nouveau Hub.",
+        ],
+      },
+      {
+        title: 'Technique',
+        items: ['TESTS E2E : Couverture de test étendue pour le nouveau Hub et le Quiz Audio.'],
+      },
+    ],
+  },
+  {
     version: '0.15.0',
     date: '2026-01-13',
     sections: [

@@ -32,15 +32,15 @@ test.describe('Study / Flashcards', () => {
     await page.goto('/study')
 
     // Default is Hiragana
-    await expect(page.getByRole('button', { name: 'Hiragana' })).toHaveClass(/bg-tanuki-green/)
+    await expect(page.getByRole('button', { name: 'Hiragana' })).toHaveClass(/btn-pill-active/)
 
     // Switch to Katakana
     await page.getByRole('button', { name: 'Katakana' }).click()
-    await expect(page.getByRole('button', { name: 'Katakana' })).toHaveClass(/bg-tanuki-green/)
-    await expect(page.getByRole('button', { name: 'Hiragana' })).not.toHaveClass(/bg-tanuki-green/)
+    await expect(page.getByRole('button', { name: 'Katakana' })).toHaveClass(/btn-pill-active/)
+    await expect(page.getByRole('button', { name: 'Hiragana' })).not.toHaveClass(/btn-pill-active/)
 
     // Switch to Phrases
     await page.getByRole('button', { name: 'Phrases' }).click()
-    await expect(page.getByRole('button', { name: 'Phrases' })).toHaveClass(/bg-tanuki-green/)
+    await expect(page.getByRole('button', { name: 'Phrases' })).toHaveClass(/btn-pill-active/)
   })
 })

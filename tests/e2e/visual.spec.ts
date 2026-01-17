@@ -34,6 +34,7 @@ test.describe('Visual Regression', () => {
       if (pageInfo.url === '/training/construction') {
         masks.push(page.locator('.card h2')) // Mask the translation text
         masks.push(page.locator('.card .min-h-\\[80px\\]')) // Mask the answer zone
+        masks.push(page.locator('.rounded-3xl.border-tanuki-green')) // Mask the propositions pool
       }
       if (pageInfo.url === '/study') {
         masks.push(page.locator('.scene')) // Mask the flashcard content
@@ -69,7 +70,8 @@ test.describe('Visual Regression', () => {
     // Click 'a' (first kana usually)
     await page.locator('.grid > div').first().click()
 
-    await expect(page.getByText('Entraînement')).toBeVisible()
+    // Wait for modal unique element (canvas border) instead of ambiguous text
+    await expect(page.locator('.border-tanuki-beige').first()).toBeVisible()
     await page.waitForTimeout(3000) // Wait for open animation
 
     // Reset scroll to top to ensure consistent snapshot

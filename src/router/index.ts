@@ -15,70 +15,75 @@ const router = createRouter({
     {
       path: '/charts',
       name: 'charts',
-      component: () => import('../views/KanaChartView.vue'),
+      component: () => import('../views/study/KanaChartView.vue'),
     },
     {
       path: '/study',
       name: 'study',
-      component: () => import('../views/StudyView.vue'),
+      component: () => import('../views/study/StudyView.vue'),
     },
     {
       path: '/training',
       name: 'training',
-      component: () => import('../views/TrainingHubView.vue'),
+      component: () => import('../views/training/TrainingHubView.vue'),
     },
     {
       path: '/training/quiz',
       name: 'quiz',
-      component: () => import('../views/QuizView.vue'),
+      component: () => import('../views/training/QuizView.vue'),
+    },
+    {
+      path: '/training/audio',
+      name: 'audio-quiz',
+      component: () => import('../views/training/AudioQuizView.vue'),
     },
     {
       path: '/training/construction',
       name: 'construction',
-      component: () => import('../views/SentenceBuilderView.vue'),
+      component: () => import('../views/training/SentenceBuilderView.vue'),
     },
     {
       path: '/kanji',
       name: 'kanji',
-      component: () => import('../views/KanjiGridView.vue'),
+      component: () => import('../views/study/KanjiGridView.vue'),
     },
 
     {
       path: '/auth',
       name: 'auth',
-      component: () => import('../views/AuthView.vue'),
+      component: () => import('../views/auth/AuthView.vue'),
     },
     {
       path: '/legal',
       name: 'legal',
-      component: () => import('../views/LegalView.vue'),
+      component: () => import('../views/legal/LegalView.vue'),
     },
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('../views/UserProfileView.vue'),
+      component: () => import('../views/user/UserProfileView.vue'),
       meta: { requiresAuth: true },
     },
     {
       path: '/update-password',
       name: 'update-password',
-      component: () => import('../views/UpdatePasswordView.vue'),
+      component: () => import('../views/auth/UpdatePasswordView.vue'),
       meta: { requiresAuth: true },
     },
     {
       path: '/grammar',
       name: 'grammar',
-      component: () => import('../views/GrammarView.vue'),
+      component: () => import('../views/grammar/GrammarView.vue'),
     },
     {
       path: '/grammar/:id',
       name: 'grammar-detail',
-      component: () => import('../views/GrammarDetailView.vue'),
+      component: () => import('../views/grammar/GrammarDetailView.vue'),
     },
     {
       path: '/vocabulary',
       name: 'vocabulary',
-      component: () => import('../views/VocabularyView.vue'),
+      component: () => import('../views/study/VocabularyView.vue'),
     },
   ],
 })

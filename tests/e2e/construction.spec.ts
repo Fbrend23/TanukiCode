@@ -22,7 +22,7 @@ test.describe('Construction Game', () => {
 
     // 3. Verify it moved to the Answer Zone
     // Tokens in the answer zone have the 'btn-primary' class and 'animate-pop-in'
-    const answerTokens = page.locator('.btn-primary.animate-pop-in')
+    const answerTokens = page.locator('div.btn-primary.animate-pop-in')
     await expect(answerTokens).toBeVisible()
     await expect(answerTokens).toHaveCount(1)
 
@@ -43,17 +43,17 @@ test.describe('Construction Game', () => {
     await page.goto('/training/construction')
 
     // Click Filtres
-    await page.getByRole('button', { name: 'Filtres' }).click()
+    const filtersBtn = page.getByRole('button', { name: 'Filtres' })
+    await filtersBtn.click()
 
     // Verify Settings Panel
     await expect(page.getByText("Options d'entraînement")).toBeVisible()
 
     // Toggle Kana mode
-    await page.getByRole('button', { name: 'Kana' }).click()
-
-    // Verify it might reset round or change UI (implementation detail)
-    // For now we just check the button indicates selection
     const kanaBtn = page.getByRole('button', { name: 'Kana' })
+    await kanaBtn.click()
+
+    // Verify it indicates selection
     await expect(kanaBtn).toHaveClass(/border-tanuki-green/)
   })
 })

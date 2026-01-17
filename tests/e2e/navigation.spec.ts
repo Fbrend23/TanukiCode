@@ -44,5 +44,23 @@ test.describe('Navigation', () => {
     // 5. Entraînement
     await navigateTo('Entraînement', /.*training/)
     await expect(page.getByRole('heading', { name: /Entraînement/ })).toBeVisible()
+
+    // 6. Verify Training Hub Links
+    // Quiz Classique
+    await expect(page.getByRole('button', { name: 'Quiz Classique' })).toBeVisible()
+    const quizCard = page.getByRole('button', { name: 'Quiz Classique' })
+    await quizCard.click()
+    await expect(page).toHaveURL(/.*training\/quiz/)
+    await page.goBack()
+
+    // Construction
+    await expect(page.getByRole('button', { name: 'Construction' })).toBeVisible()
+    const constructionCard = page.getByRole('button', { name: 'Construction' })
+    await constructionCard.click()
+    await expect(page).toHaveURL(/.*training\/construction/)
+    await page.goBack()
+
+    // Audio Quiz (assuming it's enabled or visible)
+    await expect(page.getByRole('button', { name: 'Quiz Audio' })).toBeVisible()
   })
 })

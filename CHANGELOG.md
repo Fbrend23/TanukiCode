@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.16.0] - Unreleased
+
+### Added
+
+- **Training Hub**:
+  - **Game Cards**: Visual cards with icons and descriptions for each game mode.
+- **Audio Quiz**:
+  - **New Mode**: dedicated `AudioQuizView` for listening comprehension practice.
+  - **Mechanics**: Listen to sentences, words, or kanas and select the correct meaning.
+  - **Accessibility**: integrated `aria-label` for better screen reader support and testing.
+- **Components**:
+  - **FeedbackDrawer**: Reusable bottom drawer component for consistent feedback (Success / Failure / Skip) across all games.
+  - **TrainingHeader**: Unified header component for training views.
+
+### Changed
+
+- **Navigation**:
+  - **Routes**: Moved training routes to specific sub-paths (`/training/quiz`, `/training/construction`, `/training/audio`).
+  - **Home**: "Entraînement" navigation item now points to the Training Hub.
+- **UI/UX**:
+  - **Standardization**: Applied a consistent "Tanuki" aesthetic (Buttons, Headers, Cards) across Audio Quiz and Sentence Builder.
+  - **Kanji Grid**: Improved layout consistency.
+  - **Vocabulary**: Unified search and filter layout with other dictionary views.
+
+### Fixed
+
+- **Testing**:
+  - **E2E**: Updated and expanded End-to-End test suite to cover the new Training Hub and Audio Quiz.
+  - **Stability**: Fixed mobile-specific test failures by improving selectors and interaction emulation.
+
 ## [0.15.0] - 2026-01-13
 
 ### Added
