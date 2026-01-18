@@ -175,3 +175,19 @@ export const playSentenceAudio = (id: string, text: string) => {
     speakJapanese(text)
   })
 }
+
+/**
+ * Attempts to play a particle quiz audio file.
+ * URL: {AUDIO_BASE_URL}/particles/{id}.mp3
+ *
+ * @param id - The question ID (e.g. 'pq_01')
+ * @param text - Fallback text to speak via TTS if file missing
+ */
+export const playParticleAudio = (id: string, text: string) => {
+  const audioPath = `${AUDIO_BASE_URL}/particles/${id}.mp3`
+  const audio = new Audio(audioPath)
+
+  audio.play().catch(() => {
+    speakJapanese(text)
+  })
+}

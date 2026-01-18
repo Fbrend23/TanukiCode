@@ -14,6 +14,7 @@ const jiti = createJiti(import.meta.url)
 const grammarData = jiti('../src/data/grammar.ts')
 const kanaData = jiti('../src/data/kana.ts')
 const kanjiData = jiti('../src/data/kanji.ts')
+const particleData = jiti('../src/data/particleQuiz.ts')
 
 const lessons = grammarData.grammarLessons
 const allKana = [...kanaData.hiragana, ...kanaData.katakana]
@@ -213,6 +214,30 @@ const main = async () => {
       await new Promise((r) => setTimeout(r, 200))
       // Use Kana text for TTS to ensure correct reading (e.g. Nimei vs Futari)
       await uploadAudio(sentence.kana, filePathInBucket)
+    } catch (e) {
+      console.error(`Failed ${filename}:`, e.message)
+    }
+  }
+
+  // 5. Process Particles
+  console.log('\n--- Particles ---')
+  const particleQuestions = particleData.particleQuestions
+  const existingParticles = await getExistingFiles('particles')
+
+  for (const q of particleQuestions) {
+    const filename = `${q.id}.mp3`
+    const filePathInBucket = `particles/${filename}`
+
+    if (existingParticles.has(filename) && !forceMode) {
+      process.stdout.write('.')
+      continue
+    }
+
+    const fullSentence = q.sentence.replace('_', q.correctParticle)
+    console.log(`Uploading: ${filename} ("${fullSentence}")...`)
+    try {
+      await new Promise((r) => setTimeout(r, 200))
+      await uploadAudio(fullSentence, filePathInBucket)
     } catch (e) {
       console.error(`Failed ${filename}:`, e.message)
     }
