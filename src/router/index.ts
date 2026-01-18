@@ -43,6 +43,11 @@ const router = createRouter({
       component: () => import('../views/training/SentenceBuilderView.vue'),
     },
     {
+      path: '/training/particles',
+      name: 'training-particles',
+      component: () => import('../views/training/GrammarQuizView.vue'),
+    },
+    {
       path: '/kanji',
       name: 'kanji',
       component: () => import('../views/study/KanjiGridView.vue'),

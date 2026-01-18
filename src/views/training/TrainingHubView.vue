@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { Brain, Ear, Hammer } from 'lucide-vue-next'
+import { Brain, Volume2, Construction, Quote } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
 const router = useRouter()
@@ -34,23 +34,34 @@ const games: Game[] = [
     id: 'audio',
     title: 'Quiz Audio',
     description: 'Testez votre compréhension orale.',
-    icon: Ear,
-    color: 'bg-blue-500',
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
+    icon: Volume2,
+    color: 'bg-indigo-500',
+    iconBg: 'bg-indigo-100',
+    iconColor: 'text-indigo-600',
     text: 'text-white',
     route: '/training/audio',
   },
   {
     id: 'construction',
     title: 'Construction',
-    description: 'Remettez les fragments de phrase dans le bon ordre.',
-    icon: Hammer,
+    description: 'Assemblez des phrases japonaises correctes.',
+    icon: Construction,
     color: 'bg-amber-500',
     iconBg: 'bg-amber-100',
-    iconColor: 'text-amber-600',
+    iconColor: 'text-amber-800',
     text: 'text-white',
     route: '/training/construction',
+  },
+  {
+    id: 'particles',
+    title: 'Particules',
+    description: 'Maîtrisez les particules japonaises (wa, ga, ni...) dans leur contexte.',
+    icon: Quote,
+    color: 'bg-indigo-500',
+    iconBg: 'bg-indigo-100',
+    iconColor: 'text-indigo-600',
+    text: 'text-white',
+    route: '/training/particles',
   },
 ]
 
@@ -73,7 +84,7 @@ const navigateTo = (route: string, disabled?: boolean) => {
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
         <button v-for="game in games" :key="game.id" @click="navigateTo(game.route, game.disabled)"
           class="card p-6 flex flex-col items-center text-center gap-2 transition-all border-2 relative group overflow-hidden h-full bg-white hover:shadow-xl"
           :class="[
@@ -83,8 +94,18 @@ const navigateTo = (route: string, disabled?: boolean) => {
           ]">
           <!-- Watermark Character -->
           <div
-            class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown select-none pointer-events-none">
-            {{ game.id === 'quiz' ? '問' : game.id === 'construction' ? '建' : '聴' }}
+            class="absolute -right-4 -top-4 opacity-5 font-display text-9xl text-tanuki-brown select-none pointer-events-none transition-transform group-hover:scale-110">
+            {{
+              game.id === 'quiz'
+                ? '問'
+                : game.id === 'construction'
+                  ? '建'
+                  : game.id === 'audio'
+                    ? '聴'
+                    : game.id === 'particles'
+                      ? '助'
+                      : '話'
+            }}
           </div>
 
           <!-- Coming Soon Badge -->

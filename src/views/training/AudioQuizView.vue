@@ -225,21 +225,27 @@ onMounted(() => {
         </div>
       </div>
 
-      <FeedbackDrawer :isOpen="isAnswered" :isCorrect="isCorrect" @next="nextQuestion">
+      <FeedbackDrawer :isOpen="isAnswered" :isCorrect="isCorrect"
+        :correctAnswer="currentQuestion ? getOptionText(currentQuestion) : ''" @next="nextQuestion">
         <template #details>
-          <div v-if="!isCorrect && currentQuestion" class="flex gap-2 text-lg font-bold text-gray-800">
-            <span>
-              {{
-                'word' in currentQuestion
-                  ? (currentQuestion as any).word
-                  : 'char' in currentQuestion
-                    ? (currentQuestion as any).char
-                    : (currentQuestion as any).japanese
-              }}
-            </span>
-            <span class="opacity-50 font-normal">
-              {{ 'romaji' in currentQuestion ? (currentQuestion as any).romaji : '' }}
-            </span>
+          <div v-if="currentQuestion" class="mt-1 flex flex-col">
+            <div class="flex items-center gap-2 text-lg font-bold text-gray-800">
+              <span class="font-japanese">
+                {{
+                  'word' in currentQuestion
+                    ? (currentQuestion as any).word
+                    : 'char' in currentQuestion
+                      ? (currentQuestion as any).char
+                      : (currentQuestion as any).japanese
+                }}
+              </span>
+              <span class="opacity-40 font-normal text-base">
+                {{ 'romaji' in currentQuestion ? (currentQuestion as any).romaji : '' }}
+              </span>
+            </div>
+            <p v-if="isCorrect" class="text-sm font-bold text-green-600">
+              {{ getOptionText(currentQuestion) }}
+            </p>
           </div>
         </template>
       </FeedbackDrawer>

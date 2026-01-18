@@ -1,6 +1,23 @@
 # Changelog
 
-## [0.16.0] - Unreleased
+## [0.17.0] - 2026-01-18
+
+### Added
+
+- **Nouveaux Modes d'Entraînement** :
+  - **Mode Particules** : Un nouveau mini-jeu de type "texte à trous" pour maîtriser les particules (は, が, に, を, etc.).
+- **Profil Utilisateur** :
+  - **Maîtrise Détaillée** : Affichage de la progression précise par catégorie (Kanas, Kanjis, Grammaire, Vocabulaire) dans l'onglet Statistiques.
+
+### Changed
+
+- **Training Hub** :
+  - Ajout des nouvelles cartes pour le mode Particules.
+  - Ajout de filigranes (watermarks) en kanji sur chaque carte.
+- **Audio Quiz** :
+  - **Feedback Amélioré** : Affichage de la traduction française et du texte japonais lors d'une erreur.
+
+## [0.16.0] - 2026-01-17
 
 ### Added
 

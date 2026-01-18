@@ -9,6 +9,26 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.17.0',
+    date: '2026-01-18',
+    sections: [
+      {
+        title: 'Entraînement',
+        items: [
+          'MODE PARTICULES : Nouveau jeu de texte à trous pour maîtriser は, が, に, を...',
+          'HUB : Amélioration visuelle avec watermarks et nouvelles cartes.',
+        ],
+      },
+      {
+        title: 'Profil & Feedback',
+        items: [
+          'STATS : Maîtrise détaillée par catégorie (Kanas, Kanjis...) dans le profil.',
+          'QUIZ AUDIO : Feedback amélioré montrant la traduction lors des erreurs.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.16.0',
     date: '2026-01-17',
     sections: [
