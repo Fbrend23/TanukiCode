@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.16.1] - 2026-01-24
+
+### Added
+
+- **GuestCard**: Created a reusable component for the "Guest Login" prompt to ensure design consistency and "Pixel-Perfect" alignment across all views.
+- **UI/UX**:
+  - **Learning Tabs**: Implemented the standardized `GuestCard` across Vocabulary, Kanji, Grammar, and Kana views.
+  - **Home**: Updated the Home dashboard to use the shared `GuestCard` component.
+
+### Fixed
+
+- **Quiz**:
+  - Fixed a bug where empty characters or undefined values could be displayed during questions.
+  - Added safety logic to prevent selecting no categories (defaults back to Kana) to avoid empty states.
+  - Restored score display visibility for unauthenticated users after a temporary regression.
+
 ## [0.16.0] - Unreleased
 
 ### Added
