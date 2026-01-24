@@ -7,6 +7,7 @@ import MasteryBar from '@/components/common/MasteryBar.vue'
 import FilterModal from '@/components/modals/FilterModal.vue'
 import { Search, Settings2, Info } from 'lucide-vue-next'
 import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
 
 const searchQuery = ref('')
 const selectedLevel = ref(5)
@@ -15,6 +16,8 @@ const isModalOpen = ref(false)
 const isFilterModalOpen = ref(false)
 const selectedCategories = ref<string[]>([])
 const userStore = useUserStore()
+const authStore = useAuthStore()
+
 const hideMastered = ref(false)
 
 // Mastery Stats
@@ -99,6 +102,7 @@ const toggleCategory = (cat: string) => {
   }
 }
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import GuestCard from '@/components/common/GuestCard.vue'
 import { onMounted } from 'vue'
 
 const isLoading = ref(true)
@@ -118,9 +122,7 @@ onMounted(() => {
     <template v-else>
       <div class="flex flex-col items-center w-full max-w-4xl mb-1">
         <div class="text-center mb-2">
-          <h1
-            class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center"
-          >
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-tanuki-green mb-1 md:mb-8 text-center">
             Kanji N{{ selectedLevel }}
           </h1>
         </div>
@@ -129,36 +131,24 @@ onMounted(() => {
           <!-- Search (Centered) -->
           <div class="relative w-full max-w-md mx-auto z-10">
             <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Rechercher (日, Soleil...)"
-              class="search-bar"
-            />
+            <input v-model="searchQuery" type="text" placeholder="Rechercher (日, Soleil...)" class="search-bar" />
           </div>
 
           <!-- Filter Button (Absolute Right on Desktop) -->
-          <div
-            class="flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center"
-          >
+          <div class="flex justify-center md:absolute md:right-0 md:top-0 md:bottom-0 md:flex items-center">
             <button @click="isFilterModalOpen = true" class="btn-filter md:w-auto w-full max-w-md">
               <Settings2 class="w-5 h-5" />
               <span>Filtres</span>
-              <div
-                v-if="hideMastered || selectedCategories.length > 0"
-                class="w-2 h-2 rounded-full bg-tanuki-gold"
-              ></div>
+              <div v-if="hideMastered || selectedCategories.length > 0" class="w-2 h-2 rounded-full bg-tanuki-gold">
+              </div>
             </button>
           </div>
         </div>
 
-        <!-- Progress Bar -->
-        <MasteryBar
-          :label="`Progression N${selectedLevel}`"
-          :current="masteredKanji"
-          :total="totalKanji"
-          class="mb-4"
-        />
+        <!-- Progress Bar or Guest Message -->
+        <MasteryBar v-if="authStore.user" :label="`Progression N${selectedLevel}`" :current="masteredKanji"
+          :total="totalKanji" class="mb-4" />
+        <GuestCard v-else />
 
         <div class="info-banner mb-1">
           <Info class="w-4 h-4 text-tanuki-gold" />
@@ -167,17 +157,9 @@ onMounted(() => {
       </div>
 
       <!-- Grid -->
-      <div
-        v-if="filteredKanji.length > 0"
-        class="flex flex-wrap justify-center items-stretch gap-2 md:gap-4 w-full"
-      >
-        <KanjiCard
-          v-for="k in filteredKanji"
-          :key="k.character"
-          :kanji="k"
-          @click="openModal(k)"
-          class="w-[calc(50%-0.5rem)] grow md:grow-0 md:w-52 lg:w-60"
-        />
+      <div v-if="filteredKanji.length > 0" class="flex flex-wrap justify-center items-stretch gap-2 md:gap-4 w-full">
+        <KanjiCard v-for="k in filteredKanji" :key="k.character" :kanji="k" @click="openModal(k)"
+          class="w-[calc(50%-0.5rem)] grow md:grow-0 md:w-52 lg:w-60" />
       </div>
 
       <!-- Empty State -->
@@ -195,17 +177,12 @@ onMounted(() => {
       <div class="flex flex-col gap-3">
         <h3 class="font-bold text-tanuki-brown">Catégorie</h3>
         <div class="flex flex-wrap gap-2">
-          <button
-            v-for="cat in categories"
-            :key="cat"
-            @click="toggleCategory(cat)"
-            :class="[
-              'px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
-              (cat === 'All' ? selectedCategories.length === 0 : selectedCategories.includes(cat))
-                ? 'bg-tanuki-green text-white border-tanuki-green'
-                : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50',
-            ]"
-          >
+          <button v-for="cat in categories" :key="cat" @click="toggleCategory(cat)" :class="[
+            'px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border-2',
+            (cat === 'All' ? selectedCategories.length === 0 : selectedCategories.includes(cat))
+              ? 'bg-tanuki-green text-white border-tanuki-green'
+              : 'bg-white text-gray-500 border-gray-200 hover:border-tanuki-green/50',
+          ]">
             {{ categoryTranslations[cat] }}
           </button>
         </div>
@@ -215,14 +192,13 @@ onMounted(() => {
 
       <!-- Toggle Mastered -->
       <label
-        class="flex items-center justify-between p-4 bg-white border-2 border-tanuki-brown rounded-xl cursor-pointer select-none"
-      >
+        class="flex items-center justify-between p-4 bg-white border-2 border-tanuki-brown rounded-xl cursor-pointer select-none">
         <span class="font-bold text-tanuki-brown">Masquer maîtrisés</span>
         <div class="relative">
           <input type="checkbox" v-model="hideMastered" class="peer sr-only" />
           <div
-            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green"
-          ></div>
+            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tanuki-green">
+          </div>
         </div>
       </label>
     </FilterModal>
