@@ -119,7 +119,9 @@ const combo = computed(() => userStore.currentCombo)
 
 const filteredItems = computed(() => {
   const items: QuizItem[] = []
-  if (categories.value.kana) items.push(...hiragana, ...katakana)
+  if (categories.value.kana) {
+    items.push(...hiragana.filter((k) => k.char), ...katakana.filter((k) => k.char))
+  }
   if (categories.value.vocabulary) items.push(...vocabulary)
   if (categories.value.kanji) items.push(...kanjiList)
   if (categories.value.grammar) items.push(...grammarLessons)
@@ -281,8 +283,8 @@ function getDisplayText(item: QuizItem) {
   if ('char' in item && item.char) return item.char
   if ('character' in item && item.character) return item.character
   if ('word' in item && item.word) return item.word
-  if ('id' in item && item.id) return item.japanese!
   if ('title' in item && item.title) return item.title
+  if ('id' in item && item.id) return item.japanese || '?'
   return '?'
 }
 
