@@ -9,6 +9,28 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.16.1',
+    date: '2026-01-24',
+    sections: [
+      {
+        title: 'Expérience Invité & Standardisation',
+        items: [
+          "COMPOSANT GUESTCARD : Création d'un composant réutilisable pour l'invite de connexion, garantissant une cohérence visuelle parfaite.",
+          "HARMONISATION : Déploiement du GuestCard sur toutes les pages d'apprentissage (Vocabulaire, Kanji, Grammaire, Kanas).",
+          "DASHBOARD : Mise à jour de l'accueil pour utiliser le nouveau composant standardisé.",
+          "PIXEL PERFECT : Alignement de la taille et du style de l'invite de connexion sur l'ensemble de l'application.",
+        ],
+      },
+      {
+        title: 'Correctifs Quiz',
+        items: [
+          "AFFICHAGE : Correction d'un bug provoquant l'affichage de caractères vides ou indéfinis lors du quiz.",
+          "SÉCURITÉ : Forçage d'une sélection par défaut (Kanas) si l'utilisateur décoche toutes les catégories pour éviter les erreurs.",
+        ],
+      },
+    ],
+  },
+  {
     version: '0.16.0',
     date: '2026-01-17',
     sections: [
