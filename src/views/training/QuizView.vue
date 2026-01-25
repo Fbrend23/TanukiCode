@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { hiragana, katakana, type KanaChar } from '@/data/kana'
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary'
 import { kanjiList, type Kanji } from '@/data/kanji'
@@ -8,7 +7,6 @@ import { grammarLessons, type GrammarLesson } from '@/data/grammar'
 import { sentences, type Sentence } from '@/data/sentences'
 import {
   Check,
-  Trophy,
   Settings2,
   Grid3x3,
   BookOpen,
@@ -17,8 +15,6 @@ import {
   Eye,
   Pencil,
   MessageSquare,
-  ArrowLeft,
-  Flame,
 } from 'lucide-vue-next'
 import { useUserStore } from '@/stores/userStore'
 import { happyConfetti } from '@/utils/confetti'
@@ -26,9 +22,11 @@ import { onMounted } from 'vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import KanjiWriter from '@/components/kanji/KanjiWriter.vue'
 import KanaWriter from '@/components/kana/KanaWriter.vue'
+import TrainingHeader from '@/components/training/TrainingHeader.vue'
+import TrainingStats from '@/components/training/TrainingStats.vue'
+import SkipButton from '@/components/training/SkipButton.vue'
 import FeedbackDrawer from '@/components/training/FeedbackDrawer.vue'
 
-const router = useRouter()
 const isLoading = ref(true)
 
 type QuizItem = (KanaChar | VocabularyWord | Kanji | GrammarLesson | Sentence) & {
@@ -272,6 +270,11 @@ function nextQuestion() {
   isSkipped.value = false
 }
 
+function skipQuestion() {
+  userStore.updateBestCombo(0)
+  nextQuestion()
+}
+
 const isCorrect = computed(() => {
   if (!selectedOption.value) return false
   return getId(selectedOption.value) === getId(currentQuestion.value)
@@ -322,41 +325,17 @@ onMounted(() => {
     </div>
 
     <template v-else>
-      <div class="w-full relative flex items-center justify-center mb-0 md:mb-4">
-        <button
-          @click="router.push('/training')"
-          class="absolute left-0 text-tanuki-brown/60 hover:text-tanuki-brown transition-colors p-2 rounded-full hover:bg-stone-100"
-        >
-          <ArrowLeft class="w-6 h-6" />
-        </button>
-        <h2 class="text-2xl md:text-4xl font-display font-bold text-tanuki-green text-center">
-          Quiz
-        </h2>
-      </div>
+      <TrainingHeader title="Quiz">
+        <template #actions>
+          <SkipButton @click="skipQuestion" />
+        </template>
+      </TrainingHeader>
 
       <div class="w-full flex flex-col items-center max-w-4xl mx-auto">
         <div class="relative w-full max-w-2xl flex flex-col md:block mb-2">
           <!-- Score & Streak (Centered) -->
           <div class="relative w-full max-w-md mx-auto z-10">
-            <div
-              class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full bg-white"
-            >
-              <div
-                class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown"
-              >
-                <Trophy class="w-4 h-4 text-tanuki-gold" />
-                <span>{{ score }}/{{ userStore.totalQuestions }}</span>
-              </div>
-
-              <div class="h-4 w-0.5 bg-tanuki-brown/20 rounded-full"></div>
-
-              <div
-                class="flex-1 flex items-center justify-center gap-1 font-bold text-tanuki-green"
-              >
-                <span>{{ combo }}</span>
-                <Flame class="w-4 h-4 fill-orange-500 text-orange-600" />
-              </div>
-            </div>
+            <TrainingStats :score="score" :total="userStore.totalQuestions" :combo="combo" :xpMultiplier="xpMultiplier" />
           </div>
 
           <!-- Filter Button (Absolute Right Desktop) -->

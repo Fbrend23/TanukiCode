@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { particleQuestions, type ParticleQuestion } from '@/data/particleQuiz'
-import { Trophy, Heart, Flame, Volume2 } from 'lucide-vue-next'
+import { Volume2 } from 'lucide-vue-next'
 import { useUserStore } from '@/stores/userStore'
 import { happyConfetti } from '@/utils/confetti'
 import TrainingHeader from '@/components/training/TrainingHeader.vue'
+import TrainingStats from '@/components/training/TrainingStats.vue'
+import SkipButton from '@/components/training/SkipButton.vue'
 import FeedbackDrawer from '@/components/training/FeedbackDrawer.vue'
 import { playParticleAudio } from '@/utils/audio'
 
@@ -92,40 +94,14 @@ onMounted(() => {
     <div class="flex flex-col items-center w-full px-2 md:px-4 pb-24">
         <TrainingHeader title="Particules">
             <template #actions>
-                <button @click="skipQuestion"
-                    class="text-tanuki-brown/50 hover:text-tanuki-brown font-bold text-sm transition-colors">
-                    Passer
-                </button>
+                <SkipButton @click="skipQuestion" />
             </template>
         </TrainingHeader>
 
         <div class="w-full flex flex-col items-center max-w-4xl mx-auto">
-            <!-- Top Stats Bar -->
-            <div class="relative w-full max-w-md mx-auto mb-6">
-                <div
-                    class="flex items-center justify-between card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full bg-white">
-                    <div class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown">
-                        <Trophy class="w-4 h-4 text-tanuki-gold" />
-                        <span>{{ userStore.score }}/{{ userStore.totalQuestions }}</span>
-                    </div>
-                    <div class="h-4 w-0.5 bg-tanuki-brown/20 rounded-full"></div>
-                    <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
-                        <span>{{ userStore.currentCombo }}</span>
-                        <Flame class="w-4 h-4 fill-orange-500 text-orange-600" />
-                    </div>
-                    <div class="h-4 w-0.5 bg-tanuki-brown/20 rounded-full"></div>
-                    <div class="flex-1 flex justify-center items-center gap-1">
-                        <Heart v-for="i in 1" :key="i" class="w-4 h-4 transition-all" :class="i > 1 - mistakeCount
-                                ? 'fill-gray-200 text-gray-200 opacity-50 scale-75'
-                                : 'fill-red-500 text-red-600'
-                            " />
-                    </div>
-                    <div
-                        class="absolute -right-3 -top-3 bg-linear-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                        XP x{{ xpMultiplier }}
-                    </div>
-                </div>
-            </div>
+            <!-- Stats -->
+            <TrainingStats :score="userStore.score" :total="userStore.totalQuestions" :combo="userStore.currentCombo"
+                :lives="1 - mistakeCount" :maxLives="1" :xpMultiplier="xpMultiplier" class="mb-6" />
 
             <div v-if="currentQuestion" class="w-full flex flex-col items-center">
                 <!-- Question Card -->

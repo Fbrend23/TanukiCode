@@ -3,12 +3,14 @@ import { ref, computed, onMounted } from 'vue'
 import { hiragana, katakana, type KanaChar } from '@/data/kana'
 import { vocabulary, type VocabularyWord } from '@/data/vocabulary'
 import { sentences, type Sentence } from '@/data/sentences'
-import { Volume2, Trophy, Flame, Play } from 'lucide-vue-next'
+import { Volume2, Play } from 'lucide-vue-next'
 import { useUserStore } from '@/stores/userStore'
 import { happyConfetti } from '@/utils/confetti'
 import { playKanaAudio, speakJapanese, playSentenceAudio } from '@/utils/audio'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import TrainingHeader from '@/components/training/TrainingHeader.vue'
+import TrainingStats from '@/components/training/TrainingStats.vue'
+import SkipButton from '@/components/training/SkipButton.vue'
 import FeedbackDrawer from '@/components/training/FeedbackDrawer.vue'
 
 const isLoading = ref(true)
@@ -165,6 +167,11 @@ const checkAnswer = async (option: QuizItem) => {
   userStore.updateBestCombo(newCombo)
 }
 
+const skipQuestion = () => {
+  userStore.updateBestCombo(0)
+  nextQuestion()
+}
+
 onMounted(() => {
   isLoading.value = false
   nextQuestion()
@@ -178,20 +185,14 @@ onMounted(() => {
     </div>
 
     <template v-else>
-      <TrainingHeader title="Quiz Audio" />
+      <TrainingHeader title="Quiz Audio">
+        <template #actions>
+          <SkipButton @click="skipQuestion" />
+        </template>
+      </TrainingHeader>
 
       <!-- Stats -->
-      <div class="card p-2 px-4 shadow-sm border-2 border-tanuki-green bg-white flex items-center gap-4 mb-6">
-        <div class="flex items-center gap-2 font-bold text-tanuki-brown">
-          <Trophy class="w-4 h-4 text-tanuki-gold" />
-          <span>{{ score }}</span>
-        </div>
-        <div class="h-4 w-0.5 bg-tanuki-brown/20 rounded-full"></div>
-        <div class="flex items-center gap-1 font-bold text-tanuki-green">
-          <span>{{ combo }}</span>
-          <Flame class="w-4 h-4 fill-orange-500 text-orange-600" />
-        </div>
-      </div>
+      <TrainingStats :score="score" :total="userStore.totalQuestions" :combo="combo" :xpMultiplier="1.5" class="mb-6" />
 
       <!-- Main Game Area -->
       <div class="w-full max-w-2xl flex flex-col items-center">
