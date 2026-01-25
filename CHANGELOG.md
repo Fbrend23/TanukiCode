@@ -1,9 +1,12 @@
 # Changelog
 
-## [0.17.0] - 2026-01-18
+## [0.17.0] - 2026-01-25
 
 ### Added
 
+- **Training**:
+  - **Skip Button**: Added a "Passer" (`SkipButton`) button to Audio Quiz, Grammar Quiz, Sentence Builder, and Standard Quiz.
+  - **Stats**: Integrated XP bonus pill seamlessly into the stats bar (no longer floating).
 - **New Training Modes**:
   - **Particle Mode**: A new fill-in-the-blank mini-game to master particles (は, が, に, を, etc.).
 - **User Profile**:
@@ -11,6 +14,10 @@
 
 ### Changed
 
+- **UI/UX**:
+  - **Mobile**: Optimized "Passer" button (Icon only on mobile) and improved header spacing to prevent overlap.
+  - **Refactor**: Created reusable `TrainingStats` and `SkipButton` components for better maintainability and consistency.
+  - **Design**: Updated "Skip" button to use the standard `btn-3d` design system.
 - **Training Hub**:
   - Added new cards for Particle mode.
   - Added Kanji watermarks to each card.
