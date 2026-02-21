@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
 import { sentences, type Sentence } from '@/data/sentences'
-import { Volume2, Trophy, Heart, Flame, Settings2, Check, HelpCircle } from 'lucide-vue-next'
+import { Volume2, Settings2, HelpCircle } from 'lucide-vue-next'
 import { playSentenceAudio } from '@/utils/audio'
 import { useUserStore } from '@/stores/userStore'
 import { happyConfetti } from '@/utils/confetti'
 import TrainingHeader from '@/components/training/TrainingHeader.vue'
+import TrainingStats from '@/components/training/TrainingStats.vue'
+import SkipButton from '@/components/training/SkipButton.vue'
 import FeedbackDrawer from '@/components/training/FeedbackDrawer.vue'
 
 const userStore = useUserStore()
@@ -233,6 +235,11 @@ const checkAnswer = () => {
   }
 }
 
+const skipQuestion = () => {
+  userStore.updateBestCombo(0)
+  initRound()
+}
+
 // Drag and Drop Logic
 const draggedItemIndex = ref<number | null>(null)
 
@@ -272,53 +279,16 @@ onMounted(() => {
     <!-- Uses Common Training Header -->
     <TrainingHeader title="Construction">
       <template #actions>
-        <!-- Nothing for now on right side -->
+        <SkipButton @click="skipQuestion" />
       </template>
     </TrainingHeader>
 
     <div class="w-full flex flex-col items-center max-w-4xl mx-auto">
       <div class="relative w-full max-w-2xl flex flex-col md:block mb-2">
         <!-- Score & Streak (Centered) -->
-        <div class="relative w-full max-w-md mx-auto z-10">
-          <div
-            class="flex items-center justify-between gap-0 card p-2 px-4 shadow-sm text-sm border-2 border-tanuki-green w-full bg-white"
-          >
-            <div class="flex-1 flex items-center justify-center gap-2 font-bold text-tanuki-brown">
-              <Trophy class="w-4 h-4 text-tanuki-gold" />
-              <span>{{ score }}/{{ userStore.totalQuestions }}</span>
-            </div>
-
-            <div class="h-4 w-0.5 bg-tanuki-brown/20 rounded-full"></div>
-
-            <!-- Streak -->
-            <div class="flex-1 font-bold text-tanuki-green flex items-center justify-center gap-1">
-              <span>{{ userStore.currentCombo }}</span>
-              <Flame class="w-4 h-4 fill-orange-500 text-orange-600" />
-            </div>
-
-            <div class="h-4 w-0.5 bg-tanuki-brown/20 rounded-full"></div>
-
-            <!-- Hearts / Lives -->
-            <div class="flex-1 flex justify-center items-center gap-1">
-              <Heart
-                v-for="i in 3"
-                :key="i"
-                class="w-4 h-4 transition-all"
-                :class="
-                  i > 3 - mistakeCount
-                    ? 'fill-gray-200 text-gray-200 opacity-50 scale-75'
-                    : 'fill-red-500 text-red-600'
-                "
-              />
-            </div>
-
-            <!-- Bonus Pill -->
-            <div
-              class="absolute -right-3 -top-3 bg-linear-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm"
-            >
-              XP x{{ xpMultiplier }}
-            </div>
-          </div>
+        <div class="relative w-full max-w-md mx-auto z-10 w-full mb-2">
+            <TrainingStats :score="score" :total="userStore.totalQuestions" :combo="userStore.currentCombo"
+                :lives="3 - mistakeCount" :maxLives="3" :xpMultiplier="xpMultiplier" />
         </div>
 
         <!-- Filter Button (Absolute Right Desktop) -->

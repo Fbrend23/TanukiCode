@@ -16,7 +16,7 @@ const goBack = () => {
 </script>
 
 <template>
-  <div class="w-full relative flex items-center justify-center mb-0 md:mb-4">
+  <div class="w-full relative flex items-center justify-center my-2">
     <button
       @click="goBack"
       class="absolute left-0 text-tanuki-brown/60 hover:text-tanuki-brown transition-colors p-2 rounded-full hover:bg-stone-100"

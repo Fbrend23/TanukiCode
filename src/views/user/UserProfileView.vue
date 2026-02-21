@@ -15,7 +15,13 @@ import {
   Palette,
   Lock,
   Zap,
+  CheckCircle2,
 } from 'lucide-vue-next'
+import { hiragana, katakana } from '@/data/kana'
+import { vocabulary } from '@/data/vocabulary'
+import { kanjiList } from '@/data/kanji'
+import { grammarLessons } from '@/data/grammar'
+import { computed } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useNotificationStore } from '@/stores/notificationStore'
 import ConfirmationModal from '@/components/modals/ConfirmationModal.vue'
@@ -65,7 +71,30 @@ const getColorClass = (colorName: string) => {
   return c ? c.bg : 'bg-tanuki-gold'
 }
 
-// Avatars state
+const getMasteryProgress = (
+  items: { char?: string; character?: string; word?: string; id?: string }[],
+) => {
+  const total = items.length
+  const mastered = items.filter((i) => {
+    const id = i.char || i.character || i.word || i.id
+    return userStore.masteredItems.includes(id || '')
+  }).length
+  return { mastered, total }
+}
+
+const kanaProgress = computed(() =>
+  getMasteryProgress([...hiragana.filter((k) => k.char), ...katakana.filter((k) => k.char)]),
+)
+const vocabProgress = computed(() => getMasteryProgress(vocabulary))
+const kanjiProgress = computed(() => getMasteryProgress(kanjiList))
+const grammarProgress = computed(() => getMasteryProgress(grammarLessons))
+
+const masterySections = computed(() => [
+  { name: 'Kanas', progress: kanaProgress.value, color: 'bg-blue-500', icon: 'あ' },
+  { name: 'Kanjis', progress: kanjiProgress.value, color: 'bg-red-500', icon: '日' },
+  { name: 'Grammaire', progress: grammarProgress.value, color: 'bg-indigo-500', icon: '文' },
+  { name: 'Vocabulaire', progress: vocabProgress.value, color: 'bg-green-500', icon: '語' },
+])
 interface Avatar {
   name: string
   value: string
@@ -218,29 +247,21 @@ const handleDeleteAccount = async () => {
       </div>
 
       <!-- Tab Navigation (Matching Kana Chart Style) -->
-      <div
-        class="card flex p-1 mb-6 shadow-none border-2 border-tanuki-green w-full max-w-md bg-white"
-      >
-        <button
-          @click="activeTab = 'profile'"
-          :class="[
-            'flex-1 py-2 rounded-2xl font-bold transition-all text-sm flex items-center justify-center gap-2',
-            activeTab === 'profile'
-              ? 'bg-tanuki-green text-white shadow-sm'
-              : 'text-gray-500 hover:text-tanuki-green',
-          ]"
-        >
+      <div class="card flex p-1 mb-6 shadow-none border-2 border-tanuki-green w-full max-w-md bg-white">
+        <button @click="activeTab = 'profile'" :class="[
+          'flex-1 py-2 rounded-2xl font-bold transition-all text-sm flex items-center justify-center gap-2',
+          activeTab === 'profile'
+            ? 'bg-tanuki-green text-white shadow-sm'
+            : 'text-gray-500 hover:text-tanuki-green',
+        ]">
           <User class="w-4 h-4" /> Profil
         </button>
-        <button
-          @click="activeTab = 'stats'"
-          :class="[
-            'flex-1 py-2 rounded-2xl font-bold transition-all text-sm flex items-center justify-center gap-2',
-            activeTab === 'stats'
-              ? 'bg-tanuki-green text-white shadow-sm'
-              : 'text-gray-500 hover:text-tanuki-green',
-          ]"
-        >
+        <button @click="activeTab = 'stats'" :class="[
+          'flex-1 py-2 rounded-2xl font-bold transition-all text-sm flex items-center justify-center gap-2',
+          activeTab === 'stats'
+            ? 'bg-tanuki-green text-white shadow-sm'
+            : 'text-gray-500 hover:text-tanuki-green',
+        ]">
           <Trophy class="w-4 h-4" /> Statistiques
         </button>
       </div>
@@ -251,11 +272,8 @@ const handleDeleteAccount = async () => {
           <!-- 1. Identity Card -->
           <div class="card p-4 lg:p-8 relative">
             <!-- Helper: Edit Button (Top Right) -->
-            <button
-              v-if="!isEditing"
-              @click="startEditing"
-              class="absolute top-4 right-4 p-2 text-tanuki-brown/50 hover:text-tanuki-green transition-colors"
-            >
+            <button v-if="!isEditing" @click="startEditing"
+              class="absolute top-4 right-4 p-2 text-tanuki-brown/50 hover:text-tanuki-green transition-colors">
               <Edit2 class="w-5 h-5" />
             </button>
 
@@ -265,32 +283,17 @@ const handleDeleteAccount = async () => {
               <div class="relative group">
                 <div
                   class="w-24 h-24 rounded-full flex items-center justify-center text-white shadow-inner transition-colors border-4 border-white ring-4 ring-tanuki-green/20 overflow-hidden"
-                  :class="
-                    isEditing ? getColorClass(formColor) : getColorClass(userStore.avatarColor)
-                  "
-                >
+                  :class="isEditing ? getColorClass(formColor) : getColorClass(userStore.avatarColor)
+                    ">
                   <!-- Image Avatar -->
-                  <img
-                    v-if="(isEditing ? formImage : userStore.avatarImage) !== 'default'"
-                    :src="
-                      getAvatarSrc(isEditing ? formImage : userStore.avatarImage || 'default') || ''
-                    "
-                    alt="Avatar"
-                    class="w-full h-full object-cover p-1"
-                  />
+                  <img v-if="(isEditing ? formImage : userStore.avatarImage) !== 'default'" :src="getAvatarSrc(isEditing ? formImage : userStore.avatarImage || 'default') || ''
+                    " alt="Avatar" class="w-full h-full object-cover p-1" />
                   <!-- Default Tanuki -->
-                  <img
-                    v-else
-                    :src="defaultTanuki"
-                    alt="Tanuki"
-                    class="w-full h-full object-cover p-1"
-                  />
+                  <img v-else :src="defaultTanuki" alt="Tanuki" class="w-full h-full object-cover p-1" />
                 </div>
                 <!-- Color Picker Overlay -->
-                <div
-                  v-if="isEditing"
-                  class="absolute -bottom-2 -right-2 bg-white rounded-full shadow-lg p-2 cursor-pointer border-2 border-tanuki-green"
-                >
+                <div v-if="isEditing"
+                  class="absolute -bottom-2 -right-2 bg-white rounded-full shadow-lg p-2 cursor-pointer border-2 border-tanuki-green">
                   <Palette class="w-4 h-4 text-tanuki-green" />
                 </div>
               </div>
@@ -298,109 +301,69 @@ const handleDeleteAccount = async () => {
               <!-- Identity Fields -->
               <div v-if="isEditing" class="flex-1 w-full space-y-4">
                 <div>
-                  <label
-                    for="username"
-                    class="block text-xs font-bold text-tanuki-green uppercase tracking-wide mb-1 text-center"
-                    >Pseudo</label
-                  >
-                  <input
-                    id="username"
-                    v-model="formUsername"
-                    type="text"
-                    placeholder="Votre pseudo"
-                    class="w-full px-4 py-2 bg-white border-2 border-tanuki-green rounded-xl focus:ring-2 focus:ring-tanuki-green/50 outline-none font-bold text-tanuki-brown text-center"
-                  />
+                  <label for="username"
+                    class="block text-xs font-bold text-tanuki-green uppercase tracking-wide mb-1 text-center">Pseudo</label>
+                  <input id="username" v-model="formUsername" type="text" placeholder="Votre pseudo"
+                    class="w-full px-4 py-2 bg-white border-2 border-tanuki-green rounded-xl focus:ring-2 focus:ring-tanuki-green/50 outline-none font-bold text-tanuki-brown text-center" />
                 </div>
 
                 <div>
                   <span
-                    class="block text-xs font-bold text-tanuki-green uppercase tracking-wide mb-2 text-center"
-                    >Couleur de fond</span
-                  >
+                    class="block text-xs font-bold text-tanuki-green uppercase tracking-wide mb-2 text-center">Couleur
+                    de fond</span>
                   <div class="flex gap-2 flex-wrap justify-center">
-                    <button
-                      v-for="c in colors"
-                      :key="c.value"
-                      @click="formColor = c.value"
-                      class="w-8 h-8 rounded-full border-2 transition-all transform hover:scale-110"
-                      :class="[
+                    <button v-for="c in colors" :key="c.value" @click="formColor = c.value"
+                      class="w-8 h-8 rounded-full border-2 transition-all transform hover:scale-110" :class="[
                         c.bg,
                         formColor === c.value
                           ? 'border-tanuki-brown scale-110 ring-2 ring-offset-2 ring-tanuki-brown/20'
                           : 'border-transparent',
-                      ]"
-                      :title="c.name"
-                    ></button>
+                      ]" :title="c.name"></button>
                   </div>
                 </div>
 
                 <div>
                   <span
-                    class="block text-xs font-bold text-tanuki-green uppercase tracking-wide mb-2 text-center"
-                    >Avatars</span
-                  >
+                    class="block text-xs font-bold text-tanuki-green uppercase tracking-wide mb-2 text-center">Avatars</span>
                   <div class="grid grid-cols-4 sm:grid-cols-6 gap-2 max-w-md mx-auto">
                     <!-- Default (Tanuki Head) -->
-                    <button
-                      @click="formImage = 'default'"
+                    <button @click="formImage = 'default'"
                       class="aspect-square rounded-xl border-2 transition-all transform hover:scale-105 overflow-hidden relative p-0.5 bg-white"
                       :class="[
                         formImage === 'default'
                           ? 'border-tanuki-brown ring-2 ring-offset-2 ring-tanuki-brown/20'
                           : 'border-transparent',
-                      ]"
-                      title="Tanuki Basic"
-                    >
-                      <img
-                        :src="defaultTanuki"
-                        alt="Default"
-                        class="w-full h-full object-contain"
-                      />
+                      ]" title="Tanuki Basic">
+                      <img :src="defaultTanuki" alt="Default" class="w-full h-full object-contain" />
                     </button>
                     <!-- Custom Avatars -->
-                    <button
-                      v-for="avatar in avatars"
-                      :key="avatar.value"
-                      @click="formImage = avatar.value"
+                    <button v-for="avatar in avatars" :key="avatar.value" @click="formImage = avatar.value"
                       class="aspect-square rounded-xl border-2 transition-all transform hover:scale-105 overflow-hidden relative p-0.5 bg-white"
                       :class="[
                         formImage === avatar.value
                           ? 'border-tanuki-brown ring-2 ring-offset-2 ring-tanuki-brown/20'
                           : 'border-transparent',
-                      ]"
-                      :title="avatar.name"
-                    >
-                      <img
-                        :src="avatar.src"
-                        :alt="avatar.name"
-                        class="w-full h-full object-contain"
-                      />
+                      ]" :title="avatar.name">
+                      <img :src="avatar.src" :alt="avatar.name" class="w-full h-full object-contain" />
                     </button>
                   </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-3 pt-4 justify-center">
-                  <button
-                    @click="saveProfile"
-                    class="w-full sm:w-auto px-6 btn-3d btn-primary flex items-center justify-center gap-2"
-                  >
+                  <button @click="saveProfile"
+                    class="w-full sm:w-auto px-6 btn-3d btn-primary flex items-center justify-center gap-2">
                     <Check class="w-5 h-5" /> Enregistrer
                   </button>
-                  <button
-                    @click="cancelEditing"
-                    class="w-full sm:w-auto px-6 btn-3d btn-secondary border-t-2 border-x-2 border-b-4 flex items-center justify-center gap-2"
-                  >
+                  <button @click="cancelEditing"
+                    class="w-full sm:w-auto px-6 btn-3d btn-secondary border-t-2 border-x-2 border-b-4 flex items-center justify-center gap-2">
                     <XIcon class="w-5 h-5" /> Annuler
                   </button>
                 </div>
               </div>
 
               <div v-else class="flex-1 text-center md:text-left">
-                <span
-                  class="block text-sm font-bold text-gray-400 uppercase tracking-wide cursor-help"
-                  title="Email (Privé)"
-                  >{{ auth.user?.email }}</span
-                >
+                <span class="block text-sm font-bold text-gray-400 uppercase tracking-wide cursor-help"
+                  title="Email (Privé)">{{ auth.user?.email }}</span>
                 <h2 class="text-3xl font-display font-bold text-tanuki-brown mt-1">
                   {{ userStore.username || 'Tanuki Anonyme' }}
                 </h2>
@@ -452,54 +415,35 @@ const handleDeleteAccount = async () => {
 
             <div class="space-y-4">
               <!-- Change Password Toggle -->
-              <button
-                v-if="!isChangingPassword"
-                @click="startChangingPassword"
-                class="w-full text-left btn-3d btn-secondary border-t-2 border-x-2 border-b-4 flex items-center justify-between group"
-              >
+              <button v-if="!isChangingPassword" @click="startChangingPassword"
+                class="w-full text-left btn-3d btn-secondary border-t-2 border-x-2 border-b-4 flex items-center justify-between group">
                 <span>Changer de mot de passe</span>
                 <Edit2 class="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
               </button>
 
               <!-- Change Password Form -->
-              <div
-                v-else
-                class="bg-white rounded-xl p-6 border-2 border-tanuki-green space-y-4 shadow-inner"
-              >
+              <div v-else class="bg-white rounded-xl p-6 border-2 border-tanuki-green space-y-4 shadow-inner">
                 <h4 class="font-bold text-tanuki-green text-sm uppercase tracking-wide mb-2">
                   Nouveau mot de passe
                 </h4>
                 <div>
-                  <input
-                    v-model="passNew"
-                    type="password"
-                    placeholder="Nouveau mot de passe"
-                    class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-tanuki-green outline-none font-bold text-tanuki-brown"
-                  />
+                  <input v-model="passNew" type="password" placeholder="Nouveau mot de passe"
+                    class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-tanuki-green outline-none font-bold text-tanuki-brown" />
                 </div>
                 <div>
-                  <input
-                    v-model="passConfirm"
-                    type="password"
-                    placeholder="Confirmer le mot de passe"
-                    class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-tanuki-green outline-none font-bold text-tanuki-brown"
-                  />
+                  <input v-model="passConfirm" type="password" placeholder="Confirmer le mot de passe"
+                    class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-tanuki-green outline-none font-bold text-tanuki-brown" />
                 </div>
 
                 <div class="flex gap-2">
-                  <button
-                    @click="updatePassword"
-                    :disabled="passLoading"
-                    class="flex-1 btn-3d btn-primary flex items-center justify-center gap-2"
-                  >
+                  <button @click="updatePassword" :disabled="passLoading"
+                    class="flex-1 btn-3d btn-primary flex items-center justify-center gap-2">
                     <Check class="w-5 h-5" />
                     <span v-if="passLoading">...</span>
                     <span v-else>Valider</span>
                   </button>
-                  <button
-                    @click="cancelChangingPassword"
-                    class="btn-3d btn-secondary border-t-2 border-x-2 border-b-4 px-6 flex items-center justify-center gap-2"
-                  >
+                  <button @click="cancelChangingPassword"
+                    class="btn-3d btn-secondary border-t-2 border-x-2 border-b-4 px-6 flex items-center justify-center gap-2">
                     <XIcon class="w-5 h-5" /> Annuler
                   </button>
                 </div>
@@ -508,17 +452,13 @@ const handleDeleteAccount = async () => {
               <div class="border-t border-gray-100 my-4"></div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button
-                  @click="handleLogout"
-                  class="w-full btn-3d btn-secondary border-t-2 border-x-2 border-b-4 flex items-center justify-center gap-2"
-                >
+                <button @click="handleLogout"
+                  class="w-full btn-3d btn-secondary border-t-2 border-x-2 border-b-4 flex items-center justify-center gap-2">
                   <LogOut class="w-5 h-5" />
                   Se déconnecter
                 </button>
-                <button
-                  @click="confirmDeleteAccount"
-                  class="w-full btn-3d btn-danger border-t-2 border-x-2 border-b-4 flex items-center justify-center gap-2"
-                >
+                <button @click="confirmDeleteAccount"
+                  class="w-full btn-3d btn-danger border-t-2 border-x-2 border-b-4 flex items-center justify-center gap-2">
                   <Trash2 class="w-5 h-5" />
                   Supprimer
                 </button>
@@ -535,6 +475,35 @@ const handleDeleteAccount = async () => {
             <SkillsRadarChart />
           </div>
 
+          <!-- Detailed Mastery -->
+          <div class="card p-6 border-2 border-tanuki-green/10 shadow-sm bg-white">
+            <h3 class="text-xl font-bold text-tanuki-brown mb-6 flex items-center gap-2">
+              <CheckCircle2 class="w-5 h-5 text-tanuki-green" /> Maîtrise détaillée
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div v-for="section in masterySections" :key="section.name" class="space-y-2">
+                <div class="flex justify-between items-end">
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center font-display text-tanuki-brown font-bold border border-tanuki-brown/10">
+                      {{ section.icon }}
+                    </span>
+                    <span class="font-bold text-tanuki-brown">{{ section.name }}</span>
+                  </div>
+                  <span class="text-xs font-bold text-tanuki-brown/50">
+                    {{ section.progress.mastered }} / {{ section.progress.total }}
+                  </span>
+                </div>
+                <div
+                  class="w-full h-3 bg-gray-100 rounded-full overflow-hidden border border-tanuki-brown/5 shadow-inner">
+                  <div class="h-full transition-all duration-1000" :class="section.color" :style="{
+                    width: (section.progress.mastered / section.progress.total) * 100 + '%',
+                  }"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Calendar -->
           <AttendanceCalendar />
 
@@ -543,15 +512,10 @@ const handleDeleteAccount = async () => {
         </div>
       </div>
 
-      <ConfirmationModal
-        :is-open="isDeleteModalOpen"
-        title="Supprimer mon compte ?"
+      <ConfirmationModal :is-open="isDeleteModalOpen" title="Supprimer mon compte ?"
         message="Êtes-vous sûr de vouloir supprimer votre compte et toutes vos données ? Cette action est irréversible."
-        confirm-text="Oui, tout supprimer"
-        :is-destructive="true"
-        @close="isDeleteModalOpen = false"
-        @confirm="handleDeleteAccount"
-      />
+        confirm-text="Oui, tout supprimer" :is-destructive="true" @close="isDeleteModalOpen = false"
+        @confirm="handleDeleteAccount" />
     </div>
   </div>
 </template>

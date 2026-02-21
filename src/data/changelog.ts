@@ -9,6 +9,29 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.17.0',
+    date: '2026-01-18',
+    sections: [
+      {
+        title: 'Entraînement',
+        items: [
+          'MODE PARTICULES : Nouveau jeu de texte à trous pour maîtriser は, が, に, を...',
+          'BOUTON PASSER : Possibilité de passer une question (Audio, Grammaire, Construction, Quiz).',
+          'HUB : Amélioration visuelle avec watermarks et nouvelles cartes.',
+        ],
+      },
+      {
+        title: 'Interface & Stats',
+        items: [
+          'STATS : Bonus XP intégré directement dans la barre de statistiques.',
+          'STATS : Maîtrise détaillée par catégorie (Kanas, Kanjis...) dans le profil.',
+          'DESIGN : Bouton "Passer" optimisé pour mobile (icône seule) avec style 3D.',
+          'QUIZ AUDIO : Feedback amélioré montrant la traduction lors des erreurs.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.16.0',
     date: '2026-01-17',
     sections: [
